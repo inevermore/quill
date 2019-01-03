@@ -49,10 +49,10 @@ const ATTRIBUTE_ATTRIBUTORS = [AlignAttribute, DirectionAttribute].reduce(
 
 const STYLE_ATTRIBUTORS = [
   AlignStyle,
-  BackgroundStyle,
-  ColorStyle,
+  // BackgroundStyle,
+  // ColorStyle,
   DirectionStyle,
-  FontStyle,
+  // FontStyle,
   SizeStyle,
 ].reduce((memo, attr) => {
   memo[attr.keyName] = attr;

@@ -16,6 +16,7 @@ import { BackgroundClass, BackgroundStyle } from './formats/background';
 import { ColorClass, ColorStyle } from './formats/color';
 import { FontClass, FontStyle } from './formats/font';
 import { SizeClass, SizeStyle } from './formats/size';
+import { DottedClass, DottedStyle } from './formats/dotted';
 
 import Bold from './formats/bold';
 import Italic from './formats/italic';
@@ -23,6 +24,8 @@ import Link from './formats/link';
 import Script from './formats/script';
 import Strike from './formats/strike';
 import Underline from './formats/underline';
+import Sup from './formats/sup';
+import Sub from './formats/sub';
 
 import Formula from './formats/formula';
 import Image from './formats/image';
@@ -42,38 +45,42 @@ import Tooltip from './ui/tooltip';
 
 import BubbleTheme from './themes/bubble';
 import SnowTheme from './themes/snow';
+import TikuTheme from './themes/tiku';
 
 Quill.register(
   {
+    'attributors/class/align': AlignClass,
+    'attributors/style/align': AlignStyle,
+    'formats/align': AlignClass,
     'attributors/attribute/direction': DirectionAttribute,
 
-    'attributors/class/align': AlignClass,
     'attributors/class/background': BackgroundClass,
     'attributors/class/color': ColorClass,
     'attributors/class/direction': DirectionClass,
     'attributors/class/font': FontClass,
     'attributors/class/size': SizeClass,
+    'attributors/class/dotted': DottedClass,
 
-    'attributors/style/align': AlignStyle,
     'attributors/style/background': BackgroundStyle,
     'attributors/style/color': ColorStyle,
     'attributors/style/direction': DirectionStyle,
     'attributors/style/font': FontStyle,
     'attributors/style/size': SizeStyle,
+    'attributors/style/dotted': DottedStyle,
   },
   true,
 );
 
 Quill.register(
   {
-    'formats/align': AlignClass,
     'formats/direction': DirectionClass,
     'formats/indent': Indent,
 
-    'formats/background': BackgroundStyle,
-    'formats/color': ColorStyle,
+    // 'formats/background': BackgroundStyle,
+    // 'formats/color': ColorStyle,
     'formats/font': FontClass,
     'formats/size': SizeClass,
+    'formats/dotted': DottedStyle,
 
     'formats/blockquote': Blockquote,
     'formats/code-block': CodeBlock,
@@ -87,6 +94,8 @@ Quill.register(
     'formats/script': Script,
     'formats/strike': Strike,
     'formats/underline': Underline,
+    'formats/sup': Sup,
+    'formats/sub': Sub,
 
     'formats/formula': Formula,
     'formats/image': Image,
@@ -98,6 +107,7 @@ Quill.register(
 
     'themes/bubble': BubbleTheme,
     'themes/snow': SnowTheme,
+    'themes/tiku': TikuTheme,
 
     'ui/icons': Icons,
     'ui/picker': Picker,

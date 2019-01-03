@@ -27,6 +27,10 @@ import strikeIcon from '../assets/icons/strike.svg';
 import tableIcon from '../assets/icons/table.svg';
 import underlineIcon from '../assets/icons/underline.svg';
 import videoIcon from '../assets/icons/video.svg';
+import dottedIcon from '../assets/icons/dotted.svg';
+import selectAllIcon from '../assets/icons/select-all.svg';
+import supIcon from '../assets/icons/sup.svg';
+import subIcon from '../assets/icons/sub.svg';
 
 module.exports = {
   align: {
@@ -71,4 +75,8 @@ module.exports = {
   table: tableIcon,
   underline: underlineIcon,
   video: videoIcon,
+  dotted: dottedIcon,
+  all: selectAllIcon,
+  sup: supIcon,
+  sub: subIcon,
 };
