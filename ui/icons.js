@@ -32,7 +32,7 @@ import selectAllIcon from '../assets/icons/select-all.svg';
 import supIcon from '../assets/icons/sup.svg';
 import subIcon from '../assets/icons/sub.svg';
 
-module.exports = {
+export default {
   align: {
     '': alignLeftIcon,
     center: alignCenterIcon,
