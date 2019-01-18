@@ -1,5 +1,6 @@
 .*
-/dist
+/dist/latex-editor-plugin
+/dist/quill.*
 /node_modules
 /selenium
 /docs/_site

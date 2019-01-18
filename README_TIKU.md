@@ -3,4 +3,4 @@
 2. 打开[http://localhost:9080/demo.html](http://localhost:9080/demo.html)
 
 ### 编译打包
-npm 
+npm run build
