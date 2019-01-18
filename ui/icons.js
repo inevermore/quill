@@ -29,8 +29,14 @@ import underlineIcon from '../assets/icons/underline.svg';
 import videoIcon from '../assets/icons/video.svg';
 import dottedIcon from '../assets/icons/dotted.svg';
 import selectAllIcon from '../assets/icons/select-all.svg';
-import supIcon from '../assets/icons/sup.svg';
-import subIcon from '../assets/icons/sub.svg';
+import redoIcon from '../assets/icons/redo.svg';
+import undoIcon from '../assets/icons/undo.svg';
+import wavyIcon from '../assets/icons/wavy.svg';
+import piIcon from '../assets/icons/pi.svg';
+import fillBlankUnderlineIcon from '../assets/icons/fill-blank-underline.svg';
+import svgToLatexIcon from '../assets/icons/svg-to-latex.svg';
+import latexToSvgIcon from '../assets/icons/latex-to-svg.svg';
+import pinyinIcon from '../assets/icons/pinyin.svg';
 
 export default {
   align: {
@@ -77,6 +83,26 @@ export default {
   video: videoIcon,
   dotted: dottedIcon,
   all: selectAllIcon,
-  sup: supIcon,
-  sub: subIcon,
+  undo: undoIcon,
+  redo: redoIcon,
+  wavy: wavyIcon,
+  pi: piIcon,
+  'tk-underline': {
+    normal: underlineIcon,
+    wavy: wavyIcon,
+  },
+  svgToLatex: svgToLatexIcon,
+  latexToSvg: latexToSvgIcon,
+  fillBlankUnderline: fillBlankUnderlineIcon,
+  pinyin: pinyinIcon,
+  'tk-align': {
+    left: alignLeftIcon,
+    center: alignCenterIcon,
+    right: alignRightIcon,
+  },
+  'tk-indent': {
+    indent: indentIcon,
+  },
+  'tk-strike': strikeIcon,
+  'tk-bold': boldIcon,
 };

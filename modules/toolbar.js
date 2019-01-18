@@ -254,9 +254,6 @@ Toolbar.DEFAULTS = {
         this.quill.format('list', value, Quill.sources.USER);
       }
     },
-    all() {
-      this.quill.setSelection(0, this.quill.getLength());
-    },
   },
 };
 

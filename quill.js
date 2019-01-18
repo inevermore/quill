@@ -24,12 +24,12 @@ import Link from './formats/link';
 import Script from './formats/script';
 import Strike from './formats/strike';
 import Underline from './formats/underline';
-import Sup from './formats/sup';
-import Sub from './formats/sub';
+import TkFormatClass from './formats/tk-underline';
 
 import Formula from './formats/formula';
 import Image from './formats/image';
 import Video from './formats/video';
+import FillBlankUnderline from './formats/fill-blank-underline';
 
 import CodeBlock, { Code as InlineCode } from './formats/code';
 
@@ -42,6 +42,7 @@ import Picker from './ui/picker';
 import ColorPicker from './ui/color-picker';
 import IconPicker from './ui/icon-picker';
 import Tooltip from './ui/tooltip';
+import TextPicker from './ui/text-picker';
 
 import BubbleTheme from './themes/bubble';
 import SnowTheme from './themes/snow';
@@ -55,18 +56,20 @@ Quill.register(
     'attributors/attribute/direction': DirectionAttribute,
 
     'attributors/class/background': BackgroundClass,
-    'attributors/class/color': ColorClass,
+    // 'attributors/class/color': ColorClass,
     'attributors/class/direction': DirectionClass,
     'attributors/class/font': FontClass,
     'attributors/class/size': SizeClass,
-    'attributors/class/dotted': DottedClass,
+    // 'attributors/class/dotted': DottedClass,
+    'attributors/class/tkFormat': TkFormatClass,
+    'attributors/class/italic': Italic,
 
     'attributors/style/background': BackgroundStyle,
     'attributors/style/color': ColorStyle,
     'attributors/style/direction': DirectionStyle,
     'attributors/style/font': FontStyle,
     'attributors/style/size': SizeStyle,
-    'attributors/style/dotted': DottedStyle,
+    // 'attributors/style/dotted': DottedStyle,
   },
   true,
 );
@@ -77,7 +80,7 @@ Quill.register(
     'formats/indent': Indent,
 
     // 'formats/background': BackgroundStyle,
-    // 'formats/color': ColorStyle,
+    'formats/color': ColorStyle,
     'formats/font': FontClass,
     'formats/size': SizeClass,
     'formats/dotted': DottedStyle,
@@ -92,14 +95,14 @@ Quill.register(
     'formats/italic': Italic,
     'formats/link': Link,
     'formats/script': Script,
+    'formats/tkFormat': TkFormatClass,
     'formats/strike': Strike,
     'formats/underline': Underline,
-    'formats/sup': Sup,
-    'formats/sub': Sub,
 
     'formats/formula': Formula,
     'formats/image': Image,
     'formats/video': Video,
+    'formats/fillBlankUnderline': FillBlankUnderline,
 
     'modules/syntax': Syntax,
     'modules/table': Table,
@@ -113,6 +116,7 @@ Quill.register(
     'ui/picker': Picker,
     'ui/icon-picker': IconPicker,
     'ui/color-picker': ColorPicker,
+    'ui/text-picker': TextPicker,
     'ui/tooltip': Tooltip,
   },
   true,

@@ -9,6 +9,7 @@ class History extends Module {
     this.lastRecorded = 0;
     this.ignoreChange = false;
     this.clear();
+    this.updateIcon();
     this.quill.on(
       Quill.events.EDITOR_CHANGE,
       (eventName, delta, oldDelta, source) => {
@@ -48,8 +49,23 @@ class History extends Module {
     this.quill.setSelection(index);
   }
 
+  updateIcon() {
+    ['undo', 'redo'].forEach(source => {
+      const operation = this.stack[source].length === 0 ? 'add' : 'remove';
+      const toolbar = this.quill.getModule('toolbar');
+      if (!toolbar) return;
+      const toolbarContainer = toolbar.container;
+      toolbarContainer
+        .querySelector(`.ql-${source}`)
+        .classList[operation]('tk-disable-history');
+    });
+  }
+
   clear() {
     this.stack = { undo: [], redo: [] };
+    this.updateIcon();
+    observeArray(this.stack.redo, this.updateIcon.bind(this));
+    observeArray(this.stack.undo, this.updateIcon.bind(this));
   }
 
   cutoff() {
@@ -59,6 +75,7 @@ class History extends Module {
   record(changeDelta, oldDelta) {
     if (changeDelta.ops.length === 0) return;
     this.stack.redo = [];
+    observeArray(this.stack.redo, this.updateIcon.bind(this));
     let undoDelta = guessUndoDelta(changeDelta);
     if (undoDelta == null) {
       undoDelta = this.quill.getContents().diff(oldDelta);
@@ -150,4 +167,28 @@ function guessUndoDelta(delta) {
   return failed ? null : undoDelta;
 }
 
+function def(obj, key, val) {
+  Object.defineProperty(obj, key, {
+    value: val,
+    enumerable: false,
+    writable: true,
+    configurable: true,
+  });
+}
+
+function observeArray(arr, event) {
+  const methods = ['push', 'pop', 'shift', 'unshift'];
+  const arrayProto = Array.prototype;
+  const arrayMethods = Object.create(arrayProto);
+  methods.forEach(method => {
+    // cache original method
+    const original = arrayProto[method];
+    def(arrayMethods, method, (...args) => {
+      const result = original.apply(arr, args);
+      event();
+      return result;
+    });
+    arr.__proto__ = arrayMethods; // eslint-disable-line no-proto
+  });
+}
 export { History as default, getLastChangeIndex };

@@ -4,15 +4,32 @@ import BaseTheme, { BaseTooltip } from './base';
 import LinkBlot from '../formats/link';
 import { Range } from '../core/selection';
 import icons from '../ui/icons';
+import LatexToImg from '../utils/latex-to-img';
+import ImgToLatex from '../utils/img-to-latex';
 
 const TOOLBAR_CONFIG = [
-  ['italic', 'strike', 'underline'],
-  [{ align: [] }, 'sup', 'sub'],
-  // [{ color: [] }],
+  ['undo', 'redo'],
+  [{ 'tk-bold': 'normal' }, { italic: 'normal' }, { 'tk-strike': 'normal' }],
+  [
+    { 'tk-align': 'left' },
+    { 'tk-align': 'center' },
+    { 'tk-align': 'right' },
+    { 'tk-indent': 'indent' },
+    { script: 'super' },
+    { script: 'sub' },
+  ],
   ['all', 'clean'],
   ['image'],
-  // [{ size: [] }],
-  ['dotted', 'underline'],
+  ['pi'],
+  [
+    // { tkFormat: 'dotted' },
+    { 'tk-underline': 'normal' },
+    'fillBlankUnderline',
+    { 'tk-underline': 'wavy' },
+  ],
+  ['latexToSvg', 'svgToLatex'],
+  [{ pinyin: [] }],
+  // [{ dotted: 'dotted-underline' }],
 ];
 
 class SnowTooltip extends BaseTooltip {
@@ -89,12 +106,15 @@ class TikuTheme extends BaseTheme {
     }
     super(quill, options);
     this.quill.container.classList.add('ql-snow');
+    this.quill.container.classList.add('ql-tiku');
   }
 
   extendToolbar(toolbar) {
     toolbar.container.classList.add('ql-snow');
+    toolbar.container.classList.add('ql-tiku');
     this.buildButtons(toolbar.container.querySelectorAll('button'), icons);
     this.buildPickers(toolbar.container.querySelectorAll('select'), icons);
+    // buildPickers.call(this, toolbar.container.querySelectorAll('select'), icons);
     this.tooltip = new SnowTooltip(this.quill, this.options.bounds);
     if (toolbar.container.querySelector('.ql-link')) {
       this.quill.keyboard.addBinding(
@@ -105,27 +125,41 @@ class TikuTheme extends BaseTheme {
       );
     }
   }
+
+  static getSelectIndex() {
+    return this.quill.selection.savedRange.index;
+  }
 }
+
 TikuTheme.DEFAULTS = extend(true, {}, BaseTheme.DEFAULTS, {
   modules: {
     toolbar: {
       handlers: {
-        link(value) {
-          if (value) {
-            const range = this.quill.getSelection();
-            if (range == null || range.length === 0) return;
-            let preview = this.quill.getText(range);
-            if (
-              /^\S+@\S+\.\S+$/.test(preview) &&
-              preview.indexOf('mailto:') !== 0
-            ) {
-              preview = `mailto:${preview}`;
-            }
-            const { tooltip } = this.quill.theme;
-            tooltip.edit('link', preview);
-          } else {
-            this.quill.format('link', false);
-          }
+        redo() {
+          this.quill.history.redo();
+        },
+        undo() {
+          this.quill.history.undo();
+        },
+        all() {
+          this.quill.setSelection(0, this.quill.getLength());
+        },
+        pi() {
+          this.quill.showFormulaEditor(true);
+        },
+        svgToLatex() {
+          ImgToLatex(this.quill);
+        },
+        latexToSvg() {
+          LatexToImg(this.quill, false);
+        },
+        fillBlankUnderline() {
+          const savedIndex = this.quill.selection.savedRange.index;
+          this.quill.insertEmbed(savedIndex, 'fill-blank-underline', {});
+        },
+        pinyin(value) {
+          const savedIndex = this.quill.selection.savedRange.index;
+          this.quill.insertText(savedIndex, value);
         },
       },
     },

@@ -115,14 +115,16 @@ class Table extends Module {
   }
 
   insertTable(rows, columns) {
-    const range = this.quill.getSelection();
-    if (range == null) return;
+    const rangeIndex =
+      (this.quill.getSelection() && this.quill.getSelection().index) ||
+      this.quill.selection.savedRange.index;
+    if (rangeIndex == null) return;
     const delta = new Array(rows).fill(0).reduce(memo => {
       const text = new Array(columns).fill('\n').join('');
       return memo.insert(text, { table: tableId() });
-    }, new Delta().retain(range.index));
+    }, new Delta().retain(rangeIndex));
     this.quill.updateContents(delta, Quill.sources.USER);
-    this.quill.setSelection(range.index, Quill.sources.SILENT);
+    this.quill.setSelection(rangeIndex, Quill.sources.SILENT);
     this.balanceTables();
   }
 

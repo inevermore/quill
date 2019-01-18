@@ -5,6 +5,10 @@ const config = {
   whitelist: ['normal'],
 };
 
-const ItalicClass = new ClassAttributor('italic', 'yikespec-italic', config);
+const TkStrikeClass = new ClassAttributor(
+  'tk-strike',
+  'yikespec-strike',
+  config,
+);
 
-export default ItalicClass;
+export default TkStrikeClass;

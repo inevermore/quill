@@ -5,6 +5,7 @@ import ColorPicker from '../ui/color-picker';
 import IconPicker from '../ui/icon-picker';
 import Picker from '../ui/picker';
 import Tooltip from '../ui/tooltip';
+import TextPicker from '../ui/text-picker';
 
 const ALIGNS = [false, 'center', 'right', 'justify'];
 
@@ -51,6 +52,34 @@ const FONTS = [false, 'serif', 'monospace'];
 const HEADERS = ['1', '2', '3', false];
 
 const SIZES = ['small', false, 'large', 'huge'];
+
+const PINYINS = [
+  'ā',
+  'á',
+  'ǎ',
+  'à',
+  'ō',
+  'ó',
+  'ǒ',
+  'ò',
+  'ē',
+  'é',
+  'ě',
+  'è',
+  'ī',
+  'í',
+  'ǐ',
+  'ì',
+  'ū',
+  'ú',
+  'ǔ',
+  'ù',
+  'ǖ',
+  'ǘ',
+  'ǚ',
+  'ǜ',
+  'ü',
+];
 
 class BaseTheme extends Theme {
   constructor(quill, options) {
@@ -135,6 +164,14 @@ class BaseTheme extends Theme {
         }
         return new ColorPicker(select, icons[format]);
       }
+
+      if (select.classList.contains('ql-pinyin')) {
+        if (select.querySelector('option') == null) {
+          fillSelect(select, PINYINS, '');
+        }
+        return new TextPicker(select, icons.pinyin);
+      }
+
       if (select.querySelector('option') == null) {
         if (select.classList.contains('ql-font')) {
           fillSelect(select, FONTS);

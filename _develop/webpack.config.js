@@ -26,6 +26,7 @@ const source = [
   'test',
   'themes',
   'ui',
+  'utils',
 ].map(file => {
   return path.resolve(__dirname, '..', file);
 });
@@ -100,13 +101,15 @@ const baseConfig = {
   mode: 'development',
   context: path.resolve(__dirname, '..'),
   entry: {
-    'quill.js': ['./quill.js'],
+    // 'quill.js': ['./quill.js'],
+    'quill.js': ['./tk-quill.js'],
     'quill.core.js': ['./core.js'],
     'quill.core': './assets/core.styl',
     'quill.bubble': './assets/bubble.styl',
     'quill.snow': './assets/snow.styl',
     'unit.js': './test/unit.js',
     'index.js': './index.js',
+    'quill.tk': './assets/tk.styl',
   },
   output: {
     filename: '[name]',

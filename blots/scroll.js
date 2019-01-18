@@ -63,6 +63,10 @@ class Scroll extends ScrollBlot {
     this.optimize();
   }
 
+  tranvers(index, length, fn) {
+    super.tranvers(index, length, fn);
+  }
+
   insertAt(index, value, def) {
     if (index >= this.length()) {
       if (def == null || this.scroll.query(value, Scope.BLOCK) == null) {

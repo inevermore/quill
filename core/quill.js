@@ -8,6 +8,7 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
+import GetImgList from '../utils/getImgList';
 
 const debug = logger('quill');
 
@@ -78,6 +79,11 @@ class Quill {
     this.root.addEventListener('dragstart', e => {
       e.preventDefault();
     });
+    this.root.addEventListener('dblclick', e => {
+      if (e.target.classList.contains('yk-math-img')) {
+        this.editFormula(e.target);
+      }
+    });
     this.root.classList.add('ql-blank');
     this.root.setAttribute('data-gramm', false);
     this.scrollingContainer = this.options.scrollingContainer || this.root;
@@ -95,6 +101,7 @@ class Quill {
     this.clipboard = this.theme.addModule('clipboard');
     this.history = this.theme.addModule('history');
     this.uploader = this.theme.addModule('uploader');
+    this.imageResizer = this.theme.addModule('image-resizer');
     this.theme.init();
     this.emitter.on(Emitter.events.EDITOR_CHANGE, type => {
       if (type === Emitter.events.TEXT_CHANGE) {
@@ -125,6 +132,7 @@ class Quill {
       this.disable();
     }
     this.allowReadOnlyEdits = false;
+    this.editedImg = null;
   }
 
   addContainer(container, refNode = null) {
@@ -438,7 +446,50 @@ class Quill {
       true,
     );
   }
+
+  insertFormula(objList) {
+    const savedRangeIndex = this.selection.savedRange.index;
+    // 编辑模式下替换 img 节点
+    if (this.editedImg) {
+      this.editedImg.outerHTML = `<img class="yk-math-img" data-latex="${
+        objList[0].latex
+      }" src="${objList[0].src}">`;
+      this.editedImg = null;
+    } else if (objList[0].latex) {
+      this.showFormulaEditor(false);
+      this.insertEmbed(savedRangeIndex, 'image', {
+        src: `${objList[0].src}`,
+        'data-latex': objList[0].latex,
+        class: 'yk-math-img',
+      });
+      this.setSelection(savedRangeIndex + 1, 0);
+    }
+  }
+
+  editFormula(img) {
+    this.editedImg = img;
+    this.showFormulaEditor(true, img.dataset.latex);
+  }
+
+  showFormulaEditor(boolean, latex = '') {
+    const formula = document.querySelector('#formulaEditor');
+    formula.style.visibility = boolean ? 'visible' : 'hidden';
+    formula.contentWindow.latexEditor.set(latex);
+  }
+
+  // 遍历选中区域节点
+  tranversSelected(fn) {
+    const selection = this.getSelection();
+    if (selection && selection.length > 0) {
+      this.scroll.tranvers(selection.index, selection.length, fn);
+    }
+  }
+
+  getMathImgSrcList(latexArr) {
+    GetImgList(latexArr).then(this.insertFormula.bind(this));
+  }
 }
+
 Quill.DEFAULTS = {
   bounds: null,
   modules: {},

@@ -1,21 +1,35 @@
 import { EmbedBlot } from 'parchment';
 import { sanitize } from './link';
 
-const ATTRIBUTES = ['alt', 'height', 'width'];
+const ATTRIBUTES = {
+  alt: undefined,
+  height: undefined,
+  width: undefined,
+  'data-latex': undefined,
+  class: ['yk-math-img'],
+};
 
 class Image extends EmbedBlot {
   static create(value) {
     const node = super.create(value);
     if (typeof value === 'string') {
       node.setAttribute('src', this.sanitize(value));
+    } else if (typeof value === 'object') {
+      Object.keys(value).forEach(key => {
+        const val = key === 'src' ? this.sanitize(value[key]) : value[key];
+        node.setAttribute(key, val);
+      });
     }
     return node;
   }
 
   static formats(domNode) {
-    return ATTRIBUTES.reduce((formats, attribute) => {
+    return Object.entries(ATTRIBUTES).reduce((formats, [attribute, val]) => {
       if (domNode.hasAttribute(attribute)) {
-        formats[attribute] = domNode.getAttribute(attribute);
+        const value = domNode.getAttribute(attribute);
+        if (!val || val.indexOf(value) > -1) {
+          formats[attribute] = value;
+        }
       }
       return formats;
     }, {});
@@ -43,11 +57,17 @@ class Image extends EmbedBlot {
   }
 
   format(name, value) {
-    if (ATTRIBUTES.indexOf(name) > -1) {
+    if (Object.prototype.hasOwnProperty.call(ATTRIBUTES, name)) {
       if (value) {
-        this.domNode.setAttribute(name, value);
+        if (!ATTRIBUTES[name]) {
+          this.domNode.setAttribute(name, value);
+        } else {
+          this.domNode.classList.add(value);
+        }
+      } else if (!ATTRIBUTES[name]) {
+        this.domNode.removeAttribute(name, value);
       } else {
-        this.domNode.removeAttribute(name);
+        this.domNode.classList.remove(value);
       }
     } else {
       super.format(name, value);

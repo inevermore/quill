@@ -13,12 +13,8 @@ import logger from '../core/logger';
 import Module from '../core/module';
 
 import { AlignAttribute, AlignStyle } from '../formats/align';
-import { BackgroundStyle } from '../formats/background';
 import CodeBlock from '../formats/code';
-import { ColorStyle } from '../formats/color';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
-import { FontStyle } from '../formats/font';
-import { SizeStyle } from '../formats/size';
 
 const debug = logger('quill:clipboard');
 
@@ -30,13 +26,14 @@ const CLIPBOARD_CONFIG = [
   [Node.ELEMENT_NODE, matchBlot],
   [Node.ELEMENT_NODE, matchAttributor],
   [Node.ELEMENT_NODE, matchStyles],
-  ['li', matchIndent],
-  ['ol, ul', matchList],
-  ['pre', matchCodeBlock],
   ['tr', matchTable],
-  ['b', matchAlias.bind(matchAlias, 'bold')],
-  ['i', matchAlias.bind(matchAlias, 'italic')],
+  ['b', matchAlias.bind(matchAlias, { 'tk-bold': 'normal' })],
+  ['strong', matchAlias.bind(matchAlias, { 'tk-bold': 'normal' })],
+  ['i', matchAlias.bind(matchAlias, { italic: 'normal' })],
+  ['em', matchAlias.bind(matchAlias, { italic: 'normal' })],
   ['style', matchIgnore],
+  ['u', matchUnderline],
+  ['s', matchAlias.bind(matchAlias, { 'tk-strike': 'normal' })],
 ];
 
 const ATTRIBUTE_ATTRIBUTORS = [AlignAttribute, DirectionAttribute].reduce(
@@ -53,7 +50,7 @@ const STYLE_ATTRIBUTORS = [
   // ColorStyle,
   DirectionStyle,
   // FontStyle,
-  SizeStyle,
+  // SizeStyle,
 ].reduce((memo, attr) => {
   memo[attr.keyName] = attr;
   return memo;
@@ -163,6 +160,7 @@ class Clipboard extends Module {
     const formats = this.quill.getFormat(range.index);
     const pastedDelta = this.convert({ text, html }, formats);
     debug.log('onPaste', pastedDelta, { text, html });
+    console.log(html);
     const delta = new Delta()
       .retain(range.index)
       .delete(range.length)
@@ -498,6 +496,20 @@ function matchText(node, delta) {
     }
   }
   return delta.insert(text);
+}
+
+function matchUnderline(node, delta) {
+  let value = 'normal';
+  let styleText = node.getAttribute('style');
+  if (typeof styleText === 'string') {
+    styleText = styleText.replace(/\s/g, '');
+    const WAVY = 'text-underline:wave';
+    if (styleText.indexOf(WAVY) > -1) {
+      value = 'wavy';
+    }
+  }
+
+  return applyFormat(delta, 'tk-underline', value);
 }
 
 export {

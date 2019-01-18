@@ -5,6 +5,6 @@ const config = {
   whitelist: ['normal'],
 };
 
-const ItalicClass = new ClassAttributor('italic', 'yikespec-italic', config);
+const TkBoldClass = new ClassAttributor('tk-bold', 'yikespec-bold', config);
 
-export default ItalicClass;
+export default TkBoldClass;
