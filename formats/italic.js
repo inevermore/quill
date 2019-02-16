@@ -1,3 +1,12 @@
+// import TkInline from '../blots/tk-inline';
+
+// class TkItalic extends TkInline {}
+
+// TkItalic.blotName = 'italic';
+// TkItalic.className = 'tkspec-italic';
+// TkItalic.whiteList = ['normal'];
+
+// export default TkItalic;
 import { ClassAttributor, Scope } from 'parchment';
 
 const config = {
@@ -5,6 +14,6 @@ const config = {
   whitelist: ['normal'],
 };
 
-const ItalicClass = new ClassAttributor('italic', 'yikespec-italic', config);
+const TkItalicClass = new ClassAttributor('italic', 'tkspec-italic', config);
 
-export default ItalicClass;
+export default TkItalicClass;

@@ -16,7 +16,7 @@ import { BackgroundClass, BackgroundStyle } from './formats/background';
 import { ColorClass, ColorStyle } from './formats/color';
 import { FontClass, FontStyle } from './formats/font';
 import { SizeClass, SizeStyle } from './formats/size';
-import { DottedClass, DottedStyle } from './formats/dotted';
+import DottedClass from './formats/dotted';
 
 import Bold from './formats/bold';
 import Italic from './formats/italic';
@@ -24,7 +24,7 @@ import Link from './formats/link';
 import Script from './formats/script';
 import Strike from './formats/strike';
 import Underline from './formats/underline';
-import TkFormatClass from './formats/tk-underline';
+import TkFormatClass from './formats/underline';
 
 import Formula from './formats/formula';
 import Image from './formats/image';
@@ -60,7 +60,7 @@ Quill.register(
     'attributors/class/direction': DirectionClass,
     'attributors/class/font': FontClass,
     'attributors/class/size': SizeClass,
-    // 'attributors/class/dotted': DottedClass,
+    'attributors/class/dotted': DottedClass,
     'attributors/class/tkFormat': TkFormatClass,
     'attributors/class/italic': Italic,
 
@@ -83,7 +83,7 @@ Quill.register(
     'formats/color': ColorStyle,
     'formats/font': FontClass,
     'formats/size': SizeClass,
-    'formats/dotted': DottedStyle,
+    'formats/dotted': DottedClass,
 
     'formats/blockquote': Blockquote,
     'formats/code-block': CodeBlock,

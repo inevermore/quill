@@ -1,7 +1,10 @@
-import Inline from '../blots/inline';
+import { ClassAttributor, Scope } from 'parchment';
 
-class Strike extends Inline {}
-Strike.blotName = 'strike';
-Strike.tagName = 'S';
+const config = {
+  scope: Scope.INLINE,
+  whitelist: ['normal'],
+};
 
-export default Strike;
+const TkStrikeClass = new ClassAttributor('strike', 'tkspec-strike', config);
+
+export default TkStrikeClass;

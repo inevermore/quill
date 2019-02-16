@@ -8,7 +8,7 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
-import GetImgList from '../utils/getImgList';
+import GetImgList from '../utils/get-img-list';
 
 const debug = logger('quill');
 
@@ -63,6 +63,7 @@ class Quill {
   }
 
   constructor(container, options = {}) {
+    this.imports = Quill.imports;
     this.options = expandConfig(container, options);
     this.container = this.options.container;
     if (this.container == null) {
@@ -133,6 +134,7 @@ class Quill {
     }
     this.allowReadOnlyEdits = false;
     this.editedImg = null;
+    this.tkEvents = this.options.events;
   }
 
   addContainer(container, refNode = null) {
@@ -456,7 +458,6 @@ class Quill {
       }" src="${objList[0].src}">`;
       this.editedImg = null;
     } else if (objList[0].latex) {
-      this.showFormulaEditor(false);
       this.insertEmbed(savedRangeIndex, 'image', {
         src: `${objList[0].src}`,
         'data-latex': objList[0].latex,
@@ -468,25 +469,27 @@ class Quill {
 
   editFormula(img) {
     this.editedImg = img;
-    this.showFormulaEditor(true, img.dataset.latex);
+    this.showFormulaEditor(img.dataset.latex);
   }
 
-  showFormulaEditor(boolean, latex = '') {
-    const formula = document.querySelector('#formulaEditor');
-    formula.style.visibility = boolean ? 'visible' : 'hidden';
-    formula.contentWindow.latexEditor.set(latex);
+  showFormulaEditor(latex = '') {
+    this.tkEvents.openFormula(latex);
   }
 
   // 遍历选中区域节点
-  tranversSelected(fn) {
+  traversingSelected(fn) {
     const selection = this.getSelection();
     if (selection && selection.length > 0) {
-      this.scroll.tranvers(selection.index, selection.length, fn);
+      this.scroll.traversing(selection.index, selection.length, fn);
     }
   }
 
   getMathImgSrcList(latexArr) {
     GetImgList(latexArr).then(this.insertFormula.bind(this));
+  }
+
+  getHTML() {
+    return this.root.innerHTML;
   }
 }
 

@@ -1,4 +1,5 @@
 import Module from '../core/module';
+import throttle from '../utils/throttle';
 
 class ImageResizer extends Module {
   constructor(quill, options) {
@@ -11,15 +12,16 @@ class ImageResizer extends Module {
       // [width, height]
       [-1, -1],
       [0, -1],
-      [1, 1],
+      [1, -1],
       [1, 0],
       [1, 1],
       [0, 1],
-      [-1, -1],
+      [-1, 1],
       [-1, 0],
     ];
-    this.wrap.addEventListener('click', e => {
+    this.wrap.parentNode.addEventListener('click', e => {
       if (
+        this.wrap.contains(e.target) &&
         e.target.tagName.toUpperCase() === 'IMG' &&
         (!this.imgNode || e.target !== this.imgNode)
       ) {
@@ -43,6 +45,7 @@ class ImageResizer extends Module {
   }
 
   mouseDown(e) {
+    e.preventDefault();
     const hand = e.target;
     if (hand.className.indexOf('ql-image-resizer-hand') > -1) {
       this.prePos = {
@@ -54,45 +57,70 @@ class ImageResizer extends Module {
         height: this.imgNode.offsetHeight,
       };
       this.handId = hand.className.slice(-1);
-      this.wrap.addEventListener('mousemove', ele => {
-        if (this.handId < 0) return;
-        this.mouseMove({
-          x: ele.clientX - this.prePos.x,
-          y: ele.clientY - this.prePos.y,
-        });
-      });
+      this.wrap.addEventListener(
+        'mousemove',
+        throttle(this.mouseMove, 30).bind(this),
+      );
     }
   }
 
-  mouseMove(offset) {
-    console.log('offset', offset);
-    console.log('origin', this.originSize);
+  mouseMove(e) {
+    if (this.handId < 0) return;
+    const offset = {
+      x: e.clientX - this.prePos.x,
+      y: e.clientY - this.prePos.y,
+    };
     const widthDir = this.rect[this.handId][0];
     const heightDir = this.rect[this.handId][1];
-    // adjust height only
-    if (widthDir === 0 || heightDir === 0) {
-      this.resizeImage(
-        this.originSize.width + widthDir * offset.x,
-        this.originSize.height + heightDir * offset.y,
-      );
-    } else {
-      let width = widthDir * offset.x;
-      let height = heightDir * offset.y;
-      if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
-        height = heightDir * (offset.x / this.scale);
+    let offsetWidth = widthDir * offset.x;
+    let offsetHeight = heightDir * offset.y;
+    // 比例缩放
+    if (widthDir !== 0 && heightDir !== 0) {
+      // 放大
+      if (offsetHeight > 0 || offsetWidth > 0) {
+        if (offsetHeight > 0 && offsetWidth > 0) {
+          if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
+            offsetHeight = offsetWidth / this.scale;
+          } else {
+            offsetWidth = offsetHeight * this.scale;
+          }
+        } else if (offsetWidth > 0) {
+          offsetHeight = offsetWidth / this.scale;
+        } else {
+          offsetWidth = offsetHeight * this.scale;
+        }
+        // 缩小
+      } else if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
+        offsetWidth = offsetHeight * this.scale;
       } else {
-        width = widthDir * (offset.y * this.scale);
+        offsetHeight = offsetWidth / this.scale;
       }
-      this.resizeImage(this.originSize.width + width, this.originSize.height + height);
     }
+    const width = this.originSize.width + offsetWidth;
+    const { paddingLeft, paddingRight } = getComputedStyle(this.quill.root);
+    const contentWidth =
+      this.quill.root.offsetWidth -
+      parseInt(paddingLeft, 10) -
+      parseInt(paddingRight, 10);
+    if (width >= contentWidth) {
+      return;
+    }
+    this.resizeImage(width, this.originSize.height + offsetHeight);
   }
 
   resizeImage(width, height) {
-    console.log(width, height);
-    this.resizer.style.width = `${width}px`;
     this.imgNode.width = width;
-    this.resizer.style.height = `${height}px`;
     this.imgNode.height = height;
+    this.updateImageStyle();
+  }
+
+  updateImageStyle() {
+    const wrapPos = this.wrap.getBoundingClientRect();
+    const imagePos = this.imgNode.getBoundingClientRect();
+    this.resizer.style.left = `${imagePos.x - wrapPos.x}px`;
+    this.resizer.style.top = `${imagePos.y - wrapPos.y}px`;
+    this.resizer.style.width = `${this.imgNode.offsetWidth}px`;
+    this.resizer.style.height = `${this.imgNode.offsetHeight}px`;
   }
 
   removeResizer() {
@@ -100,12 +128,9 @@ class ImageResizer extends Module {
     this.resizer.style.display = 'none';
   }
 
-  showContainer({ offsetLeft, offsetTop, offsetWidth, offsetHeight }) {
-    this.resizer.style.left = `${offsetLeft}px`;
-    this.resizer.style.top = `${offsetTop}px`;
-    this.resizer.style.width = `${offsetWidth}px`;
-    this.resizer.style.height = `${offsetHeight}px`;
+  showContainer() {
     this.resizer.style.display = 'block';
+    this.updateImageStyle();
   }
 
   createResizer() {
@@ -117,7 +142,7 @@ class ImageResizer extends Module {
       innerHtml += `<span class="ql-image-resizer-hand${i}"></span>`;
     }
     container.innerHTML = innerHtml;
-    this.quill.container.appendChild(container);
+    this.wrap.appendChild(container);
     return container;
   }
 }

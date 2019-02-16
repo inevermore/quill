@@ -5,7 +5,7 @@ function imgToLatex(quill) {
   if (range && range.length > 0) {
     let nodeCount = 0;
     let latexCount = 0;
-    quill.tranversSelected(blot => {
+    quill.traversingSelected(blot => {
       const { domNode } = blot;
       if (
         domNode.nodeType === Node.ELEMENT_NODE &&

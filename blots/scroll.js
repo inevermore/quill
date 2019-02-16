@@ -56,6 +56,7 @@ class Scroll extends ScrollBlot {
 
   enable(enabled = true) {
     this.domNode.setAttribute('contenteditable', enabled);
+    this.domNode.setAttribute('spellcheck', 'false');
   }
 
   formatAt(index, length, format, value) {
@@ -63,8 +64,10 @@ class Scroll extends ScrollBlot {
     this.optimize();
   }
 
-  tranvers(index, length, fn) {
-    super.tranvers(index, length, fn);
+  traversing(index, length, fn) {
+    this.children.forEachAt(index, length, (child, offset, childLength) => {
+      child.traversing(offset, childLength, fn);
+    });
   }
 
   insertAt(index, value, def) {

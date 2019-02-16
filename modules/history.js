@@ -55,9 +55,10 @@ class History extends Module {
       const toolbar = this.quill.getModule('toolbar');
       if (!toolbar) return;
       const toolbarContainer = toolbar.container;
-      toolbarContainer
-        .querySelector(`.ql-${source}`)
-        .classList[operation]('tk-disable-history');
+      const icon = toolbarContainer.querySelector(`.ql-${source}`);
+      if (icon) {
+        icon.classList[operation]('tk-disable-history');
+      }
     });
   }
 

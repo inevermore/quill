@@ -1,16 +1,10 @@
-import { ClassAttributor, Scope, StyleAttributor } from 'parchment';
+import { ClassAttributor, Scope } from 'parchment';
 
-class DottedAttributor extends StyleAttributor {
-  value() {
-    return 'dotted underline';
-  }
-}
-
-const DottedClass = new ClassAttributor('dotted', 'ql-dotted', {
+const config = {
   scope: Scope.INLINE,
-});
-const DottedStyle = new DottedAttributor('dotted', 'text-decoration', {
-  scope: Scope.INLINE,
-});
+  whitelist: ['circle'],
+};
 
-export { DottedClass, DottedStyle };
+const DottedClass = new ClassAttributor('dotted', 'tkspec-dotted', config);
+
+export default DottedClass;

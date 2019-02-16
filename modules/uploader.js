@@ -38,7 +38,7 @@ class Uploader extends Module {
 }
 
 Uploader.DEFAULTS = {
-  mimetypes: ['image/png', 'image/jpeg'],
+  mimetypes: ['image/png', 'image/jpg', 'image/jpeg'],
   handler(range, files) {
     const promises = files.map(file => {
       return new Promise(resolve => {

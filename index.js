@@ -1,49 +1,81 @@
-window.quill = new Quill('#editor', {
-  theme: 'tiku',
-  modules: {
-    // toolbar: [['bold', 'italic', 'strike'], ['link', 'image'], ['table']],
-    table: true,
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-  },
-});
+import extend from 'extend';
+import Quill from './tk-quill';
 
-const table = window.quill.getModule('table');
-
-function query(selector) {
-  return document.querySelector(selector);
-}
-query('#insertTable').addEventListener('click', () => table.insertTable(Number(rowNumber.value), Number(columnNumber.value)));
-query('#insertRowAbove').addEventListener('click', () => table.insertRowAbove());
-query('#insertRowBelow').addEventListener('click', () => table.insertRowBelow());
-query('#insertColumnLeft').addEventListener('click', () => table.insertColumnLeft());
-query('#insertColumnRight').addEventListener('click', () => table.insertColumnRight());
-
-function def(obj, key, val) {
-  Object.defineProperty(obj, key, {
-    value: val,
-    enumerable: false,
-    writable: true,
-    configurable: true,
-  });
-}
-
-window.obs = function observeArray(arr, event) {
-  const methods = ['push', 'pop', 'shift', 'unshift'];
-  const arrayProto = Array.prototype;
-  const arrayMethods = Object.create(arrayProto);
-  methods.forEach(method => {
-    // cache original method
-    const original = arrayProto[method];
-    def(arrayMethods, method, (...args) => {
-      const result = original.apply(arr, args);
-      console.log('observe array');
-      return result;
+class TkEditor {
+  constructor(options) {
+    this.config = extend(
+      true,
+      {
+        container: document.body,
+        toolbar: {
+          container: null,
+          options: [],
+        },
+        initContent: '',
+        events: {
+          openFormula: () => {},
+          insertBlankOption: () => {},
+          getFormat: () => {},
+        },
+      },
+      options,
+    );
+    this.defaultStyle = '';
+    this.quill = new Quill(createContainer(this.config), {
+      theme: this.config.theme,
+      modules: {
+        toolbar: {
+          container: this.config.toolbar.container,
+          options: this.config.toolbar.options,
+        },
+      },
+      events: this.config.events,
     });
-    arr.__proto__ = arrayMethods; // eslint-disable-line no-proto
-  });
+    if (this.config.initContent) {
+      // this.setContent(this.config.initContent);
+    }
+  }
+
+  setContent(content) {
+    this.quill.root.innerHTML = content;
+  }
+
+  getContent() {
+    // if (this.config.theme === 'handout') {
+    //   return `<div style="${this.defaultStyle}">${this.quill.getHTML()}</div>`;
+    // }
+    return this.quill.getHTML();
+  }
+
+  insertFormula(objList) {
+    this.quill.insertFormula(objList);
+  }
+
+  getModule(module) {
+    return this.quill.getModule(module);
+  }
+
+  format(format, value) {
+    this.quill.getModule('toolbar').formatContent(format, value);
+  }
 }
-window.a = []
+
+function createContainer(config) {
+  let { container } = config;
+  if (typeof container === 'string') {
+    container = document.querySelector(container);
+  }
+  const wrapper = document.createElement('div');
+  wrapper.style.width = '100%';
+  wrapper.style.height = '100%';
+  wrapper.style.display = 'flex';
+  wrapper.style.flexDirection = 'column';
+  container.appendChild(wrapper);
+  const editedArea = document.createElement('div');
+  editedArea.style.flex = 1;
+  editedArea.style.height = 'auto';
+  wrapper.appendChild(editedArea);
+  return editedArea;
+}
+
+export default TkEditor;

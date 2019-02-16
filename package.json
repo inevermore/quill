@@ -132,7 +132,8 @@
       "import/named": [
         "error"
       ],
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "func-names": ["error", "never"]
     }
   },
   "eslintIgnore": [

@@ -1,11 +1,11 @@
-import GetImgList from './getImgList';
+import GetImgList from './get-img-list';
 
 const dirtyList = [];
 
 function latexToImg(quill, notConvertImg) {
   let converting = false;
   if (converting) {
-    alert('正在转换中，请勿连续点击');
+    alert('正在转换中，请勿连续点击'); // eslint-disable-line no-alert
     return;
   }
   converting = true;
@@ -26,7 +26,7 @@ function latexToImg(quill, notConvertImg) {
           const img = `<img class="yk-math-img" data-latex="${
             objList[count].latex
           }" src="${objList[count].src}">`;
-          count++;
+          count += 1;
           return img;
         })
         .replace(/MATHCUSTOM/g, '\\$');
@@ -42,6 +42,7 @@ function filter(latex) {
     .replace(/\/\//g, '\\ykparallel ')
     .trim();
   const tempArr = latex.split('');
+  // eslint-disable-next-line prettier/prettier
   return tempArr.map((v, i) => {
       if (
         WHITE_LIST.test(v) ||

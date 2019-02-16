@@ -108,7 +108,7 @@ const baseConfig = {
     'quill.bubble': './assets/bubble.styl',
     'quill.snow': './assets/snow.styl',
     'unit.js': './test/unit.js',
-    'index.js': './index.js',
+    'demo-index.js': './demo-index.js',
     'quill.tk': './assets/tk.styl',
   },
   output: {

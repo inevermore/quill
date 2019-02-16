@@ -6,107 +6,57 @@ import { Range } from '../core/selection';
 import icons from '../ui/icons';
 import LatexToImg from '../utils/latex-to-img';
 import ImgToLatex from '../utils/img-to-latex';
+import uploadImage from '../utils/upload-image';
+
+const PICKERS = ['size', 'font'];
 
 const TOOLBAR_CONFIG = [
   ['undo', 'redo'],
-  [{ 'tk-bold': 'normal' }, { italic: 'normal' }, { 'tk-strike': 'normal' }],
+  ['all', 'clean'],
   [
-    { 'tk-align': 'left' },
-    { 'tk-align': 'center' },
-    { 'tk-align': 'right' },
-    { 'tk-indent': 'indent' },
+    { bold: 'normal' },
+    { italic: 'normal' },
+    { strike: 'normal' },
+    { underline: 'normal' },
+    { underline: 'wavy' },
+    { dotted: 'circle' },
     { script: 'super' },
     { script: 'sub' },
   ],
-  ['all', 'clean'],
-  ['image'],
-  ['pi'],
   [
-    // { tkFormat: 'dotted' },
-    { 'tk-underline': 'normal' },
-    'fillBlankUnderline',
-    { 'tk-underline': 'wavy' },
+    { align: 'left' },
+    { align: 'center' },
+    { align: 'right' },
+    { indent: 'normal' },
   ],
-  ['latexToSvg', 'svgToLatex'],
+  ['image', 'fillBlankUnderline', 'fill-blank-brackets'],
+  ['pi', 'latexToSvg', 'svgToLatex'],
   [{ pinyin: [] }],
-  // [{ dotted: 'dotted-underline' }],
 ];
-
-class SnowTooltip extends BaseTooltip {
-  constructor(quill, bounds) {
-    super(quill, bounds);
-    this.preview = this.root.querySelector('a.ql-preview');
-  }
-
-  listen() {
-    super.listen();
-    this.root.querySelector('a.ql-action').addEventListener('click', event => {
-      if (this.root.classList.contains('ql-editing')) {
-        this.save();
-      } else {
-        this.edit('link', this.preview.textContent);
-      }
-      event.preventDefault();
-    });
-    this.root.querySelector('a.ql-remove').addEventListener('click', event => {
-      if (this.linkRange != null) {
-        const range = this.linkRange;
-        this.restoreFocus();
-        this.quill.formatText(range, 'link', false, Emitter.sources.USER);
-        delete this.linkRange;
-      }
-      event.preventDefault();
-      this.hide();
-    });
-    this.quill.on(
-      Emitter.events.SELECTION_CHANGE,
-      (range, oldRange, source) => {
-        if (range == null) return;
-        if (range.length === 0 && source === Emitter.sources.USER) {
-          const [link, offset] = this.quill.scroll.descendant(
-            LinkBlot,
-            range.index,
-          );
-          if (link != null) {
-            this.linkRange = new Range(range.index - offset, link.length());
-            const preview = LinkBlot.formats(link.domNode);
-            this.preview.textContent = preview;
-            this.preview.setAttribute('href', preview);
-            this.show();
-            this.position(this.quill.getBounds(this.linkRange));
-            return;
-          }
-        } else {
-          delete this.linkRange;
-        }
-        this.hide();
-      },
-    );
-  }
-
-  show() {
-    super.show();
-    this.root.removeAttribute('data-mode');
-  }
-}
-SnowTooltip.TEMPLATE = [
-  '<a class="ql-preview" target="_blank" href="about:blank"></a>',
-  '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">',
-  '<a class="ql-action"></a>',
-  '<a class="ql-remove"></a>',
-].join('');
 
 class TikuTheme extends BaseTheme {
   constructor(quill, options) {
     if (
       options.modules.toolbar != null &&
-      options.modules.toolbar.container == null
+      options.modules.toolbar.options == null
     ) {
-      options.modules.toolbar.container = TOOLBAR_CONFIG;
+      options.modules.toolbar.options = TOOLBAR_CONFIG;
     }
     super(quill, options);
     this.quill.container.classList.add('ql-snow');
     this.quill.container.classList.add('ql-tiku');
+    console.log(quill.imports, options);
+    options.modules.toolbar.options.forEach(option => {
+      option.forEach(item => {
+        if (typeof item === 'object') {
+          Object.keys(item).forEach(key => {
+            if (PICKERS.indexOf(key) > -1 && Array.isArray(item[key])) {
+              quill.imports[`formats/${key}`].whitelist = item[key];
+            }
+          });
+        }
+      });
+    });
   }
 
   extendToolbar(toolbar) {
@@ -114,8 +64,6 @@ class TikuTheme extends BaseTheme {
     toolbar.container.classList.add('ql-tiku');
     this.buildButtons(toolbar.container.querySelectorAll('button'), icons);
     this.buildPickers(toolbar.container.querySelectorAll('select'), icons);
-    // buildPickers.call(this, toolbar.container.querySelectorAll('select'), icons);
-    this.tooltip = new SnowTooltip(this.quill, this.options.bounds);
     if (toolbar.container.querySelector('.ql-link')) {
       this.quill.keyboard.addBinding(
         { key: 'k', shortKey: true },
@@ -145,7 +93,7 @@ TikuTheme.DEFAULTS = extend(true, {}, BaseTheme.DEFAULTS, {
           this.quill.setSelection(0, this.quill.getLength());
         },
         pi() {
-          this.quill.showFormulaEditor(true);
+          this.quill.tkEvents.openFormula();
         },
         svgToLatex() {
           ImgToLatex(this.quill);
@@ -161,7 +109,15 @@ TikuTheme.DEFAULTS = extend(true, {}, BaseTheme.DEFAULTS, {
           const savedIndex = this.quill.selection.savedRange.index;
           this.quill.insertText(savedIndex, value);
         },
+        'fill-blank-brackets': function() {
+          const savedIndex = this.quill.selection.savedRange.index;
+          this.quill.insertText(savedIndex, '（   ）');
+        },
       },
+    },
+    table: true,
+    uploader: {
+      handler: uploadImage,
     },
   },
 });

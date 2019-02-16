@@ -12,7 +12,10 @@ import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
 
-import { AlignAttribute, AlignStyle } from '../formats/align';
+import { AlignStyle } from '../formats/align';
+import { SizeStyle } from '../formats/size';
+import LineHeightStyle from '../formats/line-height';
+import { FontStyle } from '../formats/font';
 import CodeBlock from '../formats/code';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
 
@@ -26,35 +29,42 @@ const CLIPBOARD_CONFIG = [
   [Node.ELEMENT_NODE, matchBlot],
   [Node.ELEMENT_NODE, matchAttributor],
   [Node.ELEMENT_NODE, matchStyles],
+  [Node.ELEMENT_NODE, matchTkStyles],
   ['tr', matchTable],
-  ['b', matchAlias.bind(matchAlias, { 'tk-bold': 'normal' })],
-  ['strong', matchAlias.bind(matchAlias, { 'tk-bold': 'normal' })],
+  ['b', matchAlias.bind(matchAlias, { bold: 'normal' })],
+  ['strong', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['i', matchAlias.bind(matchAlias, { italic: 'normal' })],
   ['em', matchAlias.bind(matchAlias, { italic: 'normal' })],
   ['style', matchIgnore],
   ['u', matchUnderline],
-  ['s', matchAlias.bind(matchAlias, { 'tk-strike': 'normal' })],
+  ['s', matchAlias.bind(matchAlias, { strike: 'normal' })],
 ];
-
-const ATTRIBUTE_ATTRIBUTORS = [AlignAttribute, DirectionAttribute].reduce(
-  (memo, attr) => {
-    memo[attr.keyName] = attr;
-    return memo;
-  },
-  {},
-);
+const ATTRIBUTE_ATTRIBUTORS = [DirectionAttribute].reduce((memo, attr) => {
+  memo[attr.keyName] = attr;
+  return memo;
+}, {});
 
 const STYLE_ATTRIBUTORS = [
   AlignStyle,
   // BackgroundStyle,
   // ColorStyle,
+  LineHeightStyle,
   DirectionStyle,
-  // FontStyle,
-  // SizeStyle,
+  FontStyle,
+  SizeStyle,
 ].reduce((memo, attr) => {
   memo[attr.keyName] = attr;
   return memo;
 }, {});
+
+const OLD_CLASS = {
+  italic: 'yikespec-italic',
+  indent: 'yikespec-text-indent',
+  wavy: 'yikespec-line-wave',
+  underline: 'yikespec-underline',
+  strike: 'yikespec-line-through',
+  dotted: 'yikespec-dotted',
+};
 
 class Clipboard extends Module {
   constructor(quill, options) {
@@ -157,10 +167,10 @@ class Clipboard extends Module {
   }
 
   onPaste(range, { text, html }) {
+    console.log(html)
     const formats = this.quill.getFormat(range.index);
     const pastedDelta = this.convert({ text, html }, formats);
     debug.log('onPaste', pastedDelta, { text, html });
-    console.log(html);
     const delta = new Delta()
       .retain(range.index)
       .delete(range.length)
@@ -211,6 +221,7 @@ function applyFormat(delta, format, value) {
       return applyFormat(newDelta, key, format[key]);
     }, delta);
   }
+  console.log(format, STYLE_ATTRIBUTORS);
   return delta.reduce((newDelta, op) => {
     if (op.attributes && op.attributes[format]) {
       return newDelta.push(op);
@@ -384,43 +395,43 @@ function matchBreak(node, delta) {
   return delta;
 }
 
-function matchCodeBlock(node, delta, scroll) {
-  const match = scroll.query('code-block');
-  const language = match ? match.formats(node, scroll) : true;
-  return applyFormat(delta, 'code-block', language);
-}
+// function matchCodeBlock(node, delta, scroll) {
+//   const match = scroll.query('code-block');
+//   const language = match ? match.formats(node, scroll) : true;
+//   return applyFormat(delta, 'code-block', language);
+// }
 
 function matchIgnore() {
   return new Delta();
 }
 
-function matchIndent(node, delta, scroll) {
-  const match = scroll.query(node);
-  if (
-    match == null ||
-    match.blotName !== 'list' ||
-    !deltaEndsWith(delta, '\n')
-  ) {
-    return delta;
-  }
-  let indent = -1;
-  let parent = node.parentNode;
-  while (parent != null) {
-    if (['OL', 'UL'].includes(parent.tagName)) {
-      indent += 1;
-    }
-    parent = parent.parentNode;
-  }
-  if (indent <= 0) return delta;
-  return delta.compose(
-    new Delta().retain(delta.length() - 1).retain(1, { indent }),
-  );
-}
+// function matchIndent(node, delta, scroll) {
+//   const match = scroll.query(node);
+//   if (
+//     match == null ||
+//     match.blotName !== 'list' ||
+//     !deltaEndsWith(delta, '\n')
+//   ) {
+//     return delta;
+//   }
+//   let indent = -1;
+//   let parent = node.parentNode;
+//   while (parent != null) {
+//     if (['OL', 'UL'].includes(parent.tagName)) {
+//       indent += 1;
+//     }
+//     parent = parent.parentNode;
+//   }
+//   if (indent <= 0) return delta;
+//   return delta.compose(
+//     new Delta().retain(delta.length() - 1).retain(1, { indent }),
+//   );
+// }
 
-function matchList(node, delta) {
-  const list = node.tagName === 'OL' ? 'ordered' : 'bullet';
-  return applyFormat(delta, 'list', list);
-}
+// function matchList(node, delta) {
+//   const list = node.tagName === 'OL' ? 'ordered' : 'bullet';
+//   return applyFormat(delta, 'list', list);
+// }
 
 function matchNewline(node, delta) {
   if (!deltaEndsWith(delta, '\n')) {
@@ -437,9 +448,6 @@ function matchNewline(node, delta) {
 function matchStyles(node, delta) {
   const formats = {};
   const style = node.style || {};
-  if (style.fontStyle === 'italic') {
-    formats.italic = true;
-  }
   if (
     style.fontWeight.startsWith('bold') ||
     parseInt(style.fontWeight, 10) >= 700
@@ -452,6 +460,40 @@ function matchStyles(node, delta) {
   if (parseFloat(style.textIndent || 0) > 0) {
     // Could be 0.5in
     return new Delta().insert('\t').concat(delta);
+  }
+  return delta;
+}
+
+function matchTkStyles(node, delta) {
+  const formats = {};
+  const style = node.style || {};
+  const classList = node.classList || {};
+  if (style.fontStyle === 'italic' || classList.contains(OLD_CLASS.italic)) {
+    formats.italic = 'normal';
+  }
+  if (
+    getStyle(node, 'font-emphasize').indexOf('dot') > -1 ||
+    classList.contains(OLD_CLASS.dotted)
+  ) {
+    formats.dotted = 'circle';
+  }
+  if (classList.contains(OLD_CLASS.wavy)) {
+    formats.underline = 'wavy';
+  }
+  if (classList.contains(OLD_CLASS.underline)) {
+    formats.underline = 'normal';
+  }
+  if (classList.contains(OLD_CLASS.strike)) {
+    formats.strike = 'normal';
+  }
+  if (
+    parseFloat(getStyle(node, 'text-indent') || 0) > 0 ||
+    classList.contains(OLD_CLASS.indent)
+  ) {
+    formats.indent = 'normal';
+  }
+  if (Object.keys(formats).length > 0) {
+    delta = applyFormat(delta, formats);
   }
   return delta;
 }
@@ -500,16 +542,23 @@ function matchText(node, delta) {
 
 function matchUnderline(node, delta) {
   let value = 'normal';
-  let styleText = node.getAttribute('style');
-  if (typeof styleText === 'string') {
-    styleText = styleText.replace(/\s/g, '');
-    const WAVY = 'text-underline:wave';
-    if (styleText.indexOf(WAVY) > -1) {
-      value = 'wavy';
-    }
+  if (getStyle(node, 'text-underline').indexOf('wave') > -1) {
+    value = 'wavy';
   }
+  return applyFormat(delta, 'underline', value);
+}
 
-  return applyFormat(delta, 'tk-underline', value);
+function getStyle(node, key) {
+  const styleText = node.getAttribute('style');
+  if (typeof styleText === 'string') {
+    const styles = styleText.replace(/\s/g, '').split(';') || [];
+    const style = styles.find(item => {
+      const kv = item.split(':');
+      return key === kv[0];
+    });
+    return (style && style.split(':')[1]) || '';
+  }
+  return '';
 }
 
 export {

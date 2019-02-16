@@ -37,17 +37,12 @@ import fillBlankUnderlineIcon from '../assets/icons/fill-blank-underline.svg';
 import svgToLatexIcon from '../assets/icons/svg-to-latex.svg';
 import latexToSvgIcon from '../assets/icons/latex-to-svg.svg';
 import pinyinIcon from '../assets/icons/pinyin.svg';
+import closeIcon from '../assets/icons/close.svg';
+import fillBlankBracketsIcon from '../assets/icons/fill-blank-brackets.svg';
 
 export default {
-  align: {
-    '': alignLeftIcon,
-    center: alignCenterIcon,
-    right: alignRightIcon,
-    justify: alignJustifyIcon,
-  },
   background: backgroundIcon,
   blockquote: blockquoteIcon,
-  bold: boldIcon,
   clean: cleanIcon,
   code: codeIcon,
   'code-block': codeIcon,
@@ -61,12 +56,7 @@ export default {
     '1': headerIcon,
     '2': header2Icon,
   },
-  italic: italicIcon,
   image: imageIcon,
-  indent: {
-    '+1': indentIcon,
-    '-1': outdentIcon,
-  },
   link: linkIcon,
   list: {
     bullet: listBulletIcon,
@@ -77,17 +67,14 @@ export default {
     sub: subscriptIcon,
     super: superscriptIcon,
   },
-  strike: strikeIcon,
   table: tableIcon,
-  underline: underlineIcon,
   video: videoIcon,
-  dotted: dottedIcon,
   all: selectAllIcon,
   undo: undoIcon,
   redo: redoIcon,
   wavy: wavyIcon,
   pi: piIcon,
-  'tk-underline': {
+  underline: {
     normal: underlineIcon,
     wavy: wavyIcon,
   },
@@ -95,14 +82,16 @@ export default {
   latexToSvg: latexToSvgIcon,
   fillBlankUnderline: fillBlankUnderlineIcon,
   pinyin: pinyinIcon,
-  'tk-align': {
+  align: {
     left: alignLeftIcon,
     center: alignCenterIcon,
     right: alignRightIcon,
   },
-  'tk-indent': {
-    indent: indentIcon,
-  },
-  'tk-strike': strikeIcon,
-  'tk-bold': boldIcon,
+  indent: indentIcon,
+  strike: strikeIcon,
+  bold: boldIcon,
+  italic: italicIcon,
+  dotted: dottedIcon,
+  close: closeIcon,
+  'fill-blank-brackets': fillBlankBracketsIcon,
 };

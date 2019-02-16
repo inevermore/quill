@@ -1,20 +1,19 @@
 import Quill from './core';
 
-import TkAlignClass from './formats/tk-align';
-import TkIndent from './formats/tk-indent';
+import { AlignClass, AlignStyle } from './formats/align';
+import TkIndent from './formats/indent';
 
-import { DottedClass, DottedStyle } from './formats/dotted';
+import DottedClass from './formats/dotted';
 
 import Italic from './formats/italic';
 import Script from './formats/script';
-import TkFormatClass from './formats/tk-underline';
-import TkStrike from './formats/tk-strike';
-import TkBoldClass from './formats/tk-bold';
+import TkUnderline from './formats/underline';
+import TkStrike from './formats/strike';
+import TkBoldClass from './formats/bold';
 
 import Image from './formats/image';
 import FillBlankUnderline from './formats/fill-blank-underline';
 
-import Syntax from './modules/syntax';
 import Table from './modules/table';
 import Toolbar from './modules/toolbar';
 import ImageResizer from './modules/image-resizer';
@@ -25,46 +24,60 @@ import ColorPicker from './ui/color-picker';
 import IconPicker from './ui/icon-picker';
 import TextPicker from './ui/text-picker';
 
-import BubbleTheme from './themes/bubble';
 import SnowTheme from './themes/snow';
 import TikuTheme from './themes/tiku';
+import HandoutTheme from './themes/handout';
+import List from './formats/list';
+import { FontStyle } from './formats/font';
+import { SizeStyle } from './formats/size';
+import LineHeightStyle from './formats/line-height';
+
+window.sizeStyle = SizeStyle;
 
 Quill.register(
   {
-    'attributors/class/align': TkAlignClass,
-    'formats/align': TkAlignClass,
+    'attributors/class/align': AlignClass,
+    'attributors/style/align': AlignStyle,
+    'formats/align': AlignClass,
 
-    // 'attributors/class/dotted': DottedClass,
-    'attributors/class/tkFormat': TkFormatClass,
+    'attributors/class/dotted': DottedClass,
+    'attributors/class/tkFormat': TkUnderline,
     'attributors/class/italic': Italic,
-    'attributors/class/tk-strike': TkStrike,
+    'attributors/class/strike': TkStrike,
+
+    'attributors/style/font': FontStyle,
+    'attributors/style/size': SizeStyle,
+    'attributors/style/line-height': LineHeightStyle,
   },
   true,
 );
 
 Quill.register(
   {
-    'formats/tk-indent': TkIndent,
-    'formats/tk-strike': TkStrike,
+    'formats/indent': TkIndent,
+    'formats/strike': TkStrike,
 
-    // 'formats/dotted': DottedStyle,
+    'formats/dotted': DottedClass,
 
     'formats/italic': Italic,
     'formats/script': Script,
-    'formats/tkFormat': TkFormatClass,
+    'formats/tkFormat': TkUnderline,
     'formats/TkBold': TkBoldClass,
 
     'formats/image': Image,
     'formats/fillBlankUnderline': FillBlankUnderline,
+    'formats/list': List,
+    'formats/font': FontStyle,
+    'formats/size': SizeStyle,
+    'formats/line-height': LineHeightStyle,
 
-    'modules/syntax': Syntax,
     'modules/table': Table,
     'modules/toolbar': Toolbar,
     'modules/image-resizer': ImageResizer,
 
-    'themes/bubble': BubbleTheme,
     'themes/snow': SnowTheme,
     'themes/tiku': TikuTheme,
+    'themes/handout': HandoutTheme,
 
     'ui/icons': Icons,
     'ui/picker': Picker,

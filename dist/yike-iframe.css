@@ -38,6 +38,17 @@
   line-height: 0;
   text-indent: 0;
 }
+@supports(-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: circle) {
+  .tkspec-dotted-circle {
+    -webkit-text-emphasis-position: under;
+    -webkit-text-emphasis: circle;
+  }
+}
+@supports(not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {
+  .tkspec-dotted-circle {
+    border-bottom: 2px dotted black;
+  }
+}
 /* 上边加点 */
 .yikespec-dotted-top {
   position: relative;
@@ -55,7 +66,7 @@
   line-height: .1em;
 }
 /* 字体下划线 */
-.yikespec-underline, .yikespec-underline-normal {
+.yikespec-underline, .tkspec-underline-normal {
   border-bottom: 1px solid #000;
 }
 /* 标准下划线 */
@@ -70,11 +81,11 @@
 .yikespec-line-through {
   text-decoration: line-through;
 }
-.yikespec-strike-normal {
+.tkspec-strike-normal {
   text-decoration: line-through;
 }
 /* 波浪线 */
-.yikespec-wavy, .yikespec-underline-wavy {
+.yikespec-wavy, .tkspec-underline-wavy {
   background: url(https://yy-s.zuoyebang.cc/static/standardstyle/font-wavyLine.svg) repeat-x;
   background-position-y: 1px;
   background-size: 1em 100%;
@@ -87,16 +98,25 @@
   font-style: italic;
 }
 /* 斜体与其他功能组合引入class */
-.yikespec-italic-normal {
+.tkspec-italic-normal {
   font-family: 'Courier New', Courier, arial,tahoma,'Microsoft Yahei','\5b8b\4f53',sans-serif;
   font-style: italic;
 }
+
+
 /* 首行缩进 */
 .yikespec-text-indent {
   display: block !important;
   text-indent: 1.5em;
 }
 .yikespec-text-indent * {
+  text-indent: 0;
+}
+.tkspec-indent-normal {
+  display: block !important;
+  text-indent: 1.5em;
+}
+.tkspec-indent-normal * {
   text-indent: 0;
 }
 /* 居中 */
@@ -124,6 +144,10 @@ td.yikespec-align-right {
   display: table-cell !important;
 }
 /* 加粗 */
-.yikespec-bold-normal {
+.yikespec-bold {
+  font-weight: bold;
+  font-style: normal;
+}
+.tkspec-bold-normal {
   font-weight: bold !important;
 }

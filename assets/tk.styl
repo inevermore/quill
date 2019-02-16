@@ -4,13 +4,51 @@
 @import './snow'
 
 iframe {
+  border: none;
+}
+.formula-editor-container {
   visibility: hidden;
-  width: 712px;
-  height: 573px;
+  width: 714px;
+  height: 575px;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,.2);
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  overflow: hidden;
+  background: white;
+
+  header {
+    height: 30px;
+    border-bottom: 1px solid #c6c6c6;
+    background: linear-gradient(to bottom, white, #f0f0f0);
+
+    span {
+      font-weight: 700;
+      font-size: 12px;
+      line-height: 30px;
+      padding-left: 5px;
+    }
+
+    b {
+      float: right;
+      padding-right: 10px;
+      line-height: 30px;
+
+      &:hover {
+        color: red;
+        cursor: pointer;
+      }
+    }
+  }
+
+  iframe {
+    width: 100%;
+    height: calc(100% - 30px);
+    background: white;
+  }
 }
 
 button {
@@ -24,6 +62,7 @@ button {
     min-width: 10px;
     min-height: 10px;
     border: 2px dotted #FA574B;
+    vertical-align: middle;
   }
   
   .ql-editor {
@@ -82,7 +121,7 @@ button {
       cursor: w-resize;
       top: 50%;
       left: 0;
-      transform: translate(-50%, 50%);
+      transform: translate(-50%, -50%);
     }
     span {
       position: absolute;
@@ -94,16 +133,47 @@ button {
       background-color: #3C9DD0;
     }
   }
+
+  .tk-upload-error-tips {
+    position: absolute; 
+    right: 4px;
+    top: 4px;
+    color: #b94a48;
+    background-color: #f2dede;
+    border: 1px solid #eed3d7;
+    padding: 8px;
+    border-radius: 3px;
+
+    button {
+      border: none;
+      display: inline-block;
+      background: none;
+      padding: 0 0 0 5px;
+      vertical-align: middle;
+      cursor: pointer;
+      outline: none;
+    }
+
+    svg {
+      margin-left: 5px;
+      height: 15px;
+      width: 15px;
+
+      * {
+        fill: #b94a48;
+      }
+    }
+  }
 }
 
 .ql-toolbar.ql-tiku {
   .ql-pinyin .ql-picker-label {
     padding: 0 2px;
+    width: 28px;
   }
 
   .ql-picker-label {
     outline: none;
-    width: 28px;
   }
 
   .ql-text-picker {

@@ -1,23 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <script>
-      /**
- * @param {string[]} logs
- * @return {string[]}
- */
-
-var minAreaRect = function(points) {
-  if (points.length < 4) {
-    return 0;
-  }
-  const rects = [];
-  points.forEach(item => {
-    
-  });
-};
-console.log(minAreaRect(root, 7, 15));
-
-    </script>
-  </body>
+<body>
+  <div style="height: 200px;width: 200px;border: 1px solid black">
+    <p>1234123</p>
+    <p>abcdef</p>
+    <p>awegfsdf</p>
+  </div>
+  <span id="cursor" style="background-color: red;display: inline-block;width: 2px;position: absolute;"></span>
+  <span id="container" style="opacity: 0;"></span>
+  <script>
+    document.addEventListener('selectionchange', e => {
+      const focusNode = window.getSelection().focusNode;
+      const parentNode = focusNode.parentElement;
+      const text = focusNode.textContent;
+      const parentPos = parentNode.getBoundingClientRect();
+      const container = document.querySelector('#container');
+      container.innerHTML = text.substr(0, window.getSelection().focusOffset);
+      const pos = {
+        left: parentPos.left + container.offsetWidth,
+        top: parentPos.top
+      };
+      cursor.style.left = `${pos.left}px`;
+      cursor.style.top = `${pos.top}px`;
+      cursor.style.height = `${container.offsetHeight}px`;
+    });
+  </script>
+</body>
 </html>

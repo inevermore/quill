@@ -9,15 +9,18 @@ const debug = logger('quill:toolbar');
 class Toolbar extends Module {
   constructor(quill, options) {
     super(quill, options);
-    if (Array.isArray(this.options.container)) {
-      const container = document.createElement('div');
-      addControls(container, this.options.container);
-      quill.container.parentNode.insertBefore(container, quill.container);
-      this.container = container;
+    this.container = this.options.container;
+    if (this.options.container == null) {
+      if (Array.isArray(this.options.options)) {
+        const container = document.createElement('div');
+        this.container = container;
+      }
     } else if (typeof this.options.container === 'string') {
       this.container = document.querySelector(this.options.container);
-    } else {
-      this.container = this.options.container;
+    }
+    addControls(this.container, this.options.options);
+    if (this.options.container == null) {
+      quill.container.parentNode.insertBefore(this.container, quill.container);
     }
     if (!(this.container instanceof HTMLElement)) {
       return debug.error('Container required for toolbar', this.options);
@@ -84,31 +87,36 @@ class Toolbar extends Module {
         e.preventDefault();
       }
       this.quill.focus();
-      const [range] = this.quill.selection.getRange();
-      if (this.handlers[format] != null) {
-        this.handlers[format].call(this, value);
-      } else if (
-        this.quill.scroll.query(format).prototype instanceof EmbedBlot
-      ) {
-        value = prompt(`Enter ${format}`); // eslint-disable-line no-alert
-        if (!value) return;
-        this.quill.updateContents(
-          new Delta()
-            .retain(range.index)
-            .delete(range.length)
-            .insert({ [format]: value }),
-          Quill.sources.USER,
-        );
-      } else {
-        this.quill.format(format, value, Quill.sources.USER);
-      }
-      this.update(range);
+      this.formatContent(format, value);
     });
     this.controls.push([format, input]);
   }
 
+  formatContent(format, value) {
+    const [range] = this.quill.selection.getRange();
+    if (this.handlers[format] != null) {
+      this.handlers[format].call(this, value);
+    } else if (this.quill.scroll.query(format).prototype instanceof EmbedBlot) {
+      value = prompt(`Enter ${format}`); // eslint-disable-line no-alert
+      if (!value) return;
+      this.quill.updateContents(
+        new Delta()
+          .retain(range.index)
+          .delete(range.length)
+          .insert({ [format]: value }),
+        Quill.sources.USER,
+      );
+    } else {
+      this.quill.format(format, value, Quill.sources.USER);
+    }
+    this.update(range);
+  }
+
   update(range) {
     const formats = range == null ? {} : this.quill.getFormat(range);
+    if (this.quill.tkEvents) {
+      this.quill.tkEvents.getFormat(formats);
+    }
     this.controls.forEach(pair => {
       const [format, input] = pair;
       if (input.tagName === 'SELECT') {
