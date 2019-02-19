@@ -23,6 +23,7 @@ class ImageResizer extends Module {
       if (
         this.wrap.contains(e.target) &&
         e.target.tagName.toUpperCase() === 'IMG' &&
+        !e.target.classList.contains(quill.formulaImgClass) &&
         (!this.imgNode || e.target !== this.imgNode)
       ) {
         this.addResizer(e.target);
@@ -65,7 +66,7 @@ class ImageResizer extends Module {
   }
 
   mouseMove(e) {
-    if (this.handId < 0) return;
+    if (this.handId < 0 || !this.imgNode) return;
     const offset = {
       x: e.clientX - this.prePos.x,
       y: e.clientY - this.prePos.y,
@@ -102,7 +103,7 @@ class ImageResizer extends Module {
       this.quill.root.offsetWidth -
       parseInt(paddingLeft, 10) -
       parseInt(paddingRight, 10);
-    if (width >= contentWidth) {
+    if (width >= contentWidth && widthDir !== 0) {
       return;
     }
     this.resizeImage(width, this.originSize.height + offsetHeight);

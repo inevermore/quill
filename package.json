@@ -1,10 +1,9 @@
 {
-  "name": "quill",
-  "version": "2.0.0-dev.3",
-  "description": "Your powerful, rich text editor",
-  "author": "Jason Chen <jhchen7@gmail.com>",
-  "homepage": "http://quilljs.com",
-  "main": "dist/quill.js",
+  "name": "text-editor",
+  "version": "0.0.1",
+  "description": "富文本编辑器",
+  "author": "zhangweigang@zuoyebang.com",
+  "main": "index.js",
   "files": [
     "assets",
     "blots",
@@ -16,12 +15,14 @@
     "dist/quill.bubble.css",
     "dist/quill.snow.css",
     "dist/quill.core.css",
-    "dist/quill.js",
+    "dist/index.js",
     "dist/quill.core.js",
     "dist/quill.min.js.map",
     "dist/quill.min.js",
+    "dist/yike-iframe.css",
     "core.js",
-    "quill.js"
+    "quill.js",
+    "utils"
   ],
   "config": {
     "ports": {
@@ -133,7 +134,10 @@
         "error"
       ],
       "prettier/prettier": "error",
-      "func-names": ["error", "never"]
+      "func-names": [
+        "error",
+        "never"
+      ]
     }
   },
   "eslintIgnore": [
@@ -161,6 +165,10 @@
   "keywords": [
     "editor",
     "rich text",
-    "wysiwyg"
+    "wysiwyg",
+    "题库",
+    "讲义",
+    "编辑器",
+    "富文本编辑器"
   ]
 }

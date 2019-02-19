@@ -1,14 +1,8 @@
-import Tiku from './tiku';
+import TkBaseTheme from './tk-base';
 
-class Handout extends Tiku {
-  constructor(quill, options) {
-    super(quill, options);
-    this.quill.container.style.border = 'none';
-  }
-
+class Handout extends TkBaseTheme {
   extendToolbar(toolbar) {
-    super.extendToolbar(toolbar);
-    toolbar.container.style.display = 'none';
+    toolbar.container.parentNode.removeChild(toolbar.container);
   }
 }
 

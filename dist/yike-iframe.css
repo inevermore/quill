@@ -39,13 +39,13 @@
   text-indent: 0;
 }
 @supports(-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: circle) {
-  .tkspec-dotted-circle {
+  .tkspec-dotted-normal {
     -webkit-text-emphasis-position: under;
     -webkit-text-emphasis: circle;
   }
 }
 @supports(not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {
-  .tkspec-dotted-circle {
+  .tkspec-dotted-normal {
     border-bottom: 2px dotted black;
   }
 }
@@ -150,4 +150,13 @@ td.yikespec-align-right {
 }
 .tkspec-bold-normal {
   font-weight: bold !important;
+}
+
+.tkspec-script-sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+.tkspec-script-super {
+  vertical-align: super;
+  font-size: smaller;
 }

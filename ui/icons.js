@@ -80,7 +80,7 @@ export default {
   },
   svgToLatex: svgToLatexIcon,
   latexToSvg: latexToSvgIcon,
-  fillBlankUnderline: fillBlankUnderlineIcon,
+  'fill-blank-underline': fillBlankUnderlineIcon,
   pinyin: pinyinIcon,
   align: {
     left: alignLeftIcon,

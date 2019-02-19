@@ -2,34 +2,36 @@ import GetImgList from './get-img-list';
 
 const dirtyList = [];
 
-function latexToImg(quill, notConvertImg) {
+function latexToImg(editor, notConvertImg) {
   let converting = false;
   if (converting) {
     alert('正在转换中，请勿连续点击'); // eslint-disable-line no-alert
     return;
   }
   converting = true;
-  const html = quill
-    .getSemanticHTML()
+  const html = editor
+    .getContent()
     .replace(/\\\$/g, 'MATHCUSTOM')
     .replace(/\n/g, '');
   if (notConvertImg) {
-    quill.root.innerHTML = html
-      .replace(/\$(.*?)\$/g, filter)
-      .replace(/MATHCUSTOM/g, '\\$');
+    editor.setContent(
+      html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),
+    );
     converting = false;
   } else {
     GetImgList(html.match(/\$(.*?)\$/g) || []).then(objList => {
       let count = 0;
-      quill.root.innerHTML = html
-        .replace(/\$(.*?)\$/g, () => {
-          const img = `<img class="yk-math-img" data-latex="${
-            objList[count].latex
-          }" src="${objList[count].src}">`;
-          count += 1;
-          return img;
-        })
-        .replace(/MATHCUSTOM/g, '\\$');
+      editor.setContent(
+        html
+          .replace(/\$(.*?)\$/g, () => {
+            const img = `<img class="${
+              editor.quill.formulaImgClass
+            }" data-latex="${objList[count].latex}" src="${objList[count].src}">`;
+            count += 1;
+            return img;
+          })
+          .replace(/MATHCUSTOM/g, '\\$'),
+      );
       converting = false;
     });
   }

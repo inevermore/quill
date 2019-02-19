@@ -15,7 +15,10 @@ import Module from '../core/module';
 import { AlignStyle } from '../formats/align';
 import { SizeStyle } from '../formats/size';
 import LineHeightStyle from '../formats/line-height';
+import ScriptStyle from '../formats/script';
 import { FontStyle } from '../formats/font';
+import { ColorStyle } from '../formats/color';
+import { BackgroundStyle } from '../formats/background';
 import CodeBlock from '../formats/code';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
 
@@ -30,11 +33,14 @@ const CLIPBOARD_CONFIG = [
   [Node.ELEMENT_NODE, matchAttributor],
   [Node.ELEMENT_NODE, matchStyles],
   [Node.ELEMENT_NODE, matchTkStyles],
+  ['ol, ul', matchList],
   ['tr', matchTable],
   ['b', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['strong', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['i', matchAlias.bind(matchAlias, { italic: 'normal' })],
   ['em', matchAlias.bind(matchAlias, { italic: 'normal' })],
+  ['sup', matchAlias.bind(matchAlias, { script: 'super' })],
+  ['sub', matchAlias.bind(matchAlias, { script: 'sub' })],
   ['style', matchIgnore],
   ['u', matchUnderline],
   ['s', matchAlias.bind(matchAlias, { strike: 'normal' })],
@@ -46,8 +52,8 @@ const ATTRIBUTE_ATTRIBUTORS = [DirectionAttribute].reduce((memo, attr) => {
 
 const STYLE_ATTRIBUTORS = [
   AlignStyle,
-  // BackgroundStyle,
-  // ColorStyle,
+  BackgroundStyle,
+  ColorStyle,
   LineHeightStyle,
   DirectionStyle,
   FontStyle,
@@ -428,10 +434,10 @@ function matchIgnore() {
 //   );
 // }
 
-// function matchList(node, delta) {
-//   const list = node.tagName === 'OL' ? 'ordered' : 'bullet';
-//   return applyFormat(delta, 'list', list);
-// }
+function matchList(node, delta) {
+  const list = node.tagName === 'OL' ? 'ordered' : 'bullet';
+  return applyFormat(delta, 'list', list);
+}
 
 function matchNewline(node, delta) {
   if (!deltaEndsWith(delta, '\n')) {
@@ -475,7 +481,7 @@ function matchTkStyles(node, delta) {
     getStyle(node, 'font-emphasize').indexOf('dot') > -1 ||
     classList.contains(OLD_CLASS.dotted)
   ) {
-    formats.dotted = 'circle';
+    formats.dotted = 'normal';
   }
   if (classList.contains(OLD_CLASS.wavy)) {
     formats.underline = 'wavy';

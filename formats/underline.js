@@ -15,6 +15,6 @@ const config = {
   whitelist: ['normal', 'wavy'],
 };
 
-const TkUnderline = new ClassAttributor('underline', 'tkspec-underline', config);
+const Underline = new ClassAttributor('underline', 'tkspec-underline', config);
 
-export default TkUnderline;
+export default Underline;

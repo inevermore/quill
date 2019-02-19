@@ -101,14 +101,13 @@ const baseConfig = {
   mode: 'development',
   context: path.resolve(__dirname, '..'),
   entry: {
-    // 'quill.js': ['./quill.js'],
-    'quill.js': ['./tk-quill.js'],
+    'index.js': ['./index.js'],
     'quill.core.js': ['./core.js'],
     'quill.core': './assets/core.styl',
     'quill.bubble': './assets/bubble.styl',
     'quill.snow': './assets/snow.styl',
     'unit.js': './test/unit.js',
-    'demo-index.js': './demo-index.js',
+    './handout/demo.js': './dist/handout/demo-index.js',
     'quill.tk': './assets/tk.styl',
   },
   output: {

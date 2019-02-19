@@ -29,6 +29,9 @@ function getMathImgSrcList(latexArr) {
           area.setAttribute('height', '500px');
           area.setAttribute('style', 'display: none');
           // 转换
+          if (window.canvg === undefined) {
+            throw new Error('canvg is needed. Please refer to demo');
+          }
           window.canvg(area, svg.outerHTML, {
             ignoreClear: false,
             renderCallback: () => {
@@ -60,6 +63,9 @@ function latexToSvg(latexArr) {
       div.innerHTML = latex.replace(/>/g, '&gt;').replace(/</g, '&lt;');
       container.appendChild(div);
     });
+    if (window.MathJax === undefined) {
+      throw new Error('MathJax is needed. Please refer to demo');
+    }
     window.MathJax.Hub.Queue(
       ['Typeset', window.MathJax.Hub, container],
       [

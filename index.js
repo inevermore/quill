@@ -1,5 +1,6 @@
 import extend from 'extend';
-import Quill from './tk-quill';
+import Quill, { register } from './quill';
+import getImgList from './utils/get-img-list';
 
 class TkEditor {
   constructor(options) {
@@ -7,9 +8,9 @@ class TkEditor {
       true,
       {
         container: document.body,
+        options: [],
         toolbar: {
           container: null,
-          options: [],
         },
         initContent: '',
         events: {
@@ -20,19 +21,31 @@ class TkEditor {
       },
       options,
     );
-    this.defaultStyle = '';
-    this.quill = new Quill(createContainer(this.config), {
+    const formats = [];
+    this.config.options.forEach(item => {
+      if (typeof item === 'object') {
+        formats.push([...Object.keys(item)]);
+      } else {
+        formats.push(item);
+      }
+    });
+    register(formats);
+    let { container } = this.config;
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    this.quill = new Quill(container, {
       theme: this.config.theme,
       modules: {
         toolbar: {
           container: this.config.toolbar.container,
-          options: this.config.toolbar.options,
+          options: this.config.options,
         },
       },
       events: this.config.events,
     });
     if (this.config.initContent) {
-      // this.setContent(this.config.initContent);
+      this.setContent(this.config.initContent);
     }
   }
 
@@ -41,14 +54,13 @@ class TkEditor {
   }
 
   getContent() {
-    // if (this.config.theme === 'handout') {
-    //   return `<div style="${this.defaultStyle}">${this.quill.getHTML()}</div>`;
-    // }
     return this.quill.getHTML();
   }
 
-  insertFormula(objList) {
-    this.quill.insertFormula(objList);
+  insertFormula(latex) {
+    getImgList([`$${latex}$`]).then(objList => {
+      this.quill.insertFormula(objList);
+    });
   }
 
   getModule(module) {
@@ -56,26 +68,34 @@ class TkEditor {
   }
 
   format(format, value) {
-    this.quill.getModule('toolbar').formatContent(format, value);
+    this.quill.format(format, value);
   }
-}
 
-function createContainer(config) {
-  let { container } = config;
-  if (typeof container === 'string') {
-    container = document.querySelector(container);
+  undo() {
+    this.quill.history.undo();
   }
-  const wrapper = document.createElement('div');
-  wrapper.style.width = '100%';
-  wrapper.style.height = '100%';
-  wrapper.style.display = 'flex';
-  wrapper.style.flexDirection = 'column';
-  container.appendChild(wrapper);
-  const editedArea = document.createElement('div');
-  editedArea.style.flex = 1;
-  editedArea.style.height = 'auto';
-  wrapper.appendChild(editedArea);
-  return editedArea;
+
+  redo() {
+    this.quill.history.redo();
+  }
+
+  splitContent() {
+    const range = this.quill.getSelection();
+    if (range == null) {
+      return null;
+    }
+
+    const { index } = range;
+    if (index === 0) {
+      return ['', this.quill.getSemanticHTML()];
+    }
+    if (index === this.quill.getLength() - 1) {
+      return [this.quill.getSemanticHTML(), ''];
+    }
+    const prev = this.quill.getSemanticHTML(0, index);
+    const next = this.quill.getSemanticHTML(index, this.quill.getLength());
+    return [prev, next];
+  }
 }
 
 export default TkEditor;

@@ -9,7 +9,7 @@ function imgToLatex(quill) {
       const { domNode } = blot;
       if (
         domNode.nodeType === Node.ELEMENT_NODE &&
-        domNode.classList.contains('yk-math-img')
+        domNode.classList.contains(quill.formulaImgClass)
       ) {
         const latex = `$${getImgLatex(domNode)}$`;
         latexCount += latex.length;
@@ -20,7 +20,7 @@ function imgToLatex(quill) {
     // TODO: setSelection 未生效
     // quill.setSelection(range.index, range.length - nodeCount + latexCount);
   } else {
-    const imgs = quill.root.querySelectorAll('.yk-math-img');
+    const imgs = quill.root.querySelectorAll(`.${quill.formulaImgClass}`);
     Array.from(imgs).forEach(img => {
       img.outerHTML = `$${getImgLatex(img)}$`;
     });

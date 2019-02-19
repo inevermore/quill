@@ -1,23 +1,10 @@
-import Inline from '../blots/inline';
+import { ClassAttributor, Scope } from 'parchment';
 
-class Script extends Inline {
-  static create(value) {
-    if (value === 'super') {
-      return document.createElement('sup');
-    }
-    if (value === 'sub') {
-      return document.createElement('sub');
-    }
-    return super.create(value);
-  }
+const config = {
+  scope: Scope.INLINE,
+  // whitelist: ['sub', 'super'],
+};
 
-  static formats(domNode) {
-    if (domNode.tagName === 'SUB') return 'sub';
-    if (domNode.tagName === 'SUP') return 'super';
-    return undefined;
-  }
-}
-Script.blotName = 'script';
-Script.tagName = ['SUB', 'SUP'];
+const ScriptClass = new ClassAttributor('script', 'tkspec-script', config);
 
-export default Script;
+export default ScriptClass;

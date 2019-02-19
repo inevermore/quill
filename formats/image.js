@@ -24,15 +24,16 @@ class Image extends EmbedBlot {
   }
 
   static formats(domNode) {
-    return Object.entries(ATTRIBUTES).reduce((formats, [attribute, val]) => {
-      if (domNode.hasAttribute(attribute)) {
-        const value = domNode.getAttribute(attribute);
-        if (!val || val.indexOf(value) > -1) {
-          formats[attribute] = value;
-        }
-      }
-      return formats;
-    }, {});
+    // return Object.entries(ATTRIBUTES).reduce((formats, [attribute, val]) => {
+    //   if (domNode.hasAttribute(attribute)) {
+    //     const value = domNode.getAttribute(attribute);
+    //     if (!val || val.indexOf(value) > -1) {
+    //       formats[attribute] = value;
+    //     }
+    //   }
+    //   return formats;
+    // }, {});
+    return {};
   }
 
   static match(url) {

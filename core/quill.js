@@ -8,7 +8,6 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
-import GetImgList from '../utils/get-img-list';
 
 const debug = logger('quill');
 
@@ -80,8 +79,9 @@ class Quill {
     this.root.addEventListener('dragstart', e => {
       e.preventDefault();
     });
+    this.formulaImgClass = 'yk-math-img';
     this.root.addEventListener('dblclick', e => {
-      if (e.target.classList.contains('yk-math-img')) {
+      if (e.target.classList.contains(this.formulaImgClass)) {
         this.editFormula(e.target);
       }
     });
@@ -102,7 +102,7 @@ class Quill {
     this.clipboard = this.theme.addModule('clipboard');
     this.history = this.theme.addModule('history');
     this.uploader = this.theme.addModule('uploader');
-    this.imageResizer = this.theme.addModule('image-resizer');
+    // this.imageResizer = this.theme.addModule('image-resizer');
     this.theme.init();
     this.emitter.on(Emitter.events.EDITOR_CHANGE, type => {
       if (type === Emitter.events.TEXT_CHANGE) {
@@ -453,15 +453,15 @@ class Quill {
     const savedRangeIndex = this.selection.savedRange.index;
     // 编辑模式下替换 img 节点
     if (this.editedImg) {
-      this.editedImg.outerHTML = `<img class="yk-math-img" data-latex="${
-        objList[0].latex
-      }" src="${objList[0].src}">`;
+      this.editedImg.outerHTML = `<img class="${
+        this.formulaImgClass
+      }" data-latex="${objList[0].latex}" src="${objList[0].src}">`;
       this.editedImg = null;
     } else if (objList[0].latex) {
       this.insertEmbed(savedRangeIndex, 'image', {
         src: `${objList[0].src}`,
         'data-latex': objList[0].latex,
-        class: 'yk-math-img',
+        class: this.formulaImgClass,
       });
       this.setSelection(savedRangeIndex + 1, 0);
     }
@@ -482,10 +482,6 @@ class Quill {
     if (selection && selection.length > 0) {
       this.scroll.traversing(selection.index, selection.length, fn);
     }
-  }
-
-  getMathImgSrcList(latexArr) {
-    GetImgList(latexArr).then(this.insertFormula.bind(this));
   }
 
   getHTML() {
