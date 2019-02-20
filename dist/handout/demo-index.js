@@ -1,4 +1,4 @@
-import Editor from '../index';
+import Editor from '../text-editor.js';
 
 const box = document.querySelector('#editor');
 const editor = new Editor({

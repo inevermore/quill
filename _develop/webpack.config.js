@@ -4,12 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const pkg = require('../package.json');
 
 const bannerPack = new webpack.BannerPlugin({
-  banner: [
-    `Quill Editor v${pkg.version}`,
-    'https://quilljs.com/',
-    'Copyright (c) 2014, Jason Chen',
-    'Copyright (c) 2013, salesforce.com',
-  ].join('\n'),
+  banner: [`Text Editor v${pkg.version}`].join('\n'),
   entryOnly: true,
 });
 const constantPack = new webpack.DefinePlugin({
@@ -17,7 +12,7 @@ const constantPack = new webpack.DefinePlugin({
 });
 
 const source = [
-  'quill.js',
+  'index.js',
   'core.js',
   'blots',
   'core',
@@ -101,13 +96,13 @@ const baseConfig = {
   mode: 'development',
   context: path.resolve(__dirname, '..'),
   entry: {
-    'index.js': ['./index.js'],
+    'text-editor.js': ['./index.js'],
     './handout/demo.js': './dist/handout/demo-index.js',
     'text-editor': './assets/tk.styl',
   },
   output: {
     filename: '[name]',
-    library: 'Quill',
+    library: 'TextEditor',
     libraryExport: 'default',
     libraryTarget: 'umd',
     path: path.resolve(__dirname, '../dist/'),
@@ -151,7 +146,7 @@ module.exports = env => {
     return {
       ...prodConfig,
       mode: 'production',
-      entry: { 'quill.min.js': './quill.js' },
+      entry: { 'text-editor.min.js': './text-editor.js' },
       devtool: 'source-map',
     };
   }

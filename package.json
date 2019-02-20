@@ -1,9 +1,9 @@
 {
   "name": "text-editor",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
-  "main": "index.js",
+  "main": "dist/text-editor.js",
   "files": [
     "assets",
     "blots",
@@ -12,8 +12,9 @@
     "modules",
     "themes",
     "ui",
-    "dist/index.js",
+    "dist/text-editor.js",
     "dist/yike-iframe.css",
+    "dist/text-editor.css",
     "core.js",
     "quill.js",
     "utils"
@@ -74,7 +75,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quilljs/quill"
+    "url": "https://git.afpai.com/yike_fe/text-editor.git"
   },
   "bugs": {
     "url": "https://github.com/quilljs/quill/issues"

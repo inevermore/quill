@@ -1,18 +1,13 @@
-/*!
- * Quill Editor v0.0.1
- * https://quilljs.com/
- * Copyright (c) 2014, Jason Chen
- * Copyright (c) 2013, salesforce.com
- */
+/*! Text Editor v0.0.2 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["Quill"] = factory();
+		exports["TextEditor"] = factory();
 	else
-		root["Quill"] = factory();
+		root["TextEditor"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -109,7 +104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack://Quill/./assets/tk.styl?");
+eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack://TextEditor/./assets/tk.styl?");
 
 /***/ })
 

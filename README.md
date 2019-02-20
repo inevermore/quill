@@ -1,6 +1,4 @@
-#text-editor
-
-一课团队富文本编辑器，目前适用于讲义系统，基于 quill.js 二次开发。
+一课团队富文本编辑器，目前适用于讲义系统，基于 quill 二次开发。
 
 ## 快速上手
 
@@ -13,12 +11,12 @@
 <script src="demo.js"></script>
 ```
 
-`demo.js`
+demo.js
 
 ```javascript
-import Editor from 'text-editor';
+import TextEditor from 'text-editor';
 
-const editor = new Editor({
+const editor = new TextEditor({
   container: '#editor',
   theme: 'handout',
   events: {
