@@ -102,13 +102,8 @@ const baseConfig = {
   context: path.resolve(__dirname, '..'),
   entry: {
     'index.js': ['./index.js'],
-    'quill.core.js': ['./core.js'],
-    'quill.core': './assets/core.styl',
-    'quill.bubble': './assets/bubble.styl',
-    'quill.snow': './assets/snow.styl',
-    'unit.js': './test/unit.js',
     './handout/demo.js': './dist/handout/demo-index.js',
-    'quill.tk': './assets/tk.styl',
+    'text-editor': './assets/tk.styl',
   },
   output: {
     filename: '[name]',

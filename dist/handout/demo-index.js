@@ -51,10 +51,6 @@ function openFormula(latex = '') {
   formula.contentWindow.latexEditor.set(latex);
 }
 
-function insertBlankOption(index) {
-
-}
-
 function getFormat(format) {
   console.log(format);
 }

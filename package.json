@@ -1,7 +1,7 @@
 {
   "name": "text-editor",
   "version": "0.0.1",
-  "description": "富文本编辑器",
+  "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
   "main": "index.js",
   "files": [
@@ -12,13 +12,7 @@
     "modules",
     "themes",
     "ui",
-    "dist/quill.bubble.css",
-    "dist/quill.snow.css",
-    "dist/quill.core.css",
     "dist/index.js",
-    "dist/quill.core.js",
-    "dist/quill.min.js.map",
-    "dist/quill.min.js",
     "dist/yike-iframe.css",
     "core.js",
     "quill.js",
@@ -151,7 +145,7 @@
   },
   "scripts": {
     "build": "npm run lint && npm run build:webpack",
-    "build:webpack": "webpack --config _develop/webpack.config.js; rm dist/quill.core dist/quill.bubble dist/quill.snow",
+    "build:webpack": "webpack --config _develop/webpack.config.js",
     "build:release": "./_develop/scripts/release.sh",
     "lint": "eslint blots core formats modules themes ui test",
     "start": "npm run build:webpack; bundle exec foreman start -f _develop/procfile",
