@@ -10,7 +10,7 @@ class Toolbar extends Module {
   constructor(quill, options) {
     super(quill, options);
     this.container = this.options.container;
-    if (this.options.container == null) {
+    if (this.options.container == null || 'default') {
       if (Array.isArray(this.options.options)) {
         const container = document.createElement('div');
         this.container = container;
@@ -19,7 +19,7 @@ class Toolbar extends Module {
       this.container = document.querySelector(this.options.container);
     }
     addControls(this.container, this.options.options);
-    if (this.options.container == null) {
+    if (this.options.container == null || 'default') {
       quill.container.parentNode.insertBefore(this.container, quill.container);
     }
     if (!(this.container instanceof HTMLElement)) {

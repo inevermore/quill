@@ -1,9 +1,12 @@
-import Editor from '../text-editor.js';
+import Editor from '../../index';
 
 const box = document.querySelector('#editor');
 const editor = new Editor({
   container: '#editor',
-  theme: 'handout',
+  theme: 'snow',
+  toolbar: {
+    container: 'default',
+  },
   events: {
     openFormula,
     getFormat,
@@ -36,11 +39,12 @@ const editor = new Editor({
       align: ['left', 'center', 'right'],
     },
     {
-      indent: ['normal'],
+      indent: [-1 ,+1],
     },
     {
       underline: ['normal'],
     },
+    {indent: '+1'}
   ],
 });
 
@@ -87,12 +91,25 @@ document.querySelector('#formulaEditorClose').addEventListener('click', () => {
     document.body.appendChild(button);
   });
 });
-const button = document.createElement('button');
-button.innerHTML = 'split';
-button.addEventListener('click', () => {
+const button1 = document.createElement('button');
+button1.innerHTML = 'split';
+button1.addEventListener('click', () => {
   console.log(editor.splitContent());
 });
-document.body.appendChild(button);
+document.body.appendChild(button1);
+var button2 = document.createElement('button');
+button2.innerHTML = 'indent';
+button2.addEventListener('click', () => {
+  editor.format('indent', '+1');
+});
+document.body.appendChild(button2);
+
+var button2 = document.createElement('button');
+button2.innerHTML = 'indent';
+button2.addEventListener('click', () => {
+  editor.format('indent', '-1');
+});
+document.body.appendChild(button2);
 
 let lastEditedBox = null;
 document.body.addEventListener('click', e => {

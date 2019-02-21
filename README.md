@@ -104,7 +104,7 @@ const editor = new Editor({
 
 | 方法名        | 返回值       | 参数            | 说明                                                         |
 | ------------- | ------------ | --------------- | ------------------------------------------------------------ |
-| format        | 无           | (format, value) | 设置文本、段落样式，format是参数options取值范围内，value是对应值。例如：`editor.format('align', 'center')`; |
+| format        | 无           | (format, value) | 设置文本、段落样式，format是参数options取值范围内，value是对应值。例如：`editor.format('align', 'center')`。value是false时，取消对应样式 |
 | setContent    | 无           | htmlString      | 设置编辑器内容，参数是html字符串                             |
 | getContent    | htmlString   | 无              | 获取编辑器内容                                               |
 | insertFormula | 无           | string          | 插入公式，参数是公式latex                                    |

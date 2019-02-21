@@ -160,3 +160,18 @@ td.yikespec-align-right {
   vertical-align: super;
   font-size: smaller;
 }
+/* 居中 */
+.tkspec-align-center {
+  display: block !important;
+  text-align: center !important;
+}
+/* 居左 */
+.tkspec-align-left {
+  display: block !important;
+  text-align: left !important;
+}
+/* 居右 */
+.tkspec-align-right {
+  display: block !important;
+  text-align: right !important;
+}

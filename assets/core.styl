@@ -95,23 +95,23 @@ resets(arr)
     > .ql-ui:before
       content: unquote('counter(list-0, ' + LIST_STYLE[0] + ')') '. '
   for num in (1..MAX_INDENT)
-    li[data-list=ordered].ql-indent-{num}
+    li[data-list=ordered].tkspec-indent-{num}
       counter-increment: unquote('list-' + num)
       > .ql-ui:before
         content: unquote('counter(list-' + num + ', ' + LIST_STYLE[num%3] + ')') '. '
     if (num < MAX_INDENT)
-      li[data-list=ordered].ql-indent-{num}
+      li[data-list=ordered].tkspec-indent-{num}
         counter-reset: resets((num+1)..MAX_INDENT)
 
   for num in (1..MAX_INDENT)
-    .ql-indent-{num}:not(.ql-direction-rtl)
-      padding-left: (3*num)em
-    li.ql-indent-{num}:not(.ql-direction-rtl)
-      padding-left: (3*num + LIST_STYLE_OUTER_WIDTH)em
-    .ql-indent-{num}.ql-direction-rtl.ql-align-right
-      padding-right: (3*num)em
-    li.ql-indent-{num}.ql-direction-rtl.ql-align-right
-      padding-right: (3*num + LIST_STYLE_OUTER_WIDTH)em
+    .tkspec-indent-{num}:not(.ql-direction-rtl)
+      padding-left: (num)em
+    li.tkspec-indent-{num}:not(.ql-direction-rtl)
+      padding-left: (num + LIST_STYLE_OUTER_WIDTH)em
+    .tkspec-indent-{num}.ql-direction-rtl.ql-align-right
+      padding-right: (num)em
+    li.tkspec-indent-{num}.ql-direction-rtl.ql-align-right
+      padding-right: (num + LIST_STYLE_OUTER_WIDTH)em
 
   li.ql-direction-rtl
     padding-right: LIST_STYLE_OUTER_WIDTH

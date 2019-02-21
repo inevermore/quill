@@ -5,7 +5,7 @@ const config = {
   // whitelist: ['left', 'right', 'center'],
 };
 
-const AlignClass = new ClassAttributor('align', 'yikespec-align', config);
+const AlignClass = new ClassAttributor('align', 'tkspec-align', config);
 const AlignStyle = new StyleAttributor('align', 'text-align', config);
 
 export { AlignClass, AlignStyle };
