@@ -2,6 +2,7 @@ import Quill from './core';
 
 import { AlignClass, AlignStyle } from './formats/align';
 import IndentClass from './formats/indent';
+import TextIndentClass from './formats/text-indent';
 
 import DottedClass from './formats/dotted';
 
@@ -77,6 +78,7 @@ Quill.register(
 const FORMATS = {
   align: AlignClass,
   indent: IndentClass,
+  'text-indent': TextIndentClass,
   strike: Strike,
   dotted: DottedClass,
   italic: ItalicClass,

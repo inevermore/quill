@@ -458,7 +458,7 @@ function matchStyles(node, delta) {
     style.fontWeight.startsWith('bold') ||
     parseInt(style.fontWeight, 10) >= 700
   ) {
-    formats.bold = true;
+    formats.bold = 'normal';
   }
   if (Object.keys(formats).length > 0) {
     delta = applyFormat(delta, formats);

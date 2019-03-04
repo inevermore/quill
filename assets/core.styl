@@ -98,7 +98,7 @@ resets(arr)
     li[data-list=ordered].tkspec-indent-{num}
       counter-increment: unquote('list-' + num)
       > .ql-ui:before
-        content: unquote('counter(list-' + num + ', ' + LIST_STYLE[num%3] + ')') '. '
+        content: unquote('counter(list-' + num + ', ' + LIST_STYLE[0] + ')') '. '
     if (num < MAX_INDENT)
       li[data-list=ordered].tkspec-indent-{num}
         counter-reset: resets((num+1)..MAX_INDENT)

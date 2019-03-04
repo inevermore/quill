@@ -14,6 +14,7 @@ import Clipboard from './modules/clipboard';
 import History from './modules/history';
 import Keyboard from './modules/keyboard';
 import Uploader from './modules/uploader';
+import QlMathjax from './formats/mathjax';
 
 Quill.register({
   'blots/block': Block,
@@ -26,6 +27,7 @@ Quill.register({
   // 'blots/tk-inline': TkInline,
   'blots/scroll': Scroll,
   'blots/text': TextBlot,
+  'blots/ql-mathjax': QlMathjax,
 
   'modules/clipboard': Clipboard,
   'modules/history': History,

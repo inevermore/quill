@@ -80,11 +80,6 @@ class Quill {
       e.preventDefault();
     });
     this.formulaImgClass = 'yk-math-img';
-    this.root.addEventListener('dblclick', e => {
-      if (e.target.classList.contains(this.formulaImgClass)) {
-        this.editFormula(e.target);
-      }
-    });
     this.root.classList.add('ql-blank');
     this.root.setAttribute('data-gramm', false);
     this.scrollingContainer = this.options.scrollingContainer || this.root;
@@ -102,7 +97,6 @@ class Quill {
     this.clipboard = this.theme.addModule('clipboard');
     this.history = this.theme.addModule('history');
     this.uploader = this.theme.addModule('uploader');
-    // this.imageResizer = this.theme.addModule('image-resizer');
     this.theme.init();
     this.emitter.on(Emitter.events.EDITOR_CHANGE, type => {
       if (type === Emitter.events.TEXT_CHANGE) {
@@ -449,43 +443,12 @@ class Quill {
     );
   }
 
-  insertFormula(objList) {
-    const savedRangeIndex = this.selection.savedRange.index;
-    // 编辑模式下替换 img 节点
-    if (this.editedImg) {
-      this.editedImg.outerHTML = `<img class="${
-        this.formulaImgClass
-      }" data-latex="${objList[0].latex}" src="${objList[0].src}">`;
-      this.editedImg = null;
-    } else if (objList[0].latex) {
-      this.insertEmbed(savedRangeIndex, 'image', {
-        src: `${objList[0].src}`,
-        'data-latex': objList[0].latex,
-        class: this.formulaImgClass,
-      });
-      this.setSelection(savedRangeIndex + 1, 0);
-    }
-  }
-
-  editFormula(img) {
-    this.editedImg = img;
-    this.showFormulaEditor(img.dataset.latex);
-  }
-
-  showFormulaEditor(latex = '') {
-    this.tkEvents.openFormula(latex);
-  }
-
   // 遍历选中区域节点
   traversingSelected(fn) {
     const selection = this.getSelection();
     if (selection && selection.length > 0) {
       this.scroll.traversing(selection.index, selection.length, fn);
     }
-  }
-
-  getHTML() {
-    return this.root.innerHTML;
   }
 }
 

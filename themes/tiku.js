@@ -62,7 +62,7 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           this.quill.setSelection(0, this.quill.getLength());
         },
         pi() {
-          this.quill.tkEvents.openFormula();
+          // this.quill.tkEvents.openFormula();
         },
         svgToLatex() {
           ImgToLatex(this.quill);

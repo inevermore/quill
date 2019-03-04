@@ -99,10 +99,9 @@
 }
 /* 斜体与其他功能组合引入class */
 .tkspec-italic-normal {
-  font-family: 'Courier New', Courier, arial,tahoma,'Microsoft Yahei','\5b8b\4f53',sans-serif;
+  /* font-family: 'Courier New', Courier, arial,tahoma,'Microsoft Yahei','\5b8b\4f53',sans-serif; */
   font-style: italic;
 }
-
 
 /* 首行缩进 */
 .yikespec-text-indent {
@@ -112,11 +111,11 @@
 .yikespec-text-indent * {
   text-indent: 0;
 }
-.tkspec-indent-normal {
+.tkspec-text-indent-normal {
   display: block !important;
   text-indent: 1.5em;
 }
-.tkspec-indent-normal * {
+.tkspec-text-indent-normal * {
   text-indent: 0;
 }
 /* 居中 */
@@ -152,13 +151,17 @@ td.yikespec-align-right {
   font-weight: bold !important;
 }
 
-.tkspec-script-sub {
-  vertical-align: sub;
-  font-size: smaller;
+.tkspec-script-sub, .tkspec-script-super {
+  position: relative;
+  font-size: 75%;
+  vertical-align: baseline;
+  line-height: 0;
 }
 .tkspec-script-super {
-  vertical-align: super;
-  font-size: smaller;
+  top: -.5em;
+}
+.tkspec-script-sub {
+  bottom: -.25em;
 }
 /* 居中 */
 .tkspec-align-center {

@@ -1,6 +1,5 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
-import getImgList from './utils/get-img-list';
 
 class TkEditor {
   constructor(options) {
@@ -14,7 +13,7 @@ class TkEditor {
         },
         initContent: '',
         events: {
-          openFormula: () => {},
+          // openFormula: () => {},
           insertBlankOption: () => {},
           getFormat: () => {},
         },
@@ -44,9 +43,18 @@ class TkEditor {
       },
       events: this.config.events,
     });
+    this.quill.on(Quill.events.EDITOR_CHANGE, type => {
+      if (type === Quill.events.SELECTION_CHANGE) {
+        this.config.events.getFormat(this.quill.getFormat());
+      }
+    });
+    this.quill.on(Quill.events.SCROLL_OPTIMIZE, () => {
+      this.config.events.getFormat(this.quill.getFormat());
+    });
     if (this.config.initContent) {
       this.setContent(this.config.initContent);
     }
+    this.savedRange = this.quill.selection.savedRange;
   }
 
   setContent(content) {
@@ -54,21 +62,40 @@ class TkEditor {
   }
 
   getContent() {
-    return this.quill.getHTML();
+    return this.quill.root.innerHTML;
   }
 
-  insertFormula(latex) {
-    getImgList([`$${latex}$`]).then(objList => {
-      this.quill.insertFormula(objList);
-    });
+  getData() {
+    return this.quill.getContents();
   }
 
-  getModule(module) {
-    return this.quill.getModule(module);
+  setData(delta) {
+    this.quill.setContents(delta);
+  }
+
+  getSelection() {
+    return this.quill.getSelection();
+  }
+
+  setSelection(index, length) {
+    this.quill.setSelection(index, length);
+  }
+
+  insertEmbed(index, embed, value) {
+    this.quill.insertEmbed(index, embed, value);
+    if (embed === 'ql-mathjax') {
+      this.quill.insertText(index + 1, ' ');
+      this.quill.setSelection(index + 2);
+    }
+  }
+
+  getModule(name) {
+    return this.quill.getModule(name);
   }
 
   format(format, value) {
     this.quill.format(format, value);
+    this.config.events.getFormat(this.quill.getFormat());
   }
 
   undo() {
@@ -95,6 +122,10 @@ class TkEditor {
     const prev = this.quill.getSemanticHTML(0, index);
     const next = this.quill.getSemanticHTML(index, this.quill.getLength());
     return [prev, next];
+  }
+
+  isBlank() {
+    return this.quill.editor.isBlank();
   }
 }
 

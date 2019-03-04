@@ -193,3 +193,18 @@ function observeArray(arr, event) {
   });
 }
 export { History as default, getLastChangeIndex };
+
+const test = [{name: 'a'}, {name: 'b'}, {name: 'a'}];
+
+function duplicate(arr) {
+  const obj = {};
+  const ret = [];
+  arr.forEach(item => {
+    if (obj[item.name] === undefined) {
+      obj[item.name] = true;
+      ret.push(item);
+    }
+  });
+  return ret;
+}
+console.log(duplicate(test));

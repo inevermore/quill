@@ -3,7 +3,7 @@ import Editor from '../../index';
 const box = document.querySelector('#editor');
 const editor = new Editor({
   container: '#editor',
-  theme: 'snow',
+  theme: 'handout',
   toolbar: {
     container: 'default',
   },
@@ -38,13 +38,14 @@ const editor = new Editor({
     {
       align: ['left', 'center', 'right'],
     },
-    {
-      indent: [-1 ,+1],
-    },
-    {
-      underline: ['normal'],
-    },
-    {indent: '+1'}
+    // {
+    //   indent: [-1 ,+1],
+    // },
+    // {
+    //   underline: ['normal'],
+    // },
+    {indent: [1,2,3,4,5,6,7,8]},
+    {'text-indent': 'normal'}
   ],
 });
 
@@ -105,11 +106,12 @@ button2.addEventListener('click', () => {
 document.body.appendChild(button2);
 
 var button2 = document.createElement('button');
-button2.innerHTML = 'indent';
+button2.innerHTML = 'cancel list';
 button2.addEventListener('click', () => {
-  editor.format('indent', '-1');
+  editor.format('list', false);
 });
 document.body.appendChild(button2);
+
 
 let lastEditedBox = null;
 document.body.addEventListener('click', e => {
@@ -120,12 +122,18 @@ document.body.addEventListener('click', e => {
         if (lastEditedBox != null) {
           lastEditedBox.innerHTML = editor.getContent();
           lastEditedBox.appendChild(box);
+          setTimeout(() => {
+            editor.quill.setSelection(0, 0);
+          }, 0)
         }
         lastEditedBox = node;
         editor.setContent(node.innerHTML.trim());
         node.innerHTML = '';
         box.style.display = 'block';
         lastEditedBox.appendChild(box);
+        setTimeout(() => {
+          editor.quill.setSelection(0, 0);
+        }, 0)
         return;
       }
       break;
@@ -135,3 +143,7 @@ document.body.addEventListener('click', e => {
   }
   // editor.hide();
 });
+
+document.querySelector('#test1').addEventListener('click', () => {
+  console.log(editor.splitContent());
+})
