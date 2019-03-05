@@ -1,7 +1,6 @@
 import alignLeftIcon from '../assets/icons/align-left.svg';
 import alignCenterIcon from '../assets/icons/align-center.svg';
 import alignRightIcon from '../assets/icons/align-right.svg';
-import alignJustifyIcon from '../assets/icons/align-justify.svg';
 import backgroundIcon from '../assets/icons/background.svg';
 import blockquoteIcon from '../assets/icons/blockquote.svg';
 import boldIcon from '../assets/icons/bold.svg';
@@ -16,7 +15,6 @@ import header2Icon from '../assets/icons/header-2.svg';
 import italicIcon from '../assets/icons/italic.svg';
 import imageIcon from '../assets/icons/image.svg';
 import indentIcon from '../assets/icons/indent.svg';
-import outdentIcon from '../assets/icons/outdent.svg';
 import linkIcon from '../assets/icons/link.svg';
 import listBulletIcon from '../assets/icons/list-bullet.svg';
 import listCheckIcon from '../assets/icons/list-check.svg';

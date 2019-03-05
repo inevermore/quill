@@ -99,6 +99,7 @@ const baseConfig = {
     'text-editor.js': ['./index.js'],
     './handout/demo.js': './dist/handout/demo-index.js',
     'text-editor': './assets/tk.styl',
+    'unit.js': './test/unit.js',
   },
   output: {
     filename: '[name]',

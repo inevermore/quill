@@ -13,7 +13,7 @@ module.exports = config => {
           'http://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js',
         served: true,
       },
-      { pattern: 'dist/quill.snow.css', nocache: true },
+      { pattern: 'dist/text-editor.css', nocache: true },
       { pattern: 'dist/unit.js', nocache: true },
       { pattern: 'dist/*.map', included: false, served: true, nocache: true },
       { pattern: 'assets/favicon.png', included: false, served: true },

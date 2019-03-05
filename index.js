@@ -62,7 +62,11 @@ class TkEditor {
   }
 
   getContent() {
-    return this.quill.root.innerHTML;
+    const copy = this.quill.root.cloneNode(true);
+    copy.querySelectorAll('.ql-cursor').forEach(el => {
+      el.parentNode.removeChild(el);
+    });
+    return copy.innerHTML;
   }
 
   getData() {

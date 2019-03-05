@@ -23,16 +23,7 @@ class Image extends EmbedBlot {
     return node;
   }
 
-  static formats(domNode) {
-    // return Object.entries(ATTRIBUTES).reduce((formats, [attribute, val]) => {
-    //   if (domNode.hasAttribute(attribute)) {
-    //     const value = domNode.getAttribute(attribute);
-    //     if (!val || val.indexOf(value) > -1) {
-    //       formats[attribute] = value;
-    //     }
-    //   }
-    //   return formats;
-    // }, {});
+  static formats() {
     return {};
   }
 

@@ -15,7 +15,6 @@ import Module from '../core/module';
 import { AlignStyle } from '../formats/align';
 import { SizeStyle } from '../formats/size';
 import LineHeightStyle from '../formats/line-height';
-import ScriptStyle from '../formats/script';
 import { FontStyle } from '../formats/font';
 import { ColorStyle } from '../formats/color';
 import { BackgroundStyle } from '../formats/background';
@@ -173,7 +172,8 @@ class Clipboard extends Module {
   }
 
   onPaste(range, { text, html }) {
-    console.log(html)
+    // eslint-disable-next-line no-console
+    console.log(html);
     const formats = this.quill.getFormat(range.index);
     const pastedDelta = this.convert({ text, html }, formats);
     debug.log('onPaste', pastedDelta, { text, html });
@@ -227,7 +227,6 @@ function applyFormat(delta, format, value) {
       return applyFormat(newDelta, key, format[key]);
     }, delta);
   }
-  console.log(format, STYLE_ATTRIBUTORS);
   return delta.reduce((newDelta, op) => {
     if (op.attributes && op.attributes[format]) {
       return newDelta.push(op);
