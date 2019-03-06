@@ -14,7 +14,7 @@ class TkEditor {
         initContent: '',
         events: {
           // openFormula: () => {},
-          insertBlankOption: () => {},
+          // insertBlankOption: () => {},
           getFormat: () => {},
         },
       },

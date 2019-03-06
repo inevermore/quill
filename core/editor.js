@@ -137,7 +137,7 @@ class Editor {
   }
 
   getHTML(index, length) {
-    const [line, lineOffset] = this.scroll.line(index);
+    // const [line, lineOffset] = this.scroll.line(index);
     // if (line.length() >= lineOffset + length) {
     //   return convertHTML(line, lineOffset, length, true);
     // }
@@ -324,6 +324,8 @@ function getListType(type) {
       return [tag, ' data-list="checked"'];
     case 'unchecked':
       return [tag, ' data-list="unchecked"'];
+    case 'ordered':
+      return [tag, ' data-list="ordered"'];
     default:
       return [tag, ''];
   }
