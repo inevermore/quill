@@ -43,13 +43,18 @@ class TkEditor {
       },
       events: this.config.events,
     });
-    this.quill.on(Quill.events.EDITOR_CHANGE, type => {
+    this.quill.on(Quill.events.EDITOR_CHANGE, (type, range) => {
       if (type === Quill.events.SELECTION_CHANGE) {
-        this.config.events.getFormat(this.quill.getFormat());
+        this.config.events.getFormat(
+          range == null ? {} : this.quill.getFormat(range),
+        );
       }
     });
     this.quill.on(Quill.events.SCROLL_OPTIMIZE, () => {
-      this.config.events.getFormat(this.quill.getFormat());
+      const [range] = this.quill.selection.getRange();
+      this.config.events.getFormat(
+        range == null ? {} : this.quill.getFormat(range),
+      );
     });
     if (this.config.initContent) {
       this.setContent(this.config.initContent);

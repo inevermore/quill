@@ -1,6 +1,6 @@
 {
   "name": "text-editor",
-  "version": "0.0.615",
+  "version": "0.0.616",
   "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
@@ -152,6 +152,7 @@
     "lint": "eslint blots core formats modules themes ui test",
     "start": "npm run build:webpack; bundle exec foreman start -f _develop/procfile",
     "test": "npm run test:unit",
+    "test:debug": "npm run build; karma start _develop/karma.config.js --single-run=false --debug",
     "test:all": "npm run test:unit; npm run test:functional",
     "test:functional": "./_develop/scripts/puppeteer.sh",
     "test:unit": "npm run build; karma start _develop/karma.config.js",

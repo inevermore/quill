@@ -4,6 +4,8 @@ import Emitter from '../../core/emitter';
 import Selection from '../../core/selection';
 import Scroll from '../../blots/scroll';
 import Quill, { globalRegistry } from '../../core/quill';
+import TextEditor from '../../index';
+// import { register } from '../../quill';
 
 const div = document.createElement('div');
 div.id = 'test-container';
@@ -127,9 +129,24 @@ function initialize(klass, html, container = this.container, options = {}) {
   const scroll = new Scroll(globalRegistry, container, { emitter });
   if (klass === Scroll) return scroll;
   if (klass === Editor) return new Editor(scroll);
+  if (klass === TextEditor) {
+    return new TextEditor({
+      container,
+      theme: 'handout',
+    });
+  }
   if (klass === Selection) return new Selection(scroll, emitter);
   if (klass[0] === Editor && klass[1] === Selection) {
     return [new Editor(scroll), new Selection(scroll, emitter)];
+  }
+  if (klass[0] === TextEditor && klass[1] === Selection) {
+    return [
+      new TextEditor({
+        container,
+        theme: 'handout',
+      }),
+      new Selection(scroll, emitter),
+    ];
   }
   return null;
 }

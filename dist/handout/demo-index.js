@@ -143,7 +143,3 @@ document.body.addEventListener('click', e => {
   }
   // editor.hide();
 });
-
-document.querySelector('#test1').addEventListener('click', () => {
-  console.log(editor.splitContent());
-})
