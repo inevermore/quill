@@ -93,8 +93,7 @@ class TkEditor {
   insertEmbed(index, embed, value) {
     this.quill.insertEmbed(index, embed, value);
     if (embed === 'ql-mathjax') {
-      this.quill.insertText(index + 1, ' ');
-      this.quill.setSelection(index + 2);
+      this.quill.setSelection(index + 1);
     }
   }
 

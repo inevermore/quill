@@ -6,8 +6,7 @@ class FormulaEmbed extends Embed {
     node.innerHTML = value.innerHTML;
     node.setAttribute('latex', value.latex);
     node.setAttribute('mathid', value.mathid);
-    node.firstElementChild.setAttribute('contenteditable', false);
-    node.innerHTML = node.querySelector('svg').outerHTML;
+    // node.querySelector('svg').setAttribute('contenteditable', false);
     return node;
   }
 

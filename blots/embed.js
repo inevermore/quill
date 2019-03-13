@@ -65,16 +65,25 @@ class Embed extends EmbedBlot {
   }
 
   update(mutations, context) {
-    mutations.forEach(mutation => {
-      if (
-        mutation.type === 'characterData' &&
-        (mutation.target === this.leftGuard ||
-          mutation.target === this.rightGuard)
-      ) {
-        const range = this.restore(mutation.target);
-        if (range) context.range = range;
-      }
-    });
+    // mutations.forEach(mutation => {
+    //   if (
+    //     mutation.type === 'characterData' &&
+    //     (mutation.target === this.leftGuard ||
+    //       mutation.target === this.rightGuard)
+    //   ) {
+    //     const range = this.restore(mutation.target);
+    //     if (range) context.range = range;
+    //   }
+    // });
+    const mutation = mutations[0];
+    if (
+      mutation.type === 'characterData' &&
+      (mutation.target === this.leftGuard ||
+        mutation.target === this.rightGuard)
+    ) {
+      const range = this.restore(mutation.target);
+      if (range) context.range = range;
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "text-editor",
-  "version": "0.0.616",
+  "version": "0.0.700",
   "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
@@ -18,7 +18,8 @@
     "core.js",
     "quill.js",
     "utils",
-    "index.js"
+    "index.js",
+    "CHANGELOG.md"
   ],
   "config": {
     "ports": {
