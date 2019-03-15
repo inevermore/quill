@@ -1,10 +1,13 @@
 import Block from '../blots/block';
 import Container from '../blots/container';
 import Quill from '../core/quill';
+import * as Parchment from 'parchment';
 
 class ListContainer extends Container {}
 ListContainer.blotName = 'list-container';
 ListContainer.tagName = 'OL';
+
+console.log(Parchment.ParentBlot.uiClass)
 
 class ListItem extends Block {
   static create(value) {
@@ -23,7 +26,12 @@ class ListItem extends Block {
 
   constructor(scroll, domNode) {
     super(scroll, domNode);
-    const ui = domNode.ownerDocument.createElement('span');
+    const firstChild = domNode.firstElementChild;
+    const ifHasUi =
+      firstChild && firstChild.classList.contains(Parchment.ParentBlot.uiClass);
+    const ui = ifHasUi
+      ? firstChild
+      : domNode.ownerDocument.createElement('span');
     const listEventHandler = e => {
       if (!scroll.isEnabled()) return;
       const format = this.statics.formats(domNode, scroll);
@@ -37,6 +45,9 @@ class ListItem extends Block {
     };
     ui.addEventListener('mousedown', listEventHandler);
     ui.addEventListener('touchstart', listEventHandler);
+    if (ifHasUi) {
+      this.uiNode = ui;
+    }
     this.attachUI(ui);
   }
 

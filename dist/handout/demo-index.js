@@ -128,7 +128,7 @@ document.body.addEventListener('click', e => {
           lastEditedBox.innerHTML = editor.getContent();
           lastEditedBox.appendChild(box);
           setTimeout(() => {
-            editor.quill.setSelection(0, 0);
+            // editor.quill.setSelection(0, 0);
           }, 0)
         }
         lastEditedBox = node;
@@ -137,7 +137,7 @@ document.body.addEventListener('click', e => {
         box.style.display = 'block';
         lastEditedBox.appendChild(box);
         setTimeout(() => {
-          editor.quill.setSelection(0, 0);
+          // editor.quill.setSelection(0, 0);
         }, 0)
         return;
       }
