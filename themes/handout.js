@@ -10,7 +10,7 @@ class Handout extends TkBaseTheme {
       if (!range) {
         return;
       }
-      
+
       while (quill.root.contains(target)) {
         if (target.classList.contains(QlMathjax.className)) {
           quill.setSelection(range.index, 1);

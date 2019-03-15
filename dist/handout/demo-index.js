@@ -36,6 +36,9 @@ const editor = new Editor({
       list: ['ordered'],
     },
     {
+      'paragraph-bottom-space': ['normal'],
+    },
+    {
       align: ['left', 'center', 'right'],
     },
     // {
@@ -99,9 +102,10 @@ button1.addEventListener('click', () => {
 });
 document.body.appendChild(button1);
 var button2 = document.createElement('button');
-button2.innerHTML = 'indent';
+button2.innerHTML = 'insert br';
 button2.addEventListener('click', () => {
-  editor.format('indent', '+1');
+  editor.insertEmbed(editor.getSelection().index, 'break')
+  // editor.quill.root.firstChild.appendChild(document.createElement('br'))
 });
 document.body.appendChild(button2);
 

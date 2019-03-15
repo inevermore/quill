@@ -60,10 +60,14 @@ class TkEditor {
       this.setContent(this.config.initContent);
     }
     this.savedRange = this.quill.selection.savedRange;
+    this.wrapperClass = 'text-editor-wrapper';
   }
 
   setContent(content) {
-    this.quill.root.innerHTML = content;
+    const div = document.createElement('div');
+    div.innerHTML = content;
+    this.quill.root.innerHTML =
+      (div.firstElementChild && div.firstElementChild.innerHTML) || '';
   }
 
   getContent() {
@@ -71,7 +75,7 @@ class TkEditor {
     copy.querySelectorAll('.ql-cursor').forEach(el => {
       el.parentNode.removeChild(el);
     });
-    return copy.innerHTML;
+    return `<div class="${this.wrapperClass}">${copy.innerHTML}</div>`;
   }
 
   getData() {

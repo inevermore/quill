@@ -178,3 +178,64 @@ td.yikespec-align-right {
   display: block !important;
   text-align: right !important;
 }
+/* 段后距 */
+.tkspec-paragraph-bottom-space-normal {
+  padding-bottom: 15px!important;
+}
+
+:root {
+  --list-style-width: 1.2em;
+  --list-style-margin: 0.3em;
+  --list-style-outer-width: 1.5em;
+}
+
+.text-editor-wrapper {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: normal;
+}
+
+.text-editor-wrapper p, ol, pre, blockquote, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+.text-editor-wrapper .ql-ui {
+  position: absolute;
+}
+
+.text-editor-wrapper li {
+  list-style-type: none;
+  padding-left: 1.5em;
+  position: relative;
+}
+
+.text-editor-wrapper li > .ql-ui:before {
+  display: inline-block;
+  margin-left: -1.5em;
+  margin-right: 0.3em;
+  text-align: right;
+  white-space: nowrap;
+  width: 1.2em;
+}
+
+.text-editor-wrapper li[data-list=checked] > .ql-ui,
+.text-editor-wrapper li[data-list=unchecked] > .ql-ui {
+  color: #777;
+}
+.text-editor-wrapper li[data-list=bullet] > .ql-ui:before {
+  content: '\2022';
+}
+.text-editor-wrapper li[data-list=checked] > .ql-ui:before {
+  content: '\2611';
+}
+.text-editor-wrapper li[data-list=unchecked] > .ql-ui:before {
+  content: '\2610';
+}
+.text-editor-wrapper li[data-list=ordered] {
+  counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+  counter-increment: list-0;
+}
+.text-editor-wrapper li[data-list=ordered] > .ql-ui:before {
+  content: counter(list-0, decimal) '. ';
+}

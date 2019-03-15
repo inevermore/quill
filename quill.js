@@ -34,6 +34,7 @@ import List from './formats/list';
 import { FontStyle } from './formats/font';
 import { SizeStyle } from './formats/size';
 import LineHeightStyle from './formats/line-height';
+import ParagraphBottomSpaceClass from './formats/paragraph-bottom-space';
 
 Quill.register(
   {
@@ -93,6 +94,7 @@ const FORMATS = {
   'line-height': LineHeightStyle,
   color: ColorStyle,
   background: BackgroundStyle,
+  'paragraph-bottom-space': ParagraphBottomSpaceClass,
 };
 
 function register(options) {
