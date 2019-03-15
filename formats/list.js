@@ -1,13 +1,11 @@
+import * as Parchment from 'parchment';
 import Block from '../blots/block';
 import Container from '../blots/container';
 import Quill from '../core/quill';
-import * as Parchment from 'parchment';
 
 class ListContainer extends Container {}
 ListContainer.blotName = 'list-container';
 ListContainer.tagName = 'OL';
-
-console.log(Parchment.ParentBlot.uiClass)
 
 class ListItem extends Block {
   static create(value) {

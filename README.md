@@ -76,23 +76,24 @@ const editor = new Editor({
 
 
 
-| 可选值      | 白名单                    | 格式影响范围 | 说明                   | 对应class                                                  |
-| ----------- | ------------------------- | ------------ | ---------------------- | ---------------------------------------------------------- |
-| bold        | 'normal'                  | 行内文本     | 粗体                   | tkspec-bold-normal                                         |
-| italic      | 'normal'                  | 行内文本     | 斜体                   | tkspec-italic-normal                                       |
-| underline   | 'normal', 'wavy'          | 行内文本     | 下划线（直线、波浪线） | tkspec-underline-normal，tkspec-underline-wavy             |
-| strike      | 'normal'                  | 行内文本     | 删除线                 | tkspec-strike-normal                                       |
-| dotted      | 'normal'                  | 行内文本     | 着重号                 | tkspec-dotted-normal                                       |
-| script      | 'super, 'sub''            | 行内文本     | 上标、下标             | tkspec-script-super，tkspec-script-sub                     |
-| font        | 任意，不设置则没有限制    | 行内文本     | 字体                   |                                                            |
-| size        | 任意，不设置则没有限制    | 行内文本     | 字号                   |                                                            |
-| color       | 任意，不设置则没有限制    | 行内文本     | 文本颜色               |                                                            |
-| background  | 任意，不设置则没有限制    | 行内文本     | 文本背景颜色           |                                                            |
-| text-indent | 'normal                   | 段落         | 首行增加缩进           | tkspec-text-indent-normal                                  |
-| indent      | '+1', '-1'                | 段落         | 段落增加缩进，减少缩进 | tkspec-indent-1，tkspec-indent-2 …… tkspec-indent-8        |
-| align       | 'left', 'center', 'right' | 段落         | 段落对齐样式           | tkspec-align-left，tkspec-align-center，tkspec-align-right |
-| line-height | 任意，不设置则没有限制    | 段落         | 行高                   |                                                            |
-| list        | 'ordered'                 | 段落         | 列表                   |                                                            |
+| 可选值                 | 白名单                    | 格式影响范围 | 说明                   | 对应class                                                  |
+| ---------------------- | ------------------------- | ------------ | ---------------------- | ---------------------------------------------------------- |
+| bold                   | 'normal'                  | 行内文本     | 粗体                   | tkspec-bold-normal                                         |
+| italic                 | 'normal'                  | 行内文本     | 斜体                   | tkspec-italic-normal                                       |
+| underline              | 'normal', 'wavy'          | 行内文本     | 下划线（直线、波浪线） | tkspec-underline-normal，tkspec-underline-wavy             |
+| strike                 | 'normal'                  | 行内文本     | 删除线                 | tkspec-strike-normal                                       |
+| dotted                 | 'normal'                  | 行内文本     | 着重号                 | tkspec-dotted-normal                                       |
+| script                 | 'super, 'sub''            | 行内文本     | 上标、下标             | tkspec-script-super，tkspec-script-sub                     |
+| font                   | 任意，不设置则没有限制    | 行内文本     | 字体                   |                                                            |
+| size                   | 任意，不设置则没有限制    | 行内文本     | 字号                   |                                                            |
+| color                  | 任意，不设置则没有限制    | 行内文本     | 文本颜色               |                                                            |
+| background             | 任意，不设置则没有限制    | 行内文本     | 文本背景颜色           |                                                            |
+| text-indent            | 'normal                   | 段落         | 首行增加缩进           | tkspec-text-indent-normal                                  |
+| indent                 | '+1', '-1'                | 段落         | 段落增加缩进，减少缩进 | tkspec-indent-1，tkspec-indent-2 …… tkspec-indent-8        |
+| align                  | 'left', 'center', 'right' | 段落         | 段落对齐样式           | tkspec-align-left，tkspec-align-center，tkspec-align-right |
+| line-height            | 任意，不设置则没有限制    | 段落         | 行高                   |                                                            |
+| list                   | 'ordered'                 | 段落         | 列表                   |                                                            |
+| paragraph-bottom-space | 'normal'                  | 段落         | 段后距                 | tkspec-paragraph-bottom-space-normal                       |
 
 ### events 说明
 
