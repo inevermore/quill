@@ -45,12 +45,13 @@ const editor = new Editor({
 
 ## 参数说明
 
-| 参数名      | 类型           | 必要性 | 默认值        | 取值范围          | 描述                               |
-| ----------- | -------------- | ------ | ------------- | ----------------- | ---------------------------------- |
-| container   | string \| Node | 可选   | document.body | 无                | 编辑器容器                         |
-| options     | array          | 必选   | []            | 见下方options说明 | 可选的样式                         |
-| initContent | string         | 可选   | ''            | 无                | 初始化内容，可以是文本或html字符串 |
-| events      | object         | 可选   | {}            | 见下方events说明  | 传入的事件                         |
+| 参数名      | 类型           | 必要性 | 默认值        | 取值范围           | 描述                               |
+| ----------- | -------------- | ------ | ------------- | ------------------ | ---------------------------------- |
+| container   | string \| Node | 可选   | document.body | 无                 | 编辑器容器                         |
+| options     | array          | 必选   | []            | 见下方options说明  | 可选的样式                         |
+| initContent | string         | 可选   | ''            | 无                 | 初始化内容，可以是文本或html字符串 |
+| events      | object         | 可选   | {}            | 见下方events说明   | 传入的事件                         |
+| keyboard    | object         | 可选   | {}            | 见下方keyboard说明 | 处理键盘事件                       |
 
 ### options 说明
 
@@ -100,6 +101,41 @@ const editor = new Editor({
 | 方法名    | 返回值 | 参数 | 说明                                   |
 | --------- | ------ | ---- | -------------------------------------- |
 | getFormat | object | 无   | 点击编辑区域时触发以获取光标区域的样式 |
+
+### keyboard 说明
+
+以下方代码为例，可以禁止回车事件
+
+```javascript
+  keyboard: {
+    bindings: {
+      handleEnter: {
+        key: 'Enter',
+        metaKey: null,
+        ctrlKey: null,
+        shiftKey: null,
+        altKey: null,
+        handler: function() {}
+      }，
+      // 禁止 shift + Enter 按键
+      handleAnotherEnter: {
+        key: 'Enter',
+        shiftKey: true,
+        handler: function() {}
+      }
+    }
+  },
+```
+
+参数说明：
+
+key: 按键
+
+handler: 事件回调
+
+metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需组合设置对应值为 true
+
+
 
 ## API
 

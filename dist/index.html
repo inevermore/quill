@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="quill.snow.css">
+  <script src="quill.js"></script>
+</head>
+
+<body>
+  <div id="quillEditor" style="width: 400px;height: 500px;"></div>
+</body>
+<script>
+  var quill = new Quill('#quillEditor', {
+    theme: 'snow',
+    modules: {
+      keyboard: {
+        bindings: {
+          tab: false,
+          handleEnter: {
+            key: 'Enter',
+            handler: function () {
+              // Do nothing
+              console.log(123)
+            }
+          },
+          custom: {
+            key: 'B',
+            shiftKey: true,
+            handler: function() {
+              console.log(1290)
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+
+</html>

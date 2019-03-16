@@ -11,6 +11,23 @@ const editor = new Editor({
     openFormula,
     getFormat,
   },
+  keyboard: {
+    bindings: {
+      handleEnter: {
+        key: 'Enter',
+        metaKey: null,
+        ctrlKey: null,
+        shiftKey: null,
+        altKey: null,
+        handler: function() {}
+      },
+      he: {
+        key: 'Enter',
+        shiftKey: true,
+        handler: function() {}
+      }
+    }
+  },
   options: [
     {
       font: ['sans-serif', 'Arial'],

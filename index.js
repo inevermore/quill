@@ -17,6 +17,7 @@ class TkEditor {
           // insertBlankOption: () => {},
           getFormat: () => {},
         },
+        keyboard: {},
       },
       options,
     );
@@ -40,6 +41,7 @@ class TkEditor {
           container: this.config.toolbar.container,
           options: this.config.options,
         },
+        keyboard: this.config.keyboard,
       },
       events: this.config.events,
     });
