@@ -1,5 +1,10 @@
+import extend from 'extend';
+import Delta from 'quill-delta';
 import TkBaseTheme from './tk-base';
 import QlMathjax from '../formats/mathjax';
+import Quill from '../core/quill';
+
+const LINE_SEPARATOR = '\u2028';
 
 class Handout extends TkBaseTheme {
   constructor(quill, options) {
@@ -24,7 +29,41 @@ class Handout extends TkBaseTheme {
 
   extendToolbar(toolbar) {
     toolbar.container.parentNode.removeChild(toolbar.container);
+      this.quill.keyboard.addBinding(
+        { key: 'k', shortKey: true },
+        (range, context) => {
+          toolbar.handlers.link.call(toolbar, !context.format.link);
+        },
+      );
+    
   }
 }
+
+Handout.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
+  modules: {
+    keyboard: {
+      bindings: {
+        'shift enter': {
+          key: 13,
+          shiftKey: true,
+          // eslint-disable-next-line object-shorthand
+          handler: function(range) {
+            // Insert LINE_SEPARATOR at cursor position
+            this.quill.history.cutoff();
+            const delta = new Delta()
+              .retain(range.index)
+              .delete(range.length)
+              .insert(LINE_SEPARATOR);
+            this.quill.updateContents(delta, Quill.sources.USER);
+            this.quill.history.cutoff();
+
+            // Position cursor after inserted linebreak
+            this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+          },
+        },
+      },
+    },
+  },
+});
 
 export default Handout;

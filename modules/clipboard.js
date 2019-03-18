@@ -26,7 +26,9 @@ const debug = logger('quill:clipboard');
 const CLIPBOARD_CONFIG = [
   [Node.TEXT_NODE, matchText],
   [Node.TEXT_NODE, matchNewline],
+  [Node.TEXT_NODE, matchTextLineBreak],
   ['br', matchBreak],
+  ['br', matchBreakText],
   [Node.ELEMENT_NODE, matchNewline],
   [Node.ELEMENT_NODE, matchBlot],
   [Node.ELEMENT_NODE, matchAttributor],
@@ -70,6 +72,7 @@ const OLD_CLASS = {
   strike: 'yikespec-line-through',
   dotted: 'yikespec-dotted',
 };
+const LINE_SEPARATOR = '\u2028';
 
 class Clipboard extends Module {
   constructor(quill, options) {
@@ -400,6 +403,15 @@ function matchBreak(node, delta) {
   return delta;
 }
 
+function matchBreakText(node) {
+  if (node.nextSibling && !node.nextSibling.textContent.startsWith('\n')) {
+    return new Delta().insert(LINE_SEPARATOR);
+  }
+  // <br> is *probably* safe to ignore. I'm pretty sure this is incorrect.
+  // what if <br> is last child in an inline block? shouldn't be ignored.
+  return new Delta();
+}
+
 // function matchCodeBlock(node, delta, scroll) {
 //   const match = scroll.query('code-block');
 //   const language = match ? match.formats(node, scroll) : true;
@@ -545,6 +557,10 @@ function matchText(node, delta) {
   return delta.insert(text);
 }
 
+function matchTextLineBreak(node) {
+  return new Delta().insert(toDeltaText(node.data));
+}
+
 function matchUnderline(node, delta) {
   let value = 'normal';
   if (getStyle(node, 'text-underline').indexOf('wave') > -1) {
@@ -564,6 +580,17 @@ function getStyle(node, key) {
     return (style && style.split(':')[1]) || '';
   }
   return '';
+}
+
+function toDeltaText(domText) {
+  return (
+    domText
+      // Text node content that ends in \n\n is rendered as two blank lines.
+      // Convert to one line separator, only. Assume the second blank line
+      // will be handled by the \n that marks the end of all paragraphs in Quill.
+      .replace(/\n\n$/, LINE_SEPARATOR)
+      .replace(/\n/g, LINE_SEPARATOR)
+  );
 }
 
 export {

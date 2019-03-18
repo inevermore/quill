@@ -35,6 +35,7 @@ import { FontStyle } from './formats/font';
 import { SizeStyle } from './formats/size';
 import LineHeightStyle from './formats/line-height';
 import ParagraphBottomSpaceClass from './formats/paragraph-bottom-space';
+// import TextLineBreak from './formats/text-line-break';
 
 Quill.register(
   {
@@ -58,6 +59,7 @@ Quill.register(
 Quill.register(
   {
     'formats/image': Image,
+    // 'formats/text-line-break': TextLineBreak,
 
     'modules/table': Table,
     'modules/toolbar': Toolbar,

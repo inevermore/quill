@@ -9,6 +9,7 @@ import Inline from './blots/inline';
 // import TkInline from './blots/tk-inline';
 import Scroll from './blots/scroll';
 import TextBlot from './blots/text';
+import TextLineBreak from './formats/text-line-break';
 
 import Clipboard from './modules/clipboard';
 import History from './modules/history';
@@ -33,6 +34,10 @@ Quill.register({
   'modules/history': History,
   'modules/keyboard': Keyboard,
   'modules/uploader': Uploader,
+});
+
+Quill.register({
+  'blots/text': TextLineBreak,
 });
 
 export default Quill;
