@@ -26,8 +26,8 @@ const debug = logger('quill:clipboard');
 const CLIPBOARD_CONFIG = [
   [Node.TEXT_NODE, matchText],
   [Node.TEXT_NODE, matchNewline],
-  [Node.TEXT_NODE, matchTextLineBreak],
-  ['br', matchBreak],
+  // [Node.TEXT_NODE, matchTextLineBreak],
+  // ['br', matchBreak],
   ['br', matchBreakText],
   [Node.ELEMENT_NODE, matchNewline],
   [Node.ELEMENT_NODE, matchBlot],
@@ -404,12 +404,13 @@ function matchBreak(node, delta) {
 }
 
 function matchBreakText(node) {
-  if (node.nextSibling && !node.nextSibling.textContent.startsWith('\n')) {
-    return new Delta().insert(LINE_SEPARATOR);
-  }
+  // if (node.nextSibling && !node.nextSibling.textContent.startsWith('\n')) {
+  //   return new Delta().insert(LINE_SEPARATOR);
+  // }
   // <br> is *probably* safe to ignore. I'm pretty sure this is incorrect.
   // what if <br> is last child in an inline block? shouldn't be ignored.
-  return new Delta();
+  // return new Delta();
+  return new Delta().insert(LINE_SEPARATOR);
 }
 
 // function matchCodeBlock(node, delta, scroll) {
@@ -539,7 +540,7 @@ function matchText(node, delta) {
       const replaced = match.replace(/[^\u00a0]/g, ''); // \u00a0 is nbsp;
       return replaced.length < 1 && collapse ? ' ' : replaced;
     };
-    text = text.replace(/\r\n/g, ' ').replace(/\n/g, ' ');
+    text = text.replace(/\r\n/g, ' ').replace(/\n/g, '');
     text = text.replace(/\s\s+/g, replacer.bind(replacer, true)); // collapse whitespace
     if (
       (node.previousSibling == null && isLine(node.parentNode)) ||
