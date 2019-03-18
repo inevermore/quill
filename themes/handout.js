@@ -29,13 +29,6 @@ class Handout extends TkBaseTheme {
 
   extendToolbar(toolbar) {
     toolbar.container.parentNode.removeChild(toolbar.container);
-      this.quill.keyboard.addBinding(
-        { key: 'k', shortKey: true },
-        (range, context) => {
-          toolbar.handlers.link.call(toolbar, !context.format.link);
-        },
-      );
-    
   }
 }
 

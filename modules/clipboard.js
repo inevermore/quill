@@ -396,14 +396,14 @@ function matchBlot(node, delta, scroll) {
   return delta;
 }
 
-function matchBreak(node, delta) {
-  if (!deltaEndsWith(delta, '\n')) {
-    delta.insert('\n');
-  }
-  return delta;
-}
+// function matchBreak(node, delta) {
+//   if (!deltaEndsWith(delta, '\n')) {
+//     delta.insert('\n');
+//   }
+//   return delta;
+// }
 
-function matchBreakText(node) {
+function matchBreakText() {
   // if (node.nextSibling && !node.nextSibling.textContent.startsWith('\n')) {
   //   return new Delta().insert(LINE_SEPARATOR);
   // }
@@ -558,9 +558,9 @@ function matchText(node, delta) {
   return delta.insert(text);
 }
 
-function matchTextLineBreak(node) {
-  return new Delta().insert(toDeltaText(node.data));
-}
+// function matchTextLineBreak(node) {
+//   return new Delta().insert(toDeltaText(node.data));
+// }
 
 function matchUnderline(node, delta) {
   let value = 'normal';
@@ -581,17 +581,6 @@ function getStyle(node, key) {
     return (style && style.split(':')[1]) || '';
   }
   return '';
-}
-
-function toDeltaText(domText) {
-  return (
-    domText
-      // Text node content that ends in \n\n is rendered as two blank lines.
-      // Convert to one line separator, only. Assume the second blank line
-      // will be handled by the \n that marks the end of all paragraphs in Quill.
-      .replace(/\n\n$/, LINE_SEPARATOR)
-      .replace(/\n/g, LINE_SEPARATOR)
-  );
 }
 
 export {
