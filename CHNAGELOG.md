@@ -1,4 +1,9 @@
+## 0.0.82
+
+* UPDATE 添加word-break样式，防止外部样式影响
+  
 ## 0.0.81
+
 * ADD setKeyboardBindings接口，支持重设自定义键盘事件
 
 ## 0.0.8

@@ -1,4 +1,4 @@
-/*! Text Editor v0.0.81 */
+/*! Text Editor v0.0.82 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
