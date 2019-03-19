@@ -1,3 +1,6 @@
+## 0.0.81
+* ADD setKeyboardBindings接口，支持重设自定义键盘事件
+
 ## 0.0.8
 
 * ADD 支持分行功能（shift + enter）

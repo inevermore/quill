@@ -1,5 +1,6 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
+import Keyboard from './modules/keyboard';
 
 class TkEditor {
   constructor(options) {
@@ -120,6 +121,7 @@ class TkEditor {
     this.quill.history.redo();
   }
 
+  // 以焦点为分界，分割富文本内容
   splitContent() {
     const range = this.quill.getSelection();
     if (range == null) {
@@ -140,6 +142,17 @@ class TkEditor {
 
   isBlank() {
     return this.quill.editor.isBlank();
+  }
+
+  // 重设键盘绑定事件
+  setKeyboardBindings(options) {
+    const { keyboard } = this.quill;
+    keyboard.bindings = Object.assign({}, Keyboard.DEFAULTS.bindings, options);
+    Object.keys(keyboard.bindings).forEach(name => {
+      if (keyboard.bindings[name]) {
+        keyboard.addBinding(keyboard.bindings[name]);
+      }
+    });
   }
 }
 

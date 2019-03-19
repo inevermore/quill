@@ -102,10 +102,31 @@ button1.addEventListener('click', () => {
 });
 document.body.appendChild(button1);
 var button2 = document.createElement('button');
-button2.innerHTML = 'insert br';
+button2.innerHTML = 'enable single line';
+let flag = false;
 button2.addEventListener('click', () => {
-  editor.insertEmbed(editor.getSelection().index, 'break')
-  // editor.quill.root.firstChild.appendChild(document.createElement('br'))
+  const bindings = editor.quill.keyboard.bindings();
+  flag = !flag;
+  if (flag) {
+    Object.assign(bindings, {
+      handleEnter: {
+        key: 'Enter',
+        metaKey: null,
+        ctrlKey: null,
+        shiftKey: null,
+        altKey: null,
+        handler: function() {}
+      },
+      // 禁止 shift + Enter 按键
+      handleAnotherEnter: {
+        key: 'Enter',
+        shiftKey: true,
+        handler: function() {}
+      }
+    });
+  } else {
+    
+  }
 });
 document.body.appendChild(button2);
 
