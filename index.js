@@ -1,6 +1,7 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
 import Keyboard from './modules/keyboard';
+import Emitter from './core/emitter';
 
 class TkEditor {
   constructor(options) {
@@ -89,8 +90,8 @@ class TkEditor {
     this.quill.setContents(delta);
   }
 
-  getSelection() {
-    return this.quill.getSelection();
+  getSelection(focus = false) {
+    return this.quill.getSelection(focus);
   }
 
   setSelection(index, length) {
@@ -146,6 +147,7 @@ class TkEditor {
 
   // 重设键盘绑定事件
   setKeyboardBindings(options) {
+    const range = this.getSelection(true);
     const { keyboard } = this.quill;
     keyboard.bindings = Object.assign({}, Keyboard.DEFAULTS.bindings, options);
     Object.keys(keyboard.bindings).forEach(name => {
@@ -153,6 +155,7 @@ class TkEditor {
         keyboard.addBinding(keyboard.bindings[name]);
       }
     });
+    this.setSelection(range, Emitter.sources.SILENT);
   }
 }
 

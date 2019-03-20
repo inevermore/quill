@@ -100,15 +100,33 @@ button1.innerHTML = 'split';
 button1.addEventListener('click', () => {
   console.log(editor.splitContent());
 });
+setTimeout(() => {
+  console.log('single line')
+  editor.setKeyboardBindings({
+    handleEnter: {
+      key: 'Enter',
+      metaKey: null,
+      ctrlKey: null,
+      shiftKey: null,
+      altKey: null,
+      handler: function() {}
+    },
+    // 禁止 shift + Enter 按键
+    handleAnotherEnter: {
+      key: 'Enter',
+      shiftKey: true,
+      handler: function() {}
+    }
+  });
+}, 5000)
 document.body.appendChild(button1);
 var button2 = document.createElement('button');
 button2.innerHTML = 'enable single line';
 let flag = false;
 button2.addEventListener('click', () => {
-  const bindings = editor.quill.keyboard.bindings();
   flag = !flag;
   if (flag) {
-    Object.assign(bindings, {
+    editor.setKeyboardBindings({
       handleEnter: {
         key: 'Enter',
         metaKey: null,
@@ -125,7 +143,7 @@ button2.addEventListener('click', () => {
       }
     });
   } else {
-    
+    editor.setKeyboardBindings();
   }
 });
 document.body.appendChild(button2);

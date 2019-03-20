@@ -1,3 +1,7 @@
+## 0.0.83
+
+* FIX setKeyboardBindings方法导致编辑器失焦
+
 ## 0.0.82
 
 * UPDATE 添加word-break样式，防止外部样式影响
