@@ -145,17 +145,8 @@ class TkEditor {
     return this.quill.editor.isBlank();
   }
 
-  // 重设键盘绑定事件
-  setKeyboardBindings(options) {
-    const range = this.getSelection(true);
-    const { keyboard } = this.quill;
-    keyboard.bindings = Object.assign({}, Keyboard.DEFAULTS.bindings, options);
-    Object.keys(keyboard.bindings).forEach(name => {
-      if (keyboard.bindings[name]) {
-        keyboard.addBinding(keyboard.bindings[name]);
-      }
-    });
-    this.setSelection(range, Emitter.sources.SILENT);
+  enableSingleLine(boolean = false) {
+    this.quill.enableSingleLine = boolean;
   }
 }
 

@@ -520,6 +520,9 @@ function handleDeleteRange(range) {
 
 // TODO use just updateContents()
 function handleEnter(range, context) {
+  if (this.quill.enableSingleLine) {
+    return;
+  }
   if (range.length > 0) {
     this.quill.scroll.deleteAt(range.index, range.length); // So we do not trigger text-change
   }

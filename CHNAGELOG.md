@@ -1,3 +1,12 @@
+## 0.0.85
+
+* 无修改
+
+## 0.0.84
+
+* FIX setKeyboardBindings方法导致键盘事件紊乱，去除此方法
+* ADD enableSingleLine方法，支持设置单行/多行模式
+
 ## 0.0.83
 
 * FIX setKeyboardBindings方法导致编辑器失焦

@@ -60,6 +60,9 @@ TikuBaseTheme.DEFAULTS = extend(true, {}, BaseTheme.DEFAULTS, {
           shiftKey: true,
           // eslint-disable-next-line object-shorthand
           handler: function(range) {
+            if (this.quill.enableSingleLine) {
+              return;
+            }
             // Insert LINE_SEPARATOR at cursor position
             this.quill.history.cutoff();
             const delta = new Delta()

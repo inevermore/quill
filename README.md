@@ -45,15 +45,15 @@ const editor = new Editor({
 
 ## 参数说明
 
-| 参数名      | 类型           | 必要性 | 默认值        | 取值范围                          | 描述                               |
-| ----------- | -------------- | ------ | ------------- | --------------------------------- | ---------------------------------- |
-| container   | string \| Node | 可选   | document.body | 无                                | 编辑器容器                         |
-| options     | array          | 必选   | []            | 见[options 说明](#options-说明)   | 可选的样式                         |
-| initContent | string         | 可选   | ''            | 无                                | 初始化内容，可以是文本或html字符串 |
-| events      | object         | 可选   | {}            | 见[events 说明](#events-说明)     | 传入的事件                         |
-| keyboard    | object         | 可选   | {}            | 见[keyboard 说明](#keyboard-说明) | 处理键盘事件                       |
+| 参数名      | 类型           | 必要性 | 默认值        | 取值范围                                | 描述                               |
+| ----------- | -------------- | ------ | ------------- | --------------------------------------- | ---------------------------------- |
+| container   | string \| Node | 可选   | document.body | 无                                      | 编辑器容器                         |
+| options     | array          | 必选   | []            | 见[options 说明](#options-description)  | 可选的样式                         |
+| initContent | string         | 可选   | ''            | 无                                      | 初始化内容，可以是文本或html字符串 |
+| events      | object         | 可选   | {}            | 见[events 说明](#events-description)    | 传入的事件                         |
+| keyboard    | object         | 可选   | {}            | 见[keyboard 说明](keyboard-description) | 处理键盘事件                       |
 
-### options 说明
+### [options 说明][options-description]
 
 示例：
 
@@ -96,13 +96,13 @@ const editor = new Editor({
 | list                   | 'ordered'                 | 段落         | 列表                   |                                                            |
 | paragraph-bottom-space | 'normal'                  | 段落         | 段后距                 | tkspec-paragraph-bottom-space-normal                       |
 
-### events 说明
+### [events 说明][events-description]
 
 | 方法名    | 返回值 | 参数 | 说明                                   |
 | --------- | ------ | ---- | -------------------------------------- |
 | getFormat | object | 无   | 点击编辑区域时触发以获取光标区域的样式 |
 
-### keyboard 说明
+### [keyboard 说明][keyboard-description]
 
 以下方代码为例，可以禁止回车事件
 
@@ -152,5 +152,6 @@ metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需�
 | splitContent          | [prev, next] | 无                      | 获得光标前后的内容，prev是光标前内容，next是光标后内容，都是html字符串 |
 | setSelection          | 无           | (index, length)         | 设置编辑器选区。index为光标位置，length为range长度           |
 | isBlank               | boolean      | 无                      | 内容是否为空                                                 |
-| setKeyboardBindings | 无           | object                  | 重新设置自定义的keyboard事件，参数见[keyboard说明](#keyboard-说明) |
+| ~~setKeyboardBindings~~ | ~~无~~       | ~~object~~              | ~~重新设置自定义的keyboard事件，参数见keyboard说明~~ |
+| enableSingleLine | 无 | boolean | 设置/取消单行模式，boolean为true单行模式，否则为多行模式 |
 
