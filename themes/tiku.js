@@ -44,6 +44,7 @@ class TikuTheme extends TkBaseTheme {
   }
 
   extendToolbar(toolbar) {
+    super.extendToolbar(toolbar);
     toolbar.container.classList.add('ql-snow');
   }
 }

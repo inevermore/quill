@@ -98,6 +98,7 @@ const baseConfig = {
   entry: {
     'text-editor.js': ['./index.js'],
     './handout/demo.js': './dist/handout/demo-index.js',
+    './tiku/demo.js': './dist/tiku/demo-index.js',
     'text-editor': './assets/tk.styl',
     'unit.js': './test/unit.js',
   },

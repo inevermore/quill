@@ -182,6 +182,9 @@ td.yikespec-align-right {
 .tkspec-paragraph-bottom-space-normal {
   padding-bottom: 15px!important;
 }
+.tkspec-fill-blank {
+  text-decoration: underline;
+}
 
 :root {
   --list-style-width: 1.2em;
