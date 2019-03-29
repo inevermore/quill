@@ -1,7 +1,5 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
-import Keyboard from './modules/keyboard';
-import Emitter from './core/emitter';
 
 class TkEditor {
   constructor(options) {
@@ -46,6 +44,7 @@ class TkEditor {
         keyboard: this.config.keyboard,
       },
       events: this.config.events,
+      wrapperClass: 'text-editor-wrapper',
     });
     this.quill.on(Quill.events.EDITOR_CHANGE, (type, range) => {
       if (type === Quill.events.SELECTION_CHANGE) {
@@ -64,7 +63,6 @@ class TkEditor {
       this.setContent(this.config.initContent);
     }
     this.savedRange = this.quill.selection.savedRange;
-    this.wrapperClass = 'text-editor-wrapper';
   }
 
   setContent(content) {
@@ -79,7 +77,7 @@ class TkEditor {
     copy.querySelectorAll('.ql-cursor').forEach(el => {
       el.parentNode.removeChild(el);
     });
-    return `<div class="${this.wrapperClass}">${copy.innerHTML}</div>`;
+    return this.wrapContent(copy.innerHTML);
   }
 
   getData() {
@@ -94,8 +92,8 @@ class TkEditor {
     return this.quill.getSelection(focus);
   }
 
-  setSelection(index, length) {
-    this.quill.setSelection(index, length);
+  setSelection(index, length, source) {
+    this.quill.setSelection(index, length, source);
   }
 
   insertEmbed(index, embed, value) {
@@ -138,7 +136,7 @@ class TkEditor {
     }
     const prev = this.quill.getSemanticHTML(0, index);
     const next = this.quill.getSemanticHTML(index, this.quill.getLength());
-    return [prev, next];
+    return [this.wrapContent(prev), this.wrapContent(next)];
   }
 
   isBlank() {
@@ -147,6 +145,10 @@ class TkEditor {
 
   enableSingleLine(boolean = false) {
     this.quill.enableSingleLine = boolean;
+  }
+
+  wrapContent(html) {
+    return `<div class="${this.quill.wrapperClass}">${html}</div>`;
   }
 }
 

@@ -1,3 +1,11 @@
+## 0.0.88
+
+* UPDATE 去除setSelection触发focus事件，避免页面滚动
+
+## 0.0.87
+
+* FIX splitContent方法没有外层div封装问题
+
 ## 0.0.86
 
 * ADD 段落标识

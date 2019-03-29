@@ -129,6 +129,7 @@ class Quill {
     this.allowReadOnlyEdits = false;
     this.editedImg = null;
     this.tkEvents = this.options.events;
+    this.wrapperClass = this.options.wrapperClass;
   }
 
   addContainer(container, refNode = null) {
