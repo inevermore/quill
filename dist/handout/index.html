@@ -25,6 +25,12 @@
     word-break: break-word;
   }
 
+  .edited-box p {
+    line-height: 1;
+    font-size: 12px;
+    background: #c6c6c6;
+  }
+
 
   iframe {
     border: none;
@@ -80,8 +86,13 @@
 <body>
   <div>
     <div id="editorToolbar"></div>
-    <div id="editor"></div>
-    <div class="edited-box"></div>
+    <div id="editor">
+    </div>
+    <div class="edited-box">
+      <p></p>
+      <p></p>
+      <p></p>
+    </div>
     <div class="edited-box"></div>
     <input style="height: 50px;width: 300px;">
     <div class="formula-editor-container" id="formulaEditorContainer">

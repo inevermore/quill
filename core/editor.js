@@ -6,7 +6,7 @@ import { LeafBlot } from 'parchment';
 import { Range } from './selection';
 import CursorBlot from '../blots/cursor';
 import Block, { BlockEmbed, bubbleFormats } from '../blots/block';
-import Break from '../blots/break';
+import Empty from '../blots/empty';
 import TextBlot, { escapeText } from '../blots/text';
 
 const ASCII = /^[ -~]*$/;
@@ -171,7 +171,7 @@ class Editor {
     const block = this.scroll.children.head;
     if (block.statics.blotName !== Block.blotName) return false;
     if (block.children.length > 1) return false;
-    return block.children.head instanceof Break;
+    return block.children.head instanceof Empty;
   }
 
   removeFormat(index, length) {

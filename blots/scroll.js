@@ -1,7 +1,7 @@
 import { Scope, ScrollBlot, ContainerBlot } from 'parchment';
 import Emitter from '../core/emitter';
 import Block, { BlockEmbed } from './block';
-import Break from './break';
+import Empty from './empty';
 import Container from './container';
 
 function isLine(blot) {
@@ -47,7 +47,7 @@ class Scroll extends ScrollBlot {
         return;
       }
       const ref =
-        last.children.head instanceof Break ? null : last.children.head;
+        last.children.head instanceof Empty ? null : last.children.head;
       first.moveChildren(last, ref);
       first.remove();
     }

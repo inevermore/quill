@@ -1,3 +1,8 @@
+## 0.0.86
+
+* ADD 段落标识
+* UPDATE 替换段落默认节点br为空span，class 为 paragraph-mark
+
 ## 0.0.85
 
 * 无修改

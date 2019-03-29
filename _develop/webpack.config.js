@@ -74,6 +74,12 @@ const stylRules = {
   use: [MiniCssExtractPlugin.loader, 'css-loader', 'stylus-loader'],
 };
 
+const lessRules = {
+  test: /\.less$/,
+  include: [path.resolve(__dirname, '../assets')],
+  use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+};
+
 const tsRules = {
   test: /\.ts$/,
   use: [
@@ -100,6 +106,7 @@ const baseConfig = {
     './handout/demo.js': './dist/handout/demo-index.js',
     'text-editor': './assets/tk.styl',
     'unit.js': './test/unit.js',
+    'yike-iframe': './assets/yike-iframe.less',
   },
   output: {
     filename: '[name]',
@@ -115,10 +122,10 @@ const baseConfig = {
         '../node_modules/parchment/src/parchment',
       ),
     },
-    extensions: ['.js', '.styl', '.ts'],
+    extensions: ['.js', '.styl', '.less', '.ts'],
   },
   module: {
-    rules: [jsRules, stylRules, svgRules, tsRules],
+    rules: [jsRules, stylRules, lessRules, svgRules, tsRules],
     noParse: [
       /\/node_modules\/clone\/clone\.js$/,
       /\/node_modules\/eventemitter3\/index\.js$/,

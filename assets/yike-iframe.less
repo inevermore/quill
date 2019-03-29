@@ -1,4 +1,3 @@
-/*! Text Editor v0.0.86 */
 /*
  * @fileoverview ueditor自定义类名及样式
  * @author zhangda | zhangda01@zuoyebang.com
@@ -26,67 +25,78 @@
   -ms-flex-direction: column;
   -o-flex-direction: column;
   flex-direction: column;
+
+  &:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    margin: auto;
+    content: '•';
+    font-family: arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
+    font-size: 1.2em;
+    font-style: normal !important;
+    line-height: 0;
+    text-indent: 0;
+  }
 }
-.yikespec-dotted:after {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0px;
-  margin: auto;
-  content: '•';
-  font-family: arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
-  font-size: 1.2em;
-  font-style: normal !important;
-  line-height: 0;
-  text-indent: 0;
-}
-@supports (-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: circle) {
+
+@supports(-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: circle) {
   .tkspec-dotted-normal {
     -webkit-text-emphasis-position: under;
     -webkit-text-emphasis: circle;
   }
 }
-@supports (not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {
+
+@supports(not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {
   .tkspec-dotted-normal {
     border-bottom: 2px dotted black;
   }
 }
+
 /* 上边加点 */
 .yikespec-dotted-top {
   position: relative;
+
+  &:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -.1em;
+    margin: auto;
+    content: '•';
+    font-size: 1.2em;
+    font-family: arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
+    text-indent: 0;
+    line-height: .1em;
+  }
 }
-.yikespec-dotted-top:after {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -0.1em;
-  margin: auto;
-  content: '•';
-  font-size: 1.2em;
-  font-family: arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
-  text-indent: 0;
-  line-height: 0.1em;
-}
+
 /* 字体下划线 */
 .yikespec-underline,
 .tkspec-underline-normal {
   border-bottom: 1px solid #000;
 }
+
 /* 标准下划线 */
 .yikespec-underline-blank {
   border-bottom: 1px solid #000;
 }
+
 /* 自定义下划线 */
 .yikespec-underline-custom {
   border-bottom: 1px solid #000;
 }
+
 /* 删除线 */
 .yikespec-line-through {
   text-decoration: line-through;
 }
+
 .tkspec-strike-normal {
   text-decoration: line-through;
 }
+
 /* 波浪线 */
 .yikespec-wavy,
 .tkspec-underline-wavy {
@@ -94,47 +104,59 @@
   background-position-y: 1px;
   background-size: 1em 100%;
 }
+
 /* 括号 */
+.yikespec-bracket {}
+
 /* 斜体 */
 .yikespec-italic {
   font-family: 'Courier New', Courier, arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
   font-style: italic;
 }
+
 /* 斜体与其他功能组合引入class */
 .tkspec-italic-normal {
   /* font-family: 'Courier New', Courier, arial,tahoma,'Microsoft Yahei','\5b8b\4f53',sans-serif; */
   font-style: italic;
 }
+
 /* 首行缩进 */
 .yikespec-text-indent {
   display: block !important;
   text-indent: 1.5em;
+
+  * {
+    text-indent: 0;
+  }
 }
-.yikespec-text-indent * {
-  text-indent: 0;
-}
+
 .tkspec-text-indent-normal {
   display: block !important;
   text-indent: 1.5em;
+
+  * {
+    text-indent: 0;
+  }
 }
-.tkspec-text-indent-normal * {
-  text-indent: 0;
-}
+
 /* 居中 */
 .yikespec-align-center {
   display: block !important;
   text-align: center !important;
 }
+
 /* 居左 */
 .yikespec-align-left {
   display: block !important;
   text-align: left !important;
 }
+
 /* 居右 */
 .yikespec-align-right {
   display: block !important;
   text-align: right !important;
 }
+
 /* 兼容table的对齐 */
 th.yikespec-align-center,
 th.yikespec-align-left,
@@ -144,14 +166,17 @@ td.yikespec-align-left,
 td.yikespec-align-right {
   display: table-cell !important;
 }
+
 /* 加粗 */
 .yikespec-bold {
   font-weight: bold;
   font-style: normal;
 }
+
 .tkspec-bold-normal {
   font-weight: bold !important;
 }
+
 .tkspec-script-sub,
 .tkspec-script-super {
   position: relative;
@@ -159,83 +184,102 @@ td.yikespec-align-right {
   vertical-align: baseline;
   line-height: 0;
 }
+
 .tkspec-script-super {
-  top: -0.5em;
+  top: -.5em;
 }
+
 .tkspec-script-sub {
-  bottom: -0.25em;
+  bottom: -.25em;
 }
+
 /* 居中 */
 .tkspec-align-center {
   display: block !important;
   text-align: center !important;
 }
+
 /* 居左 */
 .tkspec-align-left {
   display: block !important;
   text-align: left !important;
 }
+
 /* 居右 */
 .tkspec-align-right {
   display: block !important;
   text-align: right !important;
 }
+
 /* 段后距 */
 .tkspec-paragraph-bottom-space-normal {
   padding-bottom: 15px !important;
 }
+
 :root {
   --list-style-width: 1.2em;
   --list-style-margin: 0.3em;
   --list-style-outer-width: 1.5em;
 }
+
 .text-editor-wrapper {
   white-space: pre-wrap;
   word-wrap: break-word;
   word-break: normal;
+
+  p:after,
+  li:after {
+    content: '↵';
+    opacity: .5;
+    font-size: 12px;
+  }
+
+  .text-editor-wrapper .ql-ui {
+    position: absolute;
+  }
+
+  .text-editor-wrapper li {
+    list-style-type: none;
+    padding-left: 1.5em;
+    position: relative;
+  }
+
+  .text-editor-wrapper li>.ql-ui:before {
+    display: inline-block;
+    margin-left: -1.5em;
+    margin-right: 0.3em;
+    text-align: right;
+    white-space: nowrap;
+    width: 1.2em;
+  }
+
+  li[data-list=checked]>.ql-ui,
+  li[data-list=unchecked]>.ql-ui {
+    color: #777;
+  }
+
+  li[data-list=bullet]>.ql-ui:before {
+    content: '\2022';
+  }
+
+  li[data-list=checked]>.ql-ui:before {
+    content: '\2611';
+  }
+
+  li[data-list=unchecked]>.ql-ui:before {
+    content: '\2610';
+  }
+
+  li[data-list=ordered] {
+    counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+    counter-increment: list-0;
+  }
+
+  li[data-list=ordered]>.ql-ui:before {
+    content: counter(list-0, decimal) '. ';
+  }
 }
-.text-editor-wrapper p:after,
-.text-editor-wrapper li:after {
-  content: '↵';
-  opacity: 0.5;
-  font-size: 12px;
-}
-.text-editor-wrapper .text-editor-wrapper .ql-ui {
-  position: absolute;
-}
-.text-editor-wrapper .text-editor-wrapper li {
-  list-style-type: none;
-  padding-left: 1.5em;
-  position: relative;
-}
-.text-editor-wrapper .text-editor-wrapper li > .ql-ui:before {
-  display: inline-block;
-  margin-left: -1.5em;
-  margin-right: 0.3em;
-  text-align: right;
-  white-space: nowrap;
-  width: 1.2em;
-}
-.text-editor-wrapper li[data-list=checked] > .ql-ui,
-.text-editor-wrapper li[data-list=unchecked] > .ql-ui {
-  color: #777;
-}
-.text-editor-wrapper li[data-list=bullet] > .ql-ui:before {
-  content: '\2022';
-}
-.text-editor-wrapper li[data-list=checked] > .ql-ui:before {
-  content: '\2611';
-}
-.text-editor-wrapper li[data-list=unchecked] > .ql-ui:before {
-  content: '\2610';
-}
-.text-editor-wrapper li[data-list=ordered] {
-  counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
-  counter-increment: list-0;
-}
-.text-editor-wrapper li[data-list=ordered] > .ql-ui:before {
-  content: counter(list-0, decimal) '. ';
-}
+
 .text-editor-wrapper p,
 ol,
 pre,
@@ -249,4 +293,3 @@ h6 {
   margin: 0;
   padding: 0;
 }
-
