@@ -1,3 +1,7 @@
+## 0.0.89
+
+* ADD 默认快捷键：加粗（ctrl/command + b）、斜体（ctrl/command + i）
+
 ## 0.0.88
 
 * UPDATE 去除setSelection触发focus事件，避免页面滚动

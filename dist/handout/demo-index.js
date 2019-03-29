@@ -167,7 +167,9 @@ document.body.addEventListener('click', e => {
         box.style.display = 'block';
         lastEditedBox.appendChild(box);
         setTimeout(() => {
-          // editor.quill.setSelection(0, 0);
+          editor.quill.setSelection(0, 0);
+          editor.format('paragraph-bottom-space', 'normal');
+
         }, 0)
         return;
       }

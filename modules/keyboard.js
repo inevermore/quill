@@ -179,7 +179,7 @@ Keyboard.DEFAULTS = {
   bindings: {
     bold: makeFormatHandler('bold'),
     italic: makeFormatHandler('italic'),
-    underline: makeFormatHandler('underline'),
+    // underline: makeFormatHandler('underline'),
     indent: {
       // highlight tab or tab at beginning of list, indent or blockquote
       key: 'Tab',
@@ -629,7 +629,11 @@ function makeFormatHandler(format) {
     key: format[0],
     shortKey: true,
     handler(range, context) {
-      this.quill.format(format, !context.format[format], Quill.sources.USER);
+      this.quill.format(
+        format,
+        !context.format[format] && 'normal',
+        Quill.sources.USER,
+      );
     },
   };
 }
