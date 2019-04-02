@@ -1,4 +1,4 @@
-/*! Text Editor v0.0.89 */
+/*! Text Editor v0.0.891 */
 /*
  * @fileoverview ueditor自定义类名及样式
  * @author zhangda | zhangda01@zuoyebang.com
@@ -193,6 +193,9 @@ td.yikespec-align-right {
   white-space: pre-wrap;
   word-wrap: break-word;
   word-break: normal;
+}
+.text-editor-wrapper .paragraph-mark {
+  display: none;
 }
 .text-editor-wrapper p:after,
 .text-editor-wrapper li:after {

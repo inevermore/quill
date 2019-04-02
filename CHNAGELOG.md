@@ -1,3 +1,7 @@
+## 0.0.891
+
+* UPDATE 调整pargraph-mark样式display：none，以修复空段落居中/首行缩进的光标问题
+
 ## 0.0.89
 
 * ADD 默认快捷键：加粗（ctrl/command + b）、斜体（ctrl/command + i）
