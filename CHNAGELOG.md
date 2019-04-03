@@ -1,3 +1,7 @@
+## 0.0.892
+
+* UPDATE 调整首行缩进为2个中文字符
+
 ## 0.0.891
 
 * UPDATE 调整pargraph-mark样式display：none，以修复空段落居中/首行缩进的光标问题
