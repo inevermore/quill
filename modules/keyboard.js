@@ -73,6 +73,17 @@ class Keyboard extends Module {
       { collapsed: true, offset: 0 },
       handleBackspace,
     );
+    this.addBinding(
+      {
+        key: 'Backspace',
+        altKey: null,
+        ctrlKey: null,
+        metaKey: null,
+        shiftKey: null,
+      },
+      { collapsed: true },
+      handleBackspace,
+    );
     this.listen();
   }
 
