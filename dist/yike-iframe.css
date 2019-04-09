@@ -1,4 +1,4 @@
-/*! Text Editor v0.0.893 */
+/*! Text Editor v0.0.894 */
 /*
  * @fileoverview ueditor自定义类名及样式
  * @author zhangda | zhangda01@zuoyebang.com
@@ -203,34 +203,26 @@ td.yikespec-align-right {
   opacity: 0.5;
   font-size: 12px;
 }
-.text-editor-wrapper .text-editor-wrapper .ql-ui {
+.text-editor-wrapper .ql-ui {
   position: absolute;
 }
-.text-editor-wrapper .text-editor-wrapper li {
+.text-editor-wrapper li {
   list-style-type: none;
   padding-left: 1.5em;
   position: relative;
 }
-.text-editor-wrapper .text-editor-wrapper li > .ql-ui:before {
+.text-editor-wrapper li > .ql-ui {
+  position: relative;
+  display: inline-block;
+  width: 0;
+}
+.text-editor-wrapper li > .ql-ui:before {
   display: inline-block;
   margin-left: -1.5em;
   margin-right: 0.3em;
   text-align: right;
   white-space: nowrap;
   width: 1.2em;
-}
-.text-editor-wrapper li[data-list=checked] > .ql-ui,
-.text-editor-wrapper li[data-list=unchecked] > .ql-ui {
-  color: #777;
-}
-.text-editor-wrapper li[data-list=bullet] > .ql-ui:before {
-  content: '\2022';
-}
-.text-editor-wrapper li[data-list=checked] > .ql-ui:before {
-  content: '\2611';
-}
-.text-editor-wrapper li[data-list=unchecked] > .ql-ui:before {
-  content: '\2610';
 }
 .text-editor-wrapper li[data-list=ordered] {
   counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
