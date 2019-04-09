@@ -238,49 +238,38 @@ td.yikespec-align-right {
     font-size: 12px;
   }
 
-  .text-editor-wrapper .ql-ui {
+  .ql-ui {
     position: absolute;
   }
 
-  .text-editor-wrapper li {
+  li {
     list-style-type: none;
     padding-left: 1.5em;
     position: relative;
-  }
 
-  .text-editor-wrapper li>.ql-ui:before {
-    display: inline-block;
-    margin-left: -1.5em;
-    margin-right: 0.3em;
-    text-align: right;
-    white-space: nowrap;
-    width: 1.2em;
-  }
+    > .ql-ui {
+      position: relative;
+      display: inline-block;
+      width: 0;
 
-  li[data-list=checked]>.ql-ui,
-  li[data-list=unchecked]>.ql-ui {
-    color: #777;
-  }
+      &:before {
+        display: inline-block;
+        margin-left: -1.5em;
+        margin-right: 0.3em;
+        text-align: right;
+        white-space: nowrap;
+        width: 1.2em;
+      }
+    }
 
-  li[data-list=bullet]>.ql-ui:before {
-    content: '\2022';
-  }
+    &[data-list=ordered] {
+      counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+      counter-increment: list-0;
 
-  li[data-list=checked]>.ql-ui:before {
-    content: '\2611';
-  }
-
-  li[data-list=unchecked]>.ql-ui:before {
-    content: '\2610';
-  }
-
-  li[data-list=ordered] {
-    counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
-    counter-increment: list-0;
-  }
-
-  li[data-list=ordered]>.ql-ui:before {
-    content: counter(list-0, decimal) '. ';
+      &>.ql-ui:before {
+        content: counter(list-0, decimal) '. ';
+      }
+    }
   }
 }
 
