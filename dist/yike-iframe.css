@@ -1,4 +1,4 @@
-/*! Text Editor v0.0.894 */
+/*! Text Editor v0.0.896 */
 /*
  * @fileoverview ueditor自定义类名及样式
  * @author zhangda | zhangda01@zuoyebang.com
@@ -182,7 +182,7 @@ td.yikespec-align-right {
 }
 /* 段后距 */
 .tkspec-paragraph-bottom-space-normal {
-  padding-bottom: 15px !important;
+  padding-bottom: 13px !important;
 }
 :root {
   --list-style-width: 1.2em;
@@ -200,6 +200,9 @@ td.yikespec-align-right {
 .text-editor-wrapper p:after,
 .text-editor-wrapper li:after {
   content: '↵';
+  display: inline-block;
+  width: 0;
+  pointer-events: none;
   opacity: 0.5;
   font-size: 12px;
 }

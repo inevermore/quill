@@ -6,6 +6,8 @@ import { EmbedBlot, Scope, TextBlot } from 'parchment';
 import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
+import Empty from '../blots/empty';
+import Emitter from '../core/emitter';
 
 const debug = logger('quill:keyboard');
 
@@ -455,6 +457,8 @@ Keyboard.DEFAULTS = {
     'embed right shift': makeEmbedArrowHandler('ArrowRight', true),
     'table down': makeTableArrowHandler(false),
     'table up': makeTableArrowHandler(true),
+    'empty down': makeArrowHandler(false),
+    'empty up': makeArrowHandler(true),
   },
 };
 
@@ -645,6 +649,37 @@ function makeFormatHandler(format) {
         !context.format[format] && 'normal',
         Quill.sources.USER,
       );
+    },
+  };
+}
+
+function makeArrowHandler(up) {
+  return {
+    key: up ? 'ArrowUp' : 'ArrowDown',
+    handler(range, context) {
+      const key = up ? 'prev' : 'next';
+      const curLine = context.line;
+      const targetLine = curLine[key];
+      if (targetLine != null && targetLine.children.head instanceof Empty) {
+        let offset = 0;
+        const { index } = range;
+        if (curLine.children.head instanceof Empty) {
+          offset = up ? -1 : 1;
+        } else {
+          const [line, lineOffset] = this.quill.scroll.line(index);
+          offset = up ? -lineOffset - 1 : line.length() - lineOffset;
+        }
+        this.quill.setSelection(
+          {
+            index: index + offset,
+            length: 0,
+          },
+          // Emitter.sources.SILENT,
+          Emitter.sources.USER,
+        );
+        return false;
+      }
+      return true;
     },
   };
 }
