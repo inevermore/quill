@@ -115,8 +115,8 @@ class Quill {
       );
     });
     const contents = this.clipboard.convert({
-      html: `${html}<p><br></p>`,
-      text: '\n',
+      html: `${html}<p></p>`,
+      text: '',
     });
     this.setContents(contents);
     this.history.clear();

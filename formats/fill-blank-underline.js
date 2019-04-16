@@ -3,16 +3,14 @@ import Embed from '../blots/embed';
 class FillBlankUnderline extends Embed {
   static create(value) {
     const node = super.create(value);
-    node.innerHTML = `<i contenteditable="false">${this.generateSpace(
-      8,
-    )}</i>&zwj;`;
+    node.innerHTML = `${this.generateSpace(8)}`;
     return node;
   }
 
   static generateSpace(count) {
     let str = '';
     for (let i = 0; i < count; i += 1) {
-      str += '_';
+      str += '&nbsp;';
     }
     return str;
   }

@@ -18,12 +18,21 @@ class TkEditor {
           getFormat: () => {},
         },
         keyboard: {},
+        uploader: {},
       },
       options,
     );
     const formats = [];
     this.config.options.forEach(item => {
-      if (typeof item === 'object') {
+      if (Array.isArray(item)) {
+        item.forEach(i => {
+          if (typeof i === 'object') {
+            formats.push(...Object.keys(i));
+          } else {
+            formats.push(i);
+          }
+        });
+      } else if (typeof item === 'object') {
         formats.push([...Object.keys(item)]);
       } else {
         formats.push(item);
@@ -42,6 +51,7 @@ class TkEditor {
           options: this.config.options,
         },
         keyboard: this.config.keyboard,
+        uploader: this.config.uploader,
       },
       events: this.config.events,
       wrapperClass: 'text-editor-wrapper',

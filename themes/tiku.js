@@ -2,9 +2,6 @@ import extend from 'extend';
 import TkBaseTheme from './tk-base';
 import LatexToImg from '../utils/latex-to-img';
 import ImgToLatex from '../utils/img-to-latex';
-import uploadImage from '../utils/upload-image';
-
-// const PICKERS = ['size', 'font'];
 
 const TOOLBAR_CONFIG = [
   ['undo', 'redo'],
@@ -40,10 +37,12 @@ class TikuTheme extends TkBaseTheme {
     }
     super(quill, options);
     this.quill.container.classList.add('ql-snow');
+    this.quill.container.classList.add('text-editor-wrapper');
     this.addModule('image-resizer');
   }
 
   extendToolbar(toolbar) {
+    super.extendToolbar(toolbar);
     toolbar.container.classList.add('ql-snow');
   }
 }
@@ -85,9 +84,6 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
       },
     },
     table: true,
-    uploader: {
-      handler: uploadImage,
-    },
   },
 });
 
