@@ -34,6 +34,12 @@ const editor = new Editor({
     ['pi', 'latexToSvg', 'svgToLatex'],
     [{ pinyin: [] }],
   ],
+  uploader: {
+    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['url'],
+  }
 });
 
 function openFormula(latex = '') {

@@ -6,6 +6,8 @@ import { EmbedBlot, Scope, TextBlot } from 'parchment';
 import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
+import Empty from '../blots/empty';
+import Emitter from '../core/emitter';
 
 const debug = logger('quill:keyboard');
 
@@ -71,6 +73,17 @@ class Keyboard extends Module {
         shiftKey: null,
       },
       { collapsed: true, offset: 0 },
+      handleBackspace,
+    );
+    this.addBinding(
+      {
+        key: 'Backspace',
+        altKey: null,
+        ctrlKey: null,
+        metaKey: null,
+        shiftKey: null,
+      },
+      { collapsed: true },
       handleBackspace,
     );
     this.listen();
@@ -179,7 +192,7 @@ Keyboard.DEFAULTS = {
   bindings: {
     bold: makeFormatHandler('bold'),
     italic: makeFormatHandler('italic'),
-    underline: makeFormatHandler('underline'),
+    // underline: makeFormatHandler('underline'),
     indent: {
       // highlight tab or tab at beginning of list, indent or blockquote
       key: 'Tab',
@@ -444,6 +457,8 @@ Keyboard.DEFAULTS = {
     'embed right shift': makeEmbedArrowHandler('ArrowRight', true),
     'table down': makeTableArrowHandler(false),
     'table up': makeTableArrowHandler(true),
+    'empty down': makeArrowHandler(false),
+    'empty up': makeArrowHandler(true),
   },
 };
 
@@ -629,7 +644,42 @@ function makeFormatHandler(format) {
     key: format[0],
     shortKey: true,
     handler(range, context) {
-      this.quill.format(format, !context.format[format], Quill.sources.USER);
+      this.quill.format(
+        format,
+        !context.format[format] && 'normal',
+        Quill.sources.USER,
+      );
+    },
+  };
+}
+
+function makeArrowHandler(up) {
+  return {
+    key: up ? 'ArrowUp' : 'ArrowDown',
+    handler(range, context) {
+      const key = up ? 'prev' : 'next';
+      const curLine = context.line;
+      const targetLine = curLine[key];
+      if (targetLine != null && targetLine.children.head instanceof Empty) {
+        let offset = 0;
+        const { index } = range;
+        if (curLine.children.head instanceof Empty) {
+          offset = up ? -1 : 1;
+        } else {
+          const [line, lineOffset] = this.quill.scroll.line(index);
+          offset = up ? -lineOffset - 1 : line.length() - lineOffset;
+        }
+        this.quill.setSelection(
+          {
+            index: index + offset,
+            length: 0,
+          },
+          // Emitter.sources.SILENT,
+          Emitter.sources.USER,
+        );
+        return false;
+      }
+      return true;
     },
   };
 }

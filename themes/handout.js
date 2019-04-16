@@ -20,6 +20,7 @@ class Handout extends TkBaseTheme {
         }
       }
     });
+    this.quill.container.classList.add('text-editor-wrapper');
   }
 
   extendToolbar(toolbar) {

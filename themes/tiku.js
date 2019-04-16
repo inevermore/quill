@@ -40,6 +40,7 @@ class TikuTheme extends TkBaseTheme {
     }
     super(quill, options);
     this.quill.container.classList.add('ql-snow');
+    this.quill.container.classList.add('text-editor-wrapper');
     this.addModule('image-resizer');
   }
 
@@ -86,9 +87,6 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
       },
     },
     table: true,
-    uploader: {
-      handler: uploadImage,
-    },
   },
 });
 

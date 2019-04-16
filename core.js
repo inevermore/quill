@@ -2,6 +2,7 @@ import Quill from './core/quill';
 
 import Block, { BlockEmbed } from './blots/block';
 import Break from './blots/break';
+import Empty from './blots/empty';
 import Container from './blots/container';
 import Cursor from './blots/cursor';
 import Embed from './blots/embed';
@@ -20,6 +21,7 @@ Quill.register({
   'blots/block': Block,
   'blots/block/embed': BlockEmbed,
   'blots/break': Break,
+  'blots/empty': Empty,
   'blots/container': Container,
   'blots/cursor': Cursor,
   'blots/embed': Embed,

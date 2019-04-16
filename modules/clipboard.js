@@ -108,7 +108,8 @@ class Clipboard extends Module {
       container,
       nodeMatches,
     );
-    const delta = traverse(
+    const delta = traverse.call(
+      this,
       this.quill.scroll,
       container,
       elementMatchers,
@@ -317,7 +318,8 @@ function traverse(scroll, node, elementMatchers, textMatchers, nodeMatches) {
   }
   if (node.nodeType === node.ELEMENT_NODE) {
     return Array.from(node.childNodes || []).reduce((delta, childNode) => {
-      let childrenDelta = traverse(
+      let childrenDelta = traverse.call(
+        this,
         scroll,
         childNode,
         elementMatchers,
@@ -326,11 +328,11 @@ function traverse(scroll, node, elementMatchers, textMatchers, nodeMatches) {
       );
       if (childNode.nodeType === node.ELEMENT_NODE) {
         childrenDelta = elementMatchers.reduce((reducedDelta, matcher) => {
-          return matcher(childNode, reducedDelta, scroll);
+          return matcher.call(this, childNode, reducedDelta, scroll);
         }, childrenDelta);
         childrenDelta = (nodeMatches.get(childNode) || []).reduce(
           (reducedDelta, matcher) => {
-            return matcher(childNode, reducedDelta, scroll);
+            return matcher.call(this, childNode, reducedDelta, scroll);
           },
           childrenDelta,
         );
@@ -407,9 +409,11 @@ function matchBreakText() {
   // if (node.nextSibling && !node.nextSibling.textContent.startsWith('\n')) {
   //   return new Delta().insert(LINE_SEPARATOR);
   // }
-  // <br> is *probably* safe to ignore. I'm pretty sure this is incorrect.
-  // what if <br> is last child in an inline block? shouldn't be ignored.
-  // return new Delta();
+  // // <br> is *probably* safe to ignore. I'm pretty sure this is incorrect.
+  // // what if <br> is last child in an inline block? shouldn't be ignored.
+  if (this.quill.editor.isBlank()) {
+    return new Delta();
+  }
   return new Delta().insert(LINE_SEPARATOR);
 }
 

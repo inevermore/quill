@@ -1,6 +1,6 @@
 {
   "name": "text-editor",
-  "version": "0.0.85",
+  "version": "0.0.896",
   "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
@@ -61,6 +61,8 @@
     "karma-coverage": "^1.1.2",
     "karma-jasmine": "^2.0.1",
     "karma-sauce-launcher": "^2.0.2",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "~0.5.0",
     "prettier": "^1.15.3",

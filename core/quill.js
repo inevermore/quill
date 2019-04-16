@@ -115,8 +115,8 @@ class Quill {
       );
     });
     const contents = this.clipboard.convert({
-      html: `${html}<p><br></p>`,
-      text: '\n',
+      html: `${html}<p></p>`,
+      text: '',
     });
     this.setContents(contents);
     this.history.clear();
@@ -129,6 +129,7 @@ class Quill {
     this.allowReadOnlyEdits = false;
     this.editedImg = null;
     this.tkEvents = this.options.events;
+    this.wrapperClass = this.options.wrapperClass;
   }
 
   addContainer(container, refNode = null) {

@@ -1,3 +1,45 @@
+## 0.0.896
+
+* FIX 连续空段落按上/下键光标未逐行移动
+* FIX 文本占整行时段落标识符跳到下一行，未跟随文本
+
+## 0.0.895
+
+* UPDATE 调整段后距间距为 13px
+
+## 0.0.894
+
+* FIX 列表功能在添加公式后编号上移bug
+
+## 0.0.893
+
+* FIX 分行功能删除bug
+
+## 0.0.892
+
+* UPDATE 调整首行缩进为2个中文字符
+
+## 0.0.891
+
+* UPDATE 调整pargraph-mark样式display：none，以修复空段落居中/首行缩进的光标问题
+
+## 0.0.89
+
+* ADD 默认快捷键：加粗（ctrl/command + b）、斜体（ctrl/command + i）
+
+## 0.0.88
+
+* UPDATE 去除setSelection触发focus事件，避免页面滚动
+
+## 0.0.87
+
+* FIX splitContent方法没有外层div封装问题
+
+## 0.0.86
+
+* ADD 段落标识
+* UPDATE 替换段落默认节点br为空span，class 为 paragraph-mark
+
 ## 0.0.85
 
 * 无修改
