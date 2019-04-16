@@ -2,9 +2,6 @@ import extend from 'extend';
 import TkBaseTheme from './tk-base';
 import LatexToImg from '../utils/latex-to-img';
 import ImgToLatex from '../utils/img-to-latex';
-import uploadImage from '../utils/upload-image';
-
-// const PICKERS = ['size', 'font'];
 
 const TOOLBAR_CONFIG = [
   ['undo', 'redo'],
