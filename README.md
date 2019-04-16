@@ -45,15 +45,16 @@ const editor = new Editor({
 
 ## 参数说明
 
-| 参数名      | 类型           | 必要性 | 默认值        | 取值范围                                | 描述                               |
-| ----------- | -------------- | ------ | ------------- | --------------------------------------- | ---------------------------------- |
-| container   | string \| Node | 可选   | document.body | 无                                      | 编辑器容器                         |
-| options     | array          | 必选   | []            | 见[options 说明](#options-description)  | 可选的样式                         |
-| initContent | string         | 可选   | ''            | 无                                      | 初始化内容，可以是文本或html字符串 |
-| events      | object         | 可选   | {}            | 见[events 说明](#events-description)    | 传入的事件                         |
-| keyboard    | object         | 可选   | {}            | 见[keyboard 说明](keyboard-description) | 处理键盘事件                       |
+| 参数名      | 类型           | 必要性 | 默认值        | 取值范围             | 描述                               |
+| ----------- | -------------- | ------ | ------------- | -------------------- | ---------------------------------- |
+| container   | string \| Node | 可选   | document.body | 无                   | 编辑器容器                         |
+| options     | array          | 必选   | []            | 见下方 options 说明  | 可选的样式                         |
+| initContent | string         | 可选   | ''            | 无                   | 初始化内容，可以是文本或html字符串 |
+| events      | object         | 可选   | {}            | 见下方 events 说明   | 传入的事件                         |
+| keyboard    | object         | 可选   | {}            | 见下方 keyboard 说明 | 处理键盘事件                       |
+| uploader    | object         | 可选   | {}            | 见下方 uploader 说明 | 配置图片上传参数（url、参数...）   |
 
-### [options 说明][options-description]
+### options 说明
 
 示例：
 
@@ -96,13 +97,13 @@ const editor = new Editor({
 | list                   | 'ordered'                 | 段落         | 列表                   |                                                            |
 | paragraph-bottom-space | 'normal'                  | 段落         | 段后距                 | tkspec-paragraph-bottom-space-normal                       |
 
-### [events 说明][events-description]
+### events 说明
 
 | 方法名    | 返回值 | 参数 | 说明                                   |
 | --------- | ------ | ---- | -------------------------------------- |
 | getFormat | object | 无   | 点击编辑区域时触发以获取光标区域的样式 |
 
-### [keyboard 说明][keyboard-description]
+### keyboard 说明
 
 以下方代码为例，可以禁止回车事件
 
@@ -135,6 +136,34 @@ handler: 事件回调
 
 metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需组合设置对应值为 true
 
+### uploader 说明
+
+以下方代码为例: 
+
+```javascript
+  uploader: {
+    mimetypes: ['image/png', 'image/jpg', 'image/jpeg']  //默认三种格式
+    url: '/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['data', 'url'],
+  }
+```
+
+参数释义：
+
+mimetypes：图片格式，默认 ['image/png', 'image/jpg', 'image/jpeg']
+
+url： 图片上传接口，为空则使用base64存储
+
+method：http 请求方法
+
+maxSize: 图片最大体积，单位 KB
+
+response：返回数据，图片 url 数据结构。如果设为 ['data', 'url']，则取 response.data.url 作为图片url
+
+接口上传参数默认为 FormData
+
 
 
 ## API
@@ -155,3 +184,5 @@ metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需�
 | ~~setKeyboardBindings~~ | ~~无~~       | ~~object~~              | ~~重新设置自定义的keyboard事件，参数见keyboard说明~~ |
 | enableSingleLine | 无 | boolean | 设置/取消单行模式，boolean为true单行模式，否则为多行模式 |
 
+## 历史版本变动
+https://git.afpai.com/yike_fe/text-editor/blob/dev/CHNAGELOG.md
