@@ -16,6 +16,7 @@ import History from './modules/history';
 import Keyboard from './modules/keyboard';
 import Uploader from './modules/uploader';
 import QlMathjax from './formats/mathjax';
+import EmbedText from './formats/embed-text';
 
 Quill.register({
   'blots/block': Block,
@@ -29,6 +30,7 @@ Quill.register({
   'blots/scroll': Scroll,
   // 'blots/text': TextBlot,
   'blots/ql-mathjax': QlMathjax,
+  'blots/embed-text': EmbedText,
 
   'modules/clipboard': Clipboard,
   'modules/history': History,

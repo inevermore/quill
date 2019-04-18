@@ -71,6 +71,8 @@ const OLD_CLASS = {
   underline: 'yikespec-underline',
   strike: 'yikespec-line-through',
   dotted: 'yikespec-dotted',
+  fillBlankBrackets: 'yikespec-bracket',
+  fillBlankUnderline: 'yikespec-underline-blank',
 };
 const LINE_SEPARATOR = '\u2028';
 
@@ -405,16 +407,13 @@ function matchBlot(node, delta, scroll) {
 //   return delta;
 // }
 
-function matchBreakText() {
-  // if (node.nextSibling && !node.nextSibling.textContent.startsWith('\n')) {
-  //   return new Delta().insert(LINE_SEPARATOR);
-  // }
-  // // <br> is *probably* safe to ignore. I'm pretty sure this is incorrect.
-  // // what if <br> is last child in an inline block? shouldn't be ignored.
-  if (this.quill.editor.isBlank()) {
-    return new Delta();
+function matchBreakText(node, delta) {
+  //
+  if (node.nextSibling && node.nextSibling.textContent.startsWith('\n')) {
+    return new Delta().insert(LINE_SEPARATOR);
   }
-  return new Delta().insert(LINE_SEPARATOR);
+  delta.insert('\n');
+  return delta;
 }
 
 // function matchCodeBlock(node, delta, scroll) {
@@ -507,6 +506,16 @@ function matchTkStyles(node, delta) {
   }
   if (classList.contains(OLD_CLASS.strike)) {
     formats.strike = 'normal';
+  }
+  if (classList.contains(OLD_CLASS.fillBlankBrackets)) {
+    return new Delta().insert({
+      'embed-text': this.quill.embedTextMap.FILL_BLANK_BRACKETS,
+    });
+  }
+  if (classList.contains(OLD_CLASS.fillBlankUnderline)) {
+    return new Delta().insert({
+      'embed-text': this.quill.embedTextMap.FILL_BLANK_UNDERLINE,
+    });
   }
   if (
     parseFloat(getStyle(node, 'text-indent') || 0) > 0 ||

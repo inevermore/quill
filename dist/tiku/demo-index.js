@@ -20,7 +20,7 @@ const editor = new Editor({
       { strike: 'normal' },
       { underline: 'normal' },
       { underline: 'wavy' },
-      { dotted: 'circle' },
+      { dotted: 'normal' },
       { script: 'super' },
       { script: 'sub' },
     ],
@@ -28,7 +28,7 @@ const editor = new Editor({
       { align: 'left' },
       { align: 'center' },
       { align: 'right' },
-      { indent: 'normal' },
+      { 'text-indent': 'normal' },
     ],
     ['image', 'fill-blank-underline', 'fill-blank-brackets'],
     ['pi', 'latexToSvg', 'svgToLatex'],
@@ -85,3 +85,5 @@ button2.addEventListener('click', () => {
   });
 });
 document.body.appendChild(button2);
+
+

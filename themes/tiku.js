@@ -12,7 +12,7 @@ const TOOLBAR_CONFIG = [
     { strike: 'normal' },
     { underline: 'normal' },
     { underline: 'wavy' },
-    { dotted: 'circle' },
+    { dotted: 'normal' },
     { script: 'super' },
     { script: 'sub' },
   ],
@@ -71,7 +71,12 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
         },
         'fill-blank-underline': function() {
           const savedIndex = this.quill.selection.savedRange.index;
-          this.quill.insertEmbed(savedIndex, 'fill-blank-underline', {});
+          this.quill.insertEmbed(
+            savedIndex,
+            'embed-text',
+            this.quill.embedTextMap.FILL_BLANK_UNDERLINE,
+          );
+          this.quill.setSelection(savedIndex + 1, 0);
         },
         pinyin(value) {
           const savedIndex = this.quill.selection.savedRange.index;
@@ -79,7 +84,12 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
         },
         'fill-blank-brackets': function() {
           const savedIndex = this.quill.selection.savedRange.index;
-          this.quill.insertText(savedIndex, '（   ）');
+          this.quill.insertEmbed(
+            savedIndex,
+            'embed-text',
+            this.quill.embedTextMap.FILL_BLANK_BRACKETS,
+          );
+          this.quill.setSelection(savedIndex + 1, 0);
         },
       },
     },

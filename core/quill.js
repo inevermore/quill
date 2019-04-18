@@ -130,6 +130,16 @@ class Quill {
     this.editedImg = null;
     this.tkEvents = this.options.events;
     this.wrapperClass = this.options.wrapperClass;
+    this.embedTextMap = {
+      FILL_BLANK_BRACKETS: {
+        className: 'tkspec-fill-blank-brackets',
+        text: '（   ）',
+      },
+      FILL_BLANK_UNDERLINE: {
+        className: 'tkspec-fill-blank-underline',
+        text: '________',
+      },
+    };
   }
 
   addContainer(container, refNode = null) {
