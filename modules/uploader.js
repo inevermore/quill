@@ -69,7 +69,7 @@ class Uploader extends Module {
       }
       const fd = new FormData();
       fd.append(
-        'upfile',
+        this.options.param,
         file,
         file.name || `blob.${file.type.substr('image/'.length)}`,
       );

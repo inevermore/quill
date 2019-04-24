@@ -35,6 +35,7 @@ const editor = new Editor({
     [{ pinyin: [] }],
   ],
   uploader: {
+    param: 'upfile',
     url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
     method: 'post',
     maxSize: 600,

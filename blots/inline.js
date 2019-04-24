@@ -1,5 +1,4 @@
 import { EmbedBlot, InlineBlot, Scope } from 'parchment';
-import Break from './break';
 import Text from './text';
 
 class Inline extends InlineBlot {
