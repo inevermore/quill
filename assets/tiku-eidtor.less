@@ -1,0 +1,113 @@
+.toolbar {
+  padding: 5px;
+  border-bottom: 1px solid #E1E2E6;
+  border-radius: 4px 4px 0 0;
+  background: #F7F8FB;
+  display: flex;
+  align-items: center;
+
+  .seperate-line {
+    display: inline-block;
+    width: 1px;
+    height: 20px;
+    margin: 2px 4px 2px 3px;
+    background-color: grey;
+    opacity: .7;
+  }
+
+  .group {
+    display: flex;
+
+    .button {
+      display: inline-flex;
+      width: 32px;
+      height: 22px;
+      align-items: center;
+      justify-content: center;
+
+      .button-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-position: center;
+        background-size: 20px 20px;
+        background-repeat: no-repeat;
+
+        &:hover, &.active {
+          background-color: rgba(66, 197, 122, 0.1);
+          border: 1px solid #42c57a;
+          border-radius: 2px;
+        }
+
+        &:active {
+          border-color: grey;
+        }
+
+        &.disable {
+          opacity: .3;
+        }
+
+        &.undo {
+          background-image: url(../assets/tiku-icons/undo.png) !important;
+        }
+        &.redo {
+          background-image: url(../assets/tiku-icons/redo.png) !important;
+        }
+        &.italic {
+          background-image: url(../assets/tiku-icons/italic.png) !important;
+        }
+        &.strike {
+          background-image: url(../assets/tiku-icons/strike.png) !important;
+        }
+        &.align-center {
+          background-image: url(../assets/tiku-icons/align-center.png) !important;
+        }
+        &.align-left {
+          background-image: url(../assets/tiku-icons/align-left.png) !important;
+        }
+        &.align-right {
+          background-image: url(../assets/tiku-icons/align-right.png) !important;
+        }
+        &.text-indent {
+          background-image: url(../assets/tiku-icons/text-indent.png) !important;
+        }
+        &.super {
+          background-image: url(../assets/tiku-icons/super.png) !important;
+        }
+        &.sub {
+          background-image: url(../assets/tiku-icons/sub.png) !important;
+        }
+        &.select-all {
+          background-image: url(../assets/tiku-icons/select-all.png) !important;
+        }
+        &.clear {
+          background-image: url(../assets/tiku-icons/clear.png) !important;
+        }
+        &.image {
+          background-image: url(../assets/tiku-icons/image.png) !important;
+        }
+        &.fill-blank-order {
+          background-image: url(../assets/tiku-icons/fill-blank-order.png) !important;
+        }
+        &.dotted {
+          background-image: url(../assets/tiku-icons/dotted.png) !important;
+        }
+        &.fill-blank-underline {
+          background-image: url(../assets/tiku-icons/fill-blank-order.png) !important;
+        }
+        &.underline {
+          background-image: url(../assets/tiku-icons/fill-blank-order.png) !important;
+        }
+        &.wavy {
+          background-image: url(../assets/tiku-icons/fill-blank-order.png) !important;
+        }
+        &.fill-blank-brackets {
+          background-image: url(../assets/tiku-icons/fill-blank-order.png) !important;
+        }
+        &.fill-blank-brackets {
+          background-image: url(../assets/tiku-icons/fill-blank-order.png) !important;
+        }
+      }
+    }
+  }
+}

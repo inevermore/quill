@@ -1,4 +1,4 @@
-/*! Text Editor v0.0.901 */
+/*! Text Editor v0.0.902 */
 /*
  * @fileoverview ueditor自定义类名及样式
  * @author zhangda | zhangda01@zuoyebang.com
@@ -40,10 +40,10 @@
   line-height: 0;
   text-indent: 0;
 }
-@supports (-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: circle) {
+@supports (-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: dot) {
   .tkspec-dotted-normal {
     -webkit-text-emphasis-position: under;
-    -webkit-text-emphasis: circle;
+    -webkit-text-emphasis: dot;
   }
 }
 @supports (not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {

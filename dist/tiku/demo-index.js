@@ -2,7 +2,7 @@ import Editor from '../../index';
 
 const box = document.querySelector('#editor');
 const editor = new Editor({
-  container: '#editor',
+  container: '#tikuEditor',
   theme: 'tiku',
   // toolbar: {
   //   container: 'default',

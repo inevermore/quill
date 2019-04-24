@@ -80,6 +80,12 @@ const lessRules = {
   use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
 };
 
+const imageRules = {
+  test: /\.png$/,
+  include: [path.resolve(__dirname, '../assets/tiku-icons')],
+  use: ['url-loader'],
+};
+
 const tsRules = {
   test: /\.ts$/,
   use: [
@@ -126,7 +132,7 @@ const baseConfig = {
     extensions: ['.js', '.styl', '.less', '.ts'],
   },
   module: {
-    rules: [jsRules, stylRules, lessRules, svgRules, tsRules],
+    rules: [jsRules, stylRules, lessRules, svgRules, tsRules, imageRules],
     noParse: [
       /\/node_modules\/clone\/clone\.js$/,
       /\/node_modules\/eventemitter3\/index\.js$/,
