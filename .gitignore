@@ -8,3 +8,4 @@
 *.d.ts
 *.log
 line-break.js
+/nokogiri-1.8.1

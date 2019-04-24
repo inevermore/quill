@@ -205,6 +205,7 @@ td.yikespec-align-right {
   pointer-events: none;
   opacity: 0.5;
   font-size: 12px;
+  text-indent: 0 !important;
 }
 .text-editor-wrapper .ql-ui {
   position: absolute;
