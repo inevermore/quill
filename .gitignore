@@ -1,7 +1,7 @@
 .*
 /dist/*
-!/dist/handout/*
-!/dist/tiku/*
+!/dist/handout/demo.*
+!/dist/tiku/demo.*
 /node_modules
 /selenium
 /docs/_site
