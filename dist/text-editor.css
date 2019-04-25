@@ -1,4 +1,4 @@
-/*! Text Editor v0.0.904 */
+/*! Text Editor v0.0.905 */
 .ql-container {
   box-sizing: border-box;
   height: 100%;
@@ -854,6 +854,33 @@
   right: 5px;
   top: 5px;
 }
+.ql-container .tk-upload-error-tips {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  color: #b94a48;
+  background-color: #f2dede;
+  border: 1px solid #eed3d7;
+  padding: 8px;
+  border-radius: 3px;
+}
+.ql-container .tk-upload-error-tips button {
+  border: none;
+  display: inline-block;
+  background: none;
+  padding: 0 0 0 5px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+}
+.ql-container .tk-upload-error-tips svg {
+  margin-left: 5px;
+  height: 15px;
+  width: 15px;
+}
+.ql-container .tk-upload-error-tips svg * {
+  fill: #b94a48;
+}
 .ql-toolbar.ql-snow {
   border: 1px solid #ccc;
   box-sizing: border-box;
@@ -1022,33 +1049,6 @@
   font-size: 0px;
   display: inline-block;
   background-color: #3c9dd0;
-}
-.ql-tiku .tk-upload-error-tips {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  color: #b94a48;
-  background-color: #f2dede;
-  border: 1px solid #eed3d7;
-  padding: 8px;
-  border-radius: 3px;
-}
-.ql-tiku .tk-upload-error-tips button {
-  border: none;
-  display: inline-block;
-  background: none;
-  padding: 0 0 0 5px;
-  vertical-align: middle;
-  cursor: pointer;
-  outline: none;
-}
-.ql-tiku .tk-upload-error-tips svg {
-  margin-left: 5px;
-  height: 15px;
-  width: 15px;
-}
-.ql-tiku .tk-upload-error-tips svg * {
-  fill: #b94a48;
 }
 .ql-toolbar.ql-tiku .ql-pinyin .ql-picker-label {
   padding: 0 2px;

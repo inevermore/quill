@@ -10,12 +10,7 @@ export default function(options) {
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.addEventListener('load', e => {
       try {
-        const json = e.target.response;
-        if (json.state === 'SUCCESS') {
-          resolve(json);
-        } else {
-          reject();
-        }
+        resolve(e.target.response);
       } catch (er) {
         reject();
       }

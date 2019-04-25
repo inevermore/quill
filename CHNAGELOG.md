@@ -1,3 +1,7 @@
+## 0.0.905
+
+* FIX 修复 ajax.js bug
+
 ## 0.0.904
 
 * ADD 添加图片上传可配置request参数key
