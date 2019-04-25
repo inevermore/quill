@@ -109,8 +109,8 @@ const baseConfig = {
   context: path.resolve(__dirname, '..'),
   entry: {
     'text-editor.js': ['./index.js'],
-    './handout/demo.js': './dist/handout/demo-index.js',
-    './tiku/demo.js': './dist/tiku/demo-index.js',
+    './handout/bundle.js': './dist/handout/demo.js',
+    './tiku/bundle.js': './dist/tiku/demo.js',
     'text-editor': './assets/tk.styl',
     'unit.js': './test/unit.js',
     'yike-iframe': './assets/yike-iframe.less',

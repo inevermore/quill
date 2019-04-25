@@ -142,6 +142,7 @@ metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需�
 
 ```javascript
   uploader: {
+    param: 'upfile',
     mimetypes: ['image/png', 'image/jpg', 'image/jpeg']  //默认三种格式
     url: '/zbtiku/tiku/imgupload?action=uploadimage',
     method: 'post',
@@ -151,6 +152,8 @@ metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需�
 ```
 
 参数释义：
+
+param: 图片参数 key
 
 mimetypes：图片格式，默认 ['image/png', 'image/jpg', 'image/jpeg']
 

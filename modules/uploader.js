@@ -69,26 +69,25 @@ class Uploader extends Module {
       }
       const fd = new FormData();
       fd.append(
-        'upfile',
+        this.options.param,
         file,
         file.name || `blob.${file.type.substr('image/'.length)}`,
       );
       fd.append('type', 'ajax');
       return new Promise(async (resolve, reject) => {
         try {
-          const response = await ajax({
+          let response = await ajax({
             url: this.options.url,
             method: 'post',
             data: fd,
           });
-          let image = '';
           // eslint-disable-next-line no-restricted-syntax
           for (const item of this.options.response) {
             if (response[item]) {
-              image = response[item];
+              response = response[item];
             }
           }
-          resolve(image);
+          resolve(response);
         } catch (e) {
           reject();
         }
