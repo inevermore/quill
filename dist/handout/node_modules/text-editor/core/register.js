@@ -1,4 +1,0 @@
-
-function register(Quill, options) {
-
-}
