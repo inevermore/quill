@@ -1,6 +1,10 @@
+## 0.0.906
+
+* FIX 图片上传bug
+  
 ## 0.0.905
 
-* FIX 修复 ajax.js bug
+* FIX ajax.js bug
 
 ## 0.0.904
 

@@ -36,7 +36,7 @@ const editor = new Editor({
   ],
   uploader: {
     param: 'upfile',
-    url: 'http://test1152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
     method: 'post',
     maxSize: 600,
     response: ['url'],
