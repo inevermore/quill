@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<title>文本编辑器demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../text-editor.css">
+<link rel="stylesheet" href="../yike-iframe.css">
+<style>
+  #editor {
+    /* height: 400px;
+    width: 600px; */
+    border: 1px solid yellowgreen;
+  }
+
+  iframe {
+    border: none;
+  }
+
+  .formula-editor-container {
+    visibility: hidden;
+    width: 714px;
+    height: 575px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, .2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+    overflow: hidden;
+    background: white;
+  }
+
+  .formula-editor-container header {
+      height: 30px;
+      border-bottom: 1px solid #c6c6c6;
+      background: linear-gradient(to bottom, white, #f0f0f0);
+  }
+
+  .formula-editor-container header span {
+        font-weight: 700;
+        font-size: 12px;
+        line-height: 30px;
+        padding-left: 5px;
+  }
+  .formula-editor-container header span b {
+        float: right;
+        padding-right: 10px;
+        line-height: 30px;
+  }
+
+  iframe {
+      width: 100%;
+      height: calc(100% - 30px);
+      background: white;
+  }
+  .inner {
+    width:33.33%;
+    height:300px;
+    display:inline-block;
+    outline:solid 1px blue;
+  }
+  .tiku-editor-wrapper {
+    height: 400px;
+  }
+  .toolbar {
+    padding: 5px;
+    border-bottom: 1px solid #E1E2E6;
+    border-radius: 4px 4px 0 0;
+    background: #F7F8FB;
+  }
+</style>
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.css" integrity="sha384-xNwWFq3SIvM4dq/1RUyWumk8nj/0KFg4TOnNcfzUU4X2gNn3WoRML69gO7waf3xh" crossorigin="anonymous"> -->
+
+<body>
+  <div>
+    <div id="editorToolbar"></div>
+    <div class="formula-editor-container" id="formulaEditorContainer">
+      <header>
+        <span>作业帮理科公式编辑器</span>
+        <b id="formulaEditorClose">✕</b>
+      </header>
+      <iframe id="formulaEditor" src="../latex-editor-plugin/latex-editor.html"></iframe>
+    </div>
+    <div class="tiku-editor-wrapper">
+      <div class="toolbar">
+        <div class="group">
+          
+          <span class="button"><i class="button-icon undo"></i></span>
+          <span class="button"><i class="button-icon redo"></i></span>
+        </div>
+        <i class="seperate-line"></i>
+        <div class="group">
+            <i class="button italic"></i>
+            <i class="button strike"></i>
+            <i class="button align-center"></i>
+            <i class="button align-left"></i>
+            <i class="button align-right"></i>
+            <i class="button text-indent"></i>
+            <i class="button super"></i>
+            <i class="button sub"></i>
+        </div>
+        <div class="group"></div>
+        <div class="group"></div>
+        <div class="group"></div>
+      </div>
+      <div id="tikuEditor">
+
+      </div>
+    </div>
+
+  </div>
+  <script src="https://yy-s.zuoyebang.cc/static/mathjax_274/MathJax.js?config=default-full-min"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
+  <script src="demo.js"></script>
+  <script>
+
+  </script>
+</body>
+
+</html>
