@@ -2,6 +2,12 @@ import extend from 'extend';
 import TkBaseTheme from './tk-base';
 import LatexToImg from '../utils/latex-to-img';
 import ImgToLatex from '../utils/img-to-latex';
+import { isContain } from '../utils/dom-utils';
+import Emitter from '../core/emitter';
+import CustomEmitter from '../utils/custom-emitter';
+import debounce from '../utils/debounce';
+import FillBlankOrder from '../formats/fill-blank-order';
+import QlMathjax from '../formats/mathjax';
 
 const TOOLBAR_CONFIG = [
   ['undo', 'redo'],
@@ -38,12 +44,87 @@ class TikuTheme extends TkBaseTheme {
     super(quill, options);
     this.quill.container.classList.add('ql-snow');
     this.quill.container.classList.add('text-editor-wrapper');
+    quill.root.addEventListener('dblclick', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      const node = isContain(e.target, quill.root, quill.formulaImgClass);
+      if (node) {
+        quill.editFormula(node);
+      }
+    });
+    this.handleEvents();
     this.addModule('image-resizer');
   }
 
   extendToolbar(toolbar) {
     super.extendToolbar(toolbar);
     toolbar.container.classList.add('ql-snow');
+    // toolbar.container.parentNode.removeChild(toolbar.container);
+  }
+
+  handleEvents() {
+    const { root } = this.quill;
+    const deleteIndex = [];
+    const addNodes = [];
+    CustomEmitter.on(CustomEmitter.events.ADD_FILL_BLANK_ORDER, addNode => {
+      addNodes.push(addNode);
+    });
+    CustomEmitter.on(CustomEmitter.events.DELETE_FILL_BLANK_ORDER, index => {
+      deleteIndex.push(index);
+      debounce(() => {
+        if (deleteIndex.length > 0) {
+          // console.log('delete fill-blank-order index = ', deleteIndex);
+          deleteIndex.length = 0;
+        }
+      }, 200).call(this);
+    });
+    this.quill.emitter.on(Emitter.events.EDITOR_CHANGE, type => {
+      if (type === Emitter.events.TEXT_CHANGE) {
+        const nodes = root.querySelectorAll(`.${FillBlankOrder.className}`);
+        // set attribute and innerText
+        Array.from(nodes).forEach((node, index) => {
+          node.children[0].innerText = index + 1;
+          node.dataset.index = index + 1;
+        });
+        // get added index
+        const addNodesIndex = Array.from(addNodes).map(
+          node => node.dataset.index,
+        );
+        if (addNodesIndex.length > 0) {
+          // console.log('addedNodes', addNodesIndex);
+          addNodes.length = 0;
+        }
+      }
+    });
+    let mathjaxNode = null;
+    root.addEventListener('click', ({ target }) => {
+      const fillBlankOrderNode = isContain(
+        target,
+        root,
+        FillBlankOrder.className,
+      );
+      if (fillBlankOrderNode) {
+        const { index } = this.quill.getSelection();
+        this.quill.deleteText(index, 1);
+      }
+      if (mathjaxNode) {
+        mathjaxNode.classList.remove('selected');
+      }
+      const curMathjaxNode = isContain(target, root, QlMathjax.className);
+      if (curMathjaxNode) {
+        mathjaxNode = curMathjaxNode;
+        mathjaxNode.classList.add('selected');
+        const range = document.createRange();
+        range.selectNodeContents(mathjaxNode);
+        const native = this.quill.selection.normalizeNative(range);
+        this.quill.selection.setNativeRange(
+          native.start.node,
+          native.start.offset,
+          native.end.node,
+          native.end.offset,
+        );
+      }
+    });
   }
 }
 
@@ -57,16 +138,19 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
         undo() {
           this.quill.history.undo();
         },
-        all() {
+        clear() {
+          this.quill.setContents([]);
+        },
+        'select-all': function() {
           this.quill.setSelection(0, this.quill.getLength());
         },
-        pi() {
-          // this.quill.tkEvents.openFormula();
+        'formula-editor': function() {
+          this.quill.tkEvents.openFormula();
         },
-        svgToLatex() {
+        svg2latex() {
           ImgToLatex(this.quill);
         },
-        latexToSvg() {
+        latex2svg() {
           LatexToImg(this.quill, false);
         },
         'fill-blank-underline': function() {
@@ -89,6 +173,11 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
             'embed-text',
             this.quill.embedTextMap.FILL_BLANK_BRACKETS,
           );
+          this.quill.setSelection(savedIndex + 1, 0);
+        },
+        'fill-blank-order': function() {
+          const savedIndex = this.quill.selection.savedRange.index;
+          this.quill.insertEmbed(savedIndex, 'fill-blank-order', '1');
           this.quill.setSelection(savedIndex + 1, 0);
         },
       },

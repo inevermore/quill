@@ -53,6 +53,8 @@ Emitter.events = {
   SCROLL_UPDATE: 'scroll-update',
   SELECTION_CHANGE: 'selection-change',
   TEXT_CHANGE: 'text-change',
+  ADD_FILL_BLANK_ORDER: 'add-fill-blank-order',
+  DELETE_FILL_BLANK_ORDER: 'delete-fill-blank-order',
 };
 Emitter.sources = {
   API: 'api',

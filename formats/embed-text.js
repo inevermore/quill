@@ -1,5 +1,6 @@
 import Embed from '../blots/embed';
 
+const CLASS_NAME = 'tkspec-embed-text';
 class EmbedText extends Embed {
   static create(value) {
     const node = super.create();
@@ -10,7 +11,7 @@ class EmbedText extends Embed {
 
   static value(node) {
     const className = Array.from(node.classList).find(
-      item => item !== 'tkspec-embed-text',
+      item => item !== CLASS_NAME,
     );
     const text = node.children[0].innerText;
     return {
@@ -22,6 +23,6 @@ class EmbedText extends Embed {
 
 EmbedText.blotName = 'embed-text';
 EmbedText.tagName = 'SPAN';
-EmbedText.className = 'tkspec-embed-text';
+EmbedText.className = CLASS_NAME;
 
 export default EmbedText;

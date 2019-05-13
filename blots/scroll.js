@@ -64,12 +64,6 @@ class Scroll extends ScrollBlot {
     this.optimize();
   }
 
-  traversing(index, length, fn) {
-    this.children.forEachAt(index, length, (child, offset, childLength) => {
-      child.traversing(offset, childLength, fn);
-    });
-  }
-
   insertAt(index, value, def) {
     if (index >= this.length()) {
       if (def == null || this.scroll.query(value, Scope.BLOCK) == null) {

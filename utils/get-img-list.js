@@ -78,4 +78,4 @@ function latexToSvg(latexArr) {
   });
 }
 
-export default getMathImgSrcList;
+export { getMathImgSrcList as default, latexToSvg };

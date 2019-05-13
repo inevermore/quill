@@ -1,13 +1,12 @@
-function throttle(fn, delay) {
-  let lastTime = 0;
-
-  // eslint-disable-next-line func-names
+function throttle(fn, interval = 300) {
+  let canRun = true;
   return function(...rest) {
-    const context = this;
-    if (Date.now() - lastTime >= delay) {
-      fn.apply(context, rest);
-      lastTime = Date.now();
-    }
+    if (!canRun) return;
+    canRun = false;
+    setTimeout(() => {
+      fn.apply(this, rest);
+      canRun = true;
+    }, interval);
   };
 }
 

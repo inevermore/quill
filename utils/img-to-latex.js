@@ -1,20 +1,21 @@
+/* eslint-disable no-underscore-dangle */
 function imgToLatex(quill) {
   // 点击按钮执行的逻辑
   // 1. 如果有选中的range，只处理range
   const [range] = quill.selection.getRange();
   if (range && range.length > 0) {
-    let nodeCount = 0;
-    let latexCount = 0;
-    quill.traversingSelected(blot => {
-      const { domNode } = blot;
+    // let nodeCount = 0;
+    // let latexCount = 0;
+    const { native } = quill.selection.getNativeRange();
+    iterateNodes(native, domNode => {
       if (
         domNode.nodeType === Node.ELEMENT_NODE &&
         domNode.classList.contains(quill.formulaImgClass)
       ) {
         const latex = `$${getImgLatex(domNode)}$`;
-        latexCount += latex.length;
+        // latexCount += latex.length;
         domNode.outerHTML = latex;
-        nodeCount += 1;
+        // nodeCount += 1;
       }
     });
     // TODO: setSelection 未生效
@@ -28,7 +29,7 @@ function imgToLatex(quill) {
 }
 
 function getImgLatex(node) {
-  return node.dataset.latex.replace(/[><]g/, item => {
+  return node.getAttribute('latex').replace(/[><]g/, item => {
     switch (item) {
       case '<':
         return '&gt;';
@@ -40,6 +41,30 @@ function getImgLatex(node) {
         return '';
     }
   });
+}
+
+function iterateNodes(range, fn) {
+  const _iterator = document.createNodeIterator(
+    range.commonAncestorContainer,
+    NodeFilter.SHOW_ALL, // pre-filter
+    {
+      // custom filter
+      acceptNode() {
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    },
+  );
+
+  let flag = false;
+  while (_iterator.nextNode()) {
+    if (!flag && _iterator.referenceNode !== range.startContainer) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    flag = true;
+    fn(_iterator.referenceNode);
+    if (_iterator.referenceNode === range.endContainer) break;
+  }
 }
 
 export default imgToLatex;

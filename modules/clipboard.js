@@ -74,6 +74,7 @@ const OLD_CLASS = {
   dotted: 'yikespec-dotted',
   fillBlankBrackets: 'yikespec-bracket',
   fillBlankUnderline: 'yikespec-underline-blank',
+  fillBlankOrder: 'fill-blank',
 };
 const LINE_SEPARATOR = '\u2028';
 
@@ -517,6 +518,9 @@ function matchTkStyles(node, delta) {
     return new Delta().insert({
       'embed-text': this.quill.embedTextMap.FILL_BLANK_UNDERLINE,
     });
+  }
+  if (classList.contains(OLD_CLASS.fillBlankOrder)) {
+    return new Delta().insert({ 'fill-blank-order': {} });
   }
   if (
     parseFloat(getStyle(node, 'text-indent') || 0) > 0 ||

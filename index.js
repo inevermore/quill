@@ -1,5 +1,6 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
+import ImgToLatex from './utils/img-to-latex';
 
 class TkEditor {
   constructor(options) {
@@ -76,18 +77,14 @@ class TkEditor {
   }
 
   setContent(content) {
-    const div = document.createElement('div');
-    div.innerHTML = content;
-    this.quill.root.innerHTML =
-      (div.firstElementChild && div.firstElementChild.innerHTML) || '';
+    this.quill.setContent(content);
   }
 
-  getContent() {
-    const copy = this.quill.root.cloneNode(true);
-    copy.querySelectorAll('.ql-cursor').forEach(el => {
-      el.parentNode.removeChild(el);
-    });
-    return this.wrapContent(copy.innerHTML);
+  getContent(latexMode = false) {
+    if (latexMode) {
+      ImgToLatex(this.quill);
+    }
+    return this.quill.getContent();
   }
 
   getData() {
@@ -146,7 +143,7 @@ class TkEditor {
     }
     const prev = this.quill.getSemanticHTML(0, index);
     const next = this.quill.getSemanticHTML(index, this.quill.getLength());
-    return [this.wrapContent(prev), this.wrapContent(next)];
+    return [this.quill.wrapContent(prev), this.quill.wrapContent(next)];
   }
 
   isBlank() {
@@ -155,10 +152,6 @@ class TkEditor {
 
   enableSingleLine(boolean = false) {
     this.quill.enableSingleLine = boolean;
-  }
-
-  wrapContent(html) {
-    return `<div class="${this.quill.wrapperClass}">${html}</div>`;
   }
 }
 

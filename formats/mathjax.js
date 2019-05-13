@@ -6,15 +6,17 @@ class FormulaEmbed extends Embed {
     node.innerHTML = value.innerHTML;
     node.setAttribute('latex', value.latex);
     node.setAttribute('mathid', value.mathid);
-    // node.querySelector('svg').setAttribute('contenteditable', false);
+    // node.setAttribute('contenteditable', false);
+    node.setAttribute('tabindex', -1);
     return node;
   }
 
   static value(node) {
+    const svg = node.querySelector('svg');
     return {
       latex: node.getAttribute('latex'),
       mathid: node.getAttribute('mathid'),
-      innerHTML: node.innerHTML,
+      innerHTML: svg.outerHTML,
     };
   }
 }

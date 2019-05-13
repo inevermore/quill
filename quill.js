@@ -15,7 +15,6 @@ import { ColorStyle } from './formats/color';
 import { BackgroundStyle } from './formats/background';
 
 import Image from './formats/image';
-import FillBlankUnderline from './formats/fill-blank-underline';
 
 import Table from './modules/table';
 import Toolbar from './modules/toolbar';
@@ -89,7 +88,6 @@ const FORMATS = {
   script: Script,
   bold: BoldClass,
   image: Image,
-  'fill-blank-underline': FillBlankUnderline,
   list: List,
   font: FontStyle,
   size: SizeStyle,

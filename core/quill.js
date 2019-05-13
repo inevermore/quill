@@ -8,6 +8,7 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
+import QlMathjax from '../formats/mathjax';
 
 const debug = logger('quill');
 
@@ -79,7 +80,7 @@ class Quill {
     this.root.addEventListener('dragstart', e => {
       e.preventDefault();
     });
-    this.formulaImgClass = 'yk-math-img';
+    this.formulaImgClass = 'ql-mathjax';
     this.root.classList.add('ql-blank');
     this.root.setAttribute('data-gramm', false);
     this.scrollingContainer = this.options.scrollingContainer || this.root;
@@ -127,7 +128,7 @@ class Quill {
       this.disable();
     }
     this.allowReadOnlyEdits = false;
-    this.editedImg = null;
+    this.editedFormula = null;
     this.tkEvents = this.options.events;
     this.wrapperClass = this.options.wrapperClass;
     this.embedTextMap = {
@@ -454,12 +455,50 @@ class Quill {
     );
   }
 
-  // 遍历选中区域节点
-  traversingSelected(fn) {
-    const selection = this.getSelection();
-    if (selection && selection.length > 0) {
-      this.scroll.traversing(selection.index, selection.length, fn);
+  setContent(content) {
+    const div = document.createElement('div');
+    div.innerHTML = content;
+    this.root.innerHTML =
+      (div.firstElementChild && div.firstElementChild.innerHTML) || '';
+  }
+
+  getContent() {
+    const copy = this.root.cloneNode(true);
+    copy.querySelectorAll('.ql-cursor').forEach(el => {
+      el.parentNode.removeChild(el);
+    });
+    return this.wrapContent(copy.innerHTML);
+  }
+
+  wrapContent(html) {
+    return `<div class="${this.wrapperClass}">${html}</div>`;
+  }
+
+  insertFormula(objList) {
+    const savedRangeIndex = this.selection.savedRange.index;
+    // 编辑模式下替换 img 节点
+    if (this.editedFormula) {
+      this.editedFormula.outerHTML = QlMathjax.create({
+        latex: objList.latex,
+        innerHTML: objList.svg,
+      }).outerHTML;
+      this.editedFormula = null;
+    } else if (objList.latex) {
+      this.insertEmbed(savedRangeIndex, 'ql-mathjax', {
+        latex: `${objList.latex}`,
+        innerHTML: objList.svg,
+      });
+      this.setSelection(savedRangeIndex + 1, 0);
     }
+  }
+
+  editFormula(node) {
+    this.editedFormula = node;
+    this.showFormulaEditor(node.getAttribute('latex'));
+  }
+
+  showFormulaEditor(latex = '') {
+    this.tkEvents.openFormula(latex);
   }
 }
 

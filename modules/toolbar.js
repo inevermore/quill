@@ -6,6 +6,33 @@ import Module from '../core/module';
 
 const debug = logger('quill:toolbar');
 
+const PINYINS = [
+  'ā',
+  'á',
+  'ǎ',
+  'à',
+  'ō',
+  'ó',
+  'ǒ',
+  'ò',
+  'ē',
+  'é',
+  'ě',
+  'è',
+  'ī',
+  'í',
+  'ǐ',
+  'ì',
+  'ū',
+  'ú',
+  'ǔ',
+  'ù',
+  'ǖ',
+  'ǘ',
+  'ǚ',
+  'ǜ',
+  'ü',
+];
 class Toolbar extends Module {
   constructor(quill, options) {
     super(quill, options);
@@ -19,7 +46,7 @@ class Toolbar extends Module {
     } else if (typeof this.options.container === 'string') {
       this.container = document.querySelector(this.options.container);
     }
-    addControls(this.container, this.options.options);
+    addControls(this.container, this.options.options, quill);
     // eslint-disable-next-line no-constant-condition
     if (this.options.container == null || 'default') {
       quill.container.parentNode.insertBefore(this.container, quill.container);
@@ -47,6 +74,7 @@ class Toolbar extends Module {
       const [range] = this.quill.selection.getRange(); // quill.getSelection triggers update
       this.update(range);
     });
+    this.quill.toolbarContainer = this.container;
   }
 
   addHandler(format, handler) {
@@ -164,10 +192,13 @@ function addButton(container, format, value) {
   if (value != null) {
     input.value = value;
   }
+  const i = document.createElement('i');
+  i.classList.add('button-icon');
+  input.appendChild(i);
   container.appendChild(input);
 }
 
-function addControls(container, groups) {
+function addControls(container, groups, quill) {
   if (!Array.isArray(groups[0])) {
     groups = [groups];
   }
@@ -175,7 +206,9 @@ function addControls(container, groups) {
     const group = document.createElement('span');
     group.classList.add('ql-formats');
     controls.forEach(control => {
-      if (typeof control === 'string') {
+      if (control === 'pinyin') {
+        group.appendChild(buildPinyin(quill));
+      } else if (typeof control === 'string') {
         addButton(group, control);
       } else {
         const format = Object.keys(control)[0];
@@ -188,6 +221,9 @@ function addControls(container, groups) {
       }
     });
     container.appendChild(group);
+    const line = document.createElement('i');
+    line.classList.add('seperate-line');
+    container.appendChild(line);
   });
 }
 
@@ -204,6 +240,48 @@ function addSelect(container, format, values) {
     input.appendChild(option);
   });
   container.appendChild(input);
+}
+
+function buildPinyin(quill) {
+  const select = document.createElement('div');
+  select.classList.add('pinyin-select');
+  select.innerHTML = `<div class="pinyin-select">
+      <div class="pinyin-label">
+        <span class="pinyin-placeholder">插入拼音</span>
+        <span class="pinyin-arrow"></span>
+      </div>
+      <div class="pinyin-options options-hide"></div>
+    </div>`;
+  const optionsDiv = select.querySelector('.pinyin-options');
+  const label = select.querySelector('.pinyin-label');
+  const placeholder = select.querySelector('.pinyin-placeholder');
+  // eslint-disable-next-line no-restricted-syntax
+  for (const option of PINYINS) {
+    const span = document.createElement('span');
+    span.classList.add('pinyin-item');
+    span.innerText = option;
+    optionsDiv.appendChild(span);
+  }
+  select.appendChild(optionsDiv);
+  label.addEventListener('click', () => {
+    optionsDiv.classList.toggle('options-hide');
+  });
+  optionsDiv.addEventListener('click', ({ target }) => {
+    if (target.classList.contains('pinyin-item')) {
+      quill.focus();
+      const { index } = quill.selection.savedRange;
+      quill.insertText(index, target.innerText);
+      quill.update();
+      optionsDiv.classList.add('options-hide');
+      placeholder.innerText = target.innerText;
+    }
+  });
+  document.addEventListener('click', ({ target }) => {
+    if (!select.contains(target)) {
+      optionsDiv.classList.add('options-hide');
+    }
+  });
+  return select;
 }
 
 Toolbar.DEFAULTS = {

@@ -17,6 +17,7 @@ import Keyboard from './modules/keyboard';
 import Uploader from './modules/uploader';
 import QlMathjax from './formats/mathjax';
 import EmbedText from './formats/embed-text';
+import FillBlankOrder from './formats/fill-blank-order';
 
 Quill.register({
   'blots/block': Block,
@@ -31,6 +32,7 @@ Quill.register({
   // 'blots/text': TextBlot,
   'blots/ql-mathjax': QlMathjax,
   'blots/embed-text': EmbedText,
+  'blots/fill-blank-order': FillBlankOrder,
 
   'modules/clipboard': Clipboard,
   'modules/history': History,

@@ -1,4 +1,5 @@
-import GetImgList from './get-img-list';
+import { latexToSvg } from './get-img-list';
+import QlMathjax from '../formats/mathjax';
 
 const dirtyList = [];
 
@@ -19,16 +20,18 @@ function latexToImg(editor, notConvertImg) {
     );
     converting = false;
   } else {
-    GetImgList(html.match(/\$(.*?)\$/g) || []).then(objList => {
+    const latexArr = html.match(/\$(.*?)\$/g) || [];
+    latexToSvg(latexArr).then(objList => {
       let count = 0;
       editor.setContent(
         html
           .replace(/\$(.*?)\$/g, () => {
-            const img = `<img class="${
-              editor.quill.formulaImgClass
-            }" data-latex="${objList[count].latex}" src="${objList[count].src}">`;
+            const math = QlMathjax.create({
+              latex: latexArr[count].slice(1, -1),
+              innerHTML: objList[count].outerHTML,
+            });
             count += 1;
-            return img;
+            return math.outerHTML;
           })
           .replace(/MATHCUSTOM/g, '\\$'),
       );
