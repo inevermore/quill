@@ -126,6 +126,16 @@ class TikuTheme extends TkBaseTheme {
       }
     });
   }
+
+  buildButtons(buttons) {
+    Array.from(buttons).forEach(button => {
+      const className = button.getAttribute('class') || '';
+      className.split(/\s+/).forEach(name => {
+        if (!name.startsWith('ql-')) return;
+        name = name.slice('ql-'.length);
+      });
+    });
+  }
 }
 
 TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {

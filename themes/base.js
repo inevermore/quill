@@ -116,26 +116,26 @@ class BaseTheme extends Theme {
     return module;
   }
 
-  buildButtons(buttons) {
+  buildButtons(buttons, icons) {
     Array.from(buttons).forEach(button => {
       const className = button.getAttribute('class') || '';
       className.split(/\s+/).forEach(name => {
         if (!name.startsWith('ql-')) return;
         name = name.slice('ql-'.length);
-        // if (icons[name] == null) return;
-        // if (name === 'dotted') {
-        //   button.value = 'dotted underline';
-        // }
-        // if (name === 'direction') {
-        //   button.innerHTML = icons[name][''] + icons[name].rtl;
-        // } else if (typeof icons[name] === 'string') {
-        //   button.innerHTML = icons[name];
-        // } else {
-        //   const value = button.value || '';
-        //   if (value != null && icons[name][value]) {
-        //     button.innerHTML = icons[name][value];
-        //   }
-        // }
+        if (icons[name] == null) return;
+        if (name === 'dotted') {
+          button.value = 'dotted underline';
+        }
+        if (name === 'direction') {
+          button.innerHTML = icons[name][''] + icons[name].rtl;
+        } else if (typeof icons[name] === 'string') {
+          button.innerHTML = icons[name];
+        } else {
+          const value = button.value || '';
+          if (value != null && icons[name][value]) {
+            button.innerHTML = icons[name][value];
+          }
+        }
       });
     });
   }

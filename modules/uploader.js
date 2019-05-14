@@ -5,6 +5,7 @@ import ajax from '../utils/ajax';
 import icons from '../ui/icons';
 
 const UPLOAD_ERROR_TEXT = '上传错误';
+const UPLOAD_FILE_TYPE_ERROR = '文件类型错误';
 
 class Uploader extends Module {
   constructor(quill, options) {
@@ -35,7 +36,7 @@ class Uploader extends Module {
         uploads.push(file);
       } else {
         // eslint-disable-next-line no-alert
-        alert('文件类型错误');
+        alert(UPLOAD_FILE_TYPE_ERROR);
         throw new Error('wrong file type');
       }
     });

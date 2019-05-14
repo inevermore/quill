@@ -22,64 +22,20 @@
     box-sizing: border-box;
   }
 
-  iframe {
-    border: none;
-  }
-
-  .formula-editor-container {
-    visibility: hidden;
-    width: 714px;
-    height: 575px;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 6px;
-    border: 1px solid rgba(0, 0, 0, .2);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-    overflow: hidden;
-    background: white;
-    z-index: 200;
-  }
-
-  .formula-editor-container header {
-    height: 30px;
-    border-bottom: 1px solid #c6c6c6;
-    background: linear-gradient(to bottom, white, #f0f0f0);
-  }
-
-  .formula-editor-container header span {
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 30px;
-    padding-left: 5px;
-  }
-
-  .formula-editor-container header span b {
-    float: right;
-    padding-right: 10px;
-    line-height: 30px;
-  }
-
-  iframe {
-    width: 100%;
-    height: calc(100% - 30px);
-    background: white;
-  }
 </style>
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.css" integrity="sha384-xNwWFq3SIvM4dq/1RUyWumk8nj/0KFg4TOnNcfzUU4X2gNn3WoRML69gO7waf3xh" crossorigin="anonymous"> -->
 
 <body>
   <div>
-    <div id="editorToolbar"></div>
-    <div class="formula-editor-container" id="formulaEditorContainer">
-      <header>
-        <span>作业帮理科公式编辑器</span>
-        <b id="formulaEditorClose">✕</b>
-      </header>
-      <iframe id="formulaEditor" src="../latex-editor-plugin/latex-editor.html"></iframe>
-
-    </div>
+    <!-- <div class="formula-dialog" id="formulaEditorContainer">
+      <div class="formula-editor-container" >
+        <header>
+          <span>作业帮理科公式编辑器</span>
+          <b id="formulaEditorClose"></b>
+        </header>
+        <iframe id="formulaEditor" src="//mis.zuoyebang.cc/static/equation-editor/index.html" width="100%" height="480px" frameborder="0"></iframe>
+      </div>
+    </div> -->
   </div>
   <div style="height: 300px"></div>
   <div style="height: calc(100% - 300px)">
