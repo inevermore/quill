@@ -202,7 +202,7 @@ function addControls(container, groups, quill) {
   if (!Array.isArray(groups[0])) {
     groups = [groups];
   }
-  groups.forEach(controls => {
+  groups.forEach((controls, index) => {
     const group = document.createElement('span');
     group.classList.add('ql-formats');
     controls.forEach(control => {
@@ -223,7 +223,9 @@ function addControls(container, groups, quill) {
     container.appendChild(group);
     const line = document.createElement('i');
     line.classList.add('seperate-line');
-    container.appendChild(line);
+    if (index !== groups.length - 1) {
+      container.appendChild(line);
+    }
   });
 }
 

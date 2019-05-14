@@ -33,6 +33,10 @@ class Uploader extends Module {
     Array.from(files).forEach(file => {
       if (file && this.options.mimetypes.includes(file.type)) {
         uploads.push(file);
+      } else {
+        // eslint-disable-next-line no-alert
+        alert('文件类型错误');
+        throw new Error('wrong file type');
       }
     });
     if (uploads.length > 0) {

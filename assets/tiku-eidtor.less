@@ -42,7 +42,7 @@
     height: 22px;
     padding: 0;
     cursor: initial;
-    user-select: initial !important;
+    user-select: auto !important;
 
     &:hover .button-icon, &.ql-active .button-icon {
       background-color: rgba(66, 197, 122, 0.1);
@@ -162,9 +162,6 @@
     margin: 2px 4px 2px 3px;
     background-color: grey;
     opacity: .7;
-    &:last-child {
-      display: none;
-    }
   }
 
   .pinyin-select {
