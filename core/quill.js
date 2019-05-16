@@ -9,6 +9,7 @@ import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
 import QlMathjax from '../formats/mathjax';
+import openFormula from '../utils/open-formula';
 
 const debug = logger('quill');
 
@@ -488,6 +489,7 @@ class Quill {
         latex: `${objList.latex}`,
         innerHTML: objList.svg,
       });
+      this.root.focus();
       this.setSelection(savedRangeIndex + 1, 0);
     }
   }
@@ -498,7 +500,7 @@ class Quill {
   }
 
   showFormulaEditor(latex = '') {
-    this.tkEvents.openFormula(latex);
+    openFormula(latex, this.insertFormula.bind(this));
   }
 }
 

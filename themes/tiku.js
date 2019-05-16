@@ -155,7 +155,7 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           this.quill.setSelection(0, this.quill.getLength());
         },
         'formula-editor': function() {
-          this.quill.tkEvents.openFormula();
+          this.quill.showFormulaEditor();
         },
         svg2latex() {
           ImgToLatex(this.quill);

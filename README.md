@@ -20,7 +20,6 @@ const editor = new Editor({
   container: '#editor',
   theme: 'handout',
   events: {
-    openFormula,
     getFormat,
   },
   options: [

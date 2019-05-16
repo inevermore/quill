@@ -241,37 +241,51 @@
 
 }
 
-
-
-
 .formula-dialog {
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100%;
   width: 100%;
   left: 0;
   top: 0;
   background-color: rgba(204, 204, 204, .3);
   visibility: hidden;
-  z-index: 200;
+  z-index: 2000;
+
+  .iframe-box {
+    width: 100%;
+    height: 485px;
+    position: relative;
+
+    .iframe-mask {
+      width: 100%;
+      height: 100%;
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      cursor: move;
+    }
+  }
 
   .formula-editor-container {
-    width: 714px;
-    height: 575px;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    width: 730px;
     border-radius: 6px;
     border: 1px solid rgba(0, 0, 0, .2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
     overflow: hidden;
     background: white;
     cursor: move;
+    position: absolute;
+    z-index: 2000;
+
+    * {
+      user-select: none;
+    }
 
     iframe {
       border: none;
-      width: 100%;
-      height: calc(100% - 30px);
       background: white;
     }
   
