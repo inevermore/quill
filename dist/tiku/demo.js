@@ -27,12 +27,23 @@ const options = [
     'pinyin'
   ],
 ];
+const blankList = [];
 
 const editor = new Editor({
   container: '#tikuEditor',
   theme: 'tiku',
+  toolbar: {
+    handlers: {
+      'fill-blank-order': function() {
+        const savedIndex = this.quill.selection.savedRange.index;
+        this.quill.insertEmbed(savedIndex, 'fill-blank-order', '1');
+        this.quill.setSelection(savedIndex + 1, 0);
+      }
+    }
+  },
   events: {
     getFormat,
+    blankOrderChange,
   },
   options,
   uploader: {
@@ -41,24 +52,33 @@ const editor = new Editor({
     method: 'post',
     maxSize: 600,
     response: ['url'],
-  }
+  },
 });
+setInterval(() => console.log(blankList), 2000);
 
-const editor1 = new Editor({
-  container: '#tikuEditor1',
-  theme: 'tiku',
-  events: {
-    getFormat,
-  },
-  options,
-  uploader: {
-    param: 'upfile',
-    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
-    method: 'post',
-    maxSize: 600,
-    response: ['url'],
+function blankOrderChange(type, list, len) {
+  if (type === 'add') {
+    blankList.splice(list[0] - 1, 0, ...list);
+  } else {
+    blankList.splice(list[0] - 1, list.length);
   }
-});
+  console.log(len)
+}
+// const editor1 = new Editor({
+//   container: '#tikuEditor1',
+//   theme: 'tiku',
+//   events: {
+//     getFormat,
+//   },
+//   options,
+//   uploader: {
+//     param: 'upfile',
+//     url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+//     method: 'post',
+//     maxSize: 600,
+//     response: ['url'],
+//   }
+// });
 function getFormat(format) {
 }
 

@@ -459,8 +459,9 @@ class Quill {
   setContent(content) {
     const div = document.createElement('div');
     div.innerHTML = content;
-    this.root.innerHTML =
+    const html =
       (div.firstElementChild && div.firstElementChild.innerHTML) || '';
+    this.clipboard.onPaste({ index: 0, length: 0 }, { html });
   }
 
   getContent() {

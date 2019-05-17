@@ -11,11 +11,12 @@ class TkEditor {
         options: [],
         toolbar: {
           container: null,
+          handlers: {},
         },
         initContent: '',
         events: {
-          // openFormula: () => {},
           // insertBlankOption: () => {},
+          blankOrderChange: () => {},
           getFormat: () => {},
         },
         keyboard: {},
@@ -50,6 +51,7 @@ class TkEditor {
         toolbar: {
           container: this.config.toolbar.container,
           options: this.config.options,
+          handlers: this.config.toolbar.handlers,
         },
         keyboard: this.config.keyboard,
         uploader: this.config.uploader,

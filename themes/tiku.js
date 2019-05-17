@@ -59,13 +59,13 @@ class TikuTheme extends TkBaseTheme {
   extendToolbar(toolbar) {
     super.extendToolbar(toolbar);
     toolbar.container.classList.add('ql-snow');
-    // toolbar.container.parentNode.removeChild(toolbar.container);
   }
 
   handleEvents() {
     const { root } = this.quill;
     const deleteIndex = [];
     const addNodes = [];
+    const nodes = root.getElementsByClassName(FillBlankOrder.className);
     CustomEmitter.on(CustomEmitter.events.ADD_FILL_BLANK_ORDER, addNode => {
       addNodes.push(addNode);
     });
@@ -73,25 +73,31 @@ class TikuTheme extends TkBaseTheme {
       deleteIndex.push(index);
       debounce(() => {
         if (deleteIndex.length > 0) {
-          // console.log('delete fill-blank-order index = ', deleteIndex);
+          this.quill.tkEvents.blankOrderChange(
+            'del',
+            deleteIndex,
+            nodes.length,
+          );
           deleteIndex.length = 0;
         }
-      }, 200).call(this);
+      }, 20).call(this);
     });
     this.quill.emitter.on(Emitter.events.EDITOR_CHANGE, type => {
       if (type === Emitter.events.TEXT_CHANGE) {
-        const nodes = root.querySelectorAll(`.${FillBlankOrder.className}`);
         // set attribute and innerText
         Array.from(nodes).forEach((node, index) => {
           node.children[0].innerText = index + 1;
           node.dataset.index = index + 1;
         });
-        // get added index
         const addNodesIndex = Array.from(addNodes).map(
           node => node.dataset.index,
         );
         if (addNodesIndex.length > 0) {
-          // console.log('addedNodes', addNodesIndex);
+          this.quill.tkEvents.blankOrderChange(
+            'add',
+            addNodesIndex,
+            nodes.length,
+          );
           addNodes.length = 0;
         }
       }
