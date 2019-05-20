@@ -72,11 +72,7 @@ class TikuTheme extends TkBaseTheme {
       deleteIndex.push(index);
       debounce(() => {
         if (deleteIndex.length > 0) {
-          this.quill.tkEvents.blankOrderChange(
-            'del',
-            deleteIndex,
-            nodes.length,
-          );
+          this.blankOrderChange('del', deleteIndex, nodes.length);
           deleteIndex.length = 0;
         }
       }, 20).call(this);
@@ -87,16 +83,13 @@ class TikuTheme extends TkBaseTheme {
         Array.from(nodes).forEach((node, index) => {
           node.children[0].innerText = index + 1;
           node.dataset.index = index + 1;
+          node.id = index;
         });
         const addNodesIndex = Array.from(addNodes).map(
           node => node.dataset.index,
         );
         if (addNodesIndex.length > 0) {
-          this.quill.tkEvents.blankOrderChange(
-            'add',
-            addNodesIndex,
-            nodes.length,
-          );
+          this.blankOrderChange('add', addNodesIndex, nodes.length);
           addNodes.length = 0;
         }
       }
@@ -140,6 +133,15 @@ class TikuTheme extends TkBaseTheme {
         name = name.slice('ql-'.length);
       });
     });
+  }
+
+  blankOrderChange(type, changeList, len) {
+    try {
+      this.quill.tkEvents.blankOrderChange(type, changeList, len);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
   }
 }
 

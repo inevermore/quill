@@ -1,4 +1,13 @@
+## 0.2.0
+
+* ADD 调整fill-blank-order结构以和原数据保持一致
+
+## 0.1.9
+
+* ADD editor类添加Quill属性
+
 ## 0.1.8
+
 * UPDATE 公式编辑器域名改为jymis
 
 ## 0.1.7

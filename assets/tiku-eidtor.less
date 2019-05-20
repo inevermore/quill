@@ -4,26 +4,65 @@
   border: 1px solid #E1E2E6;
   border-radius: 4px;
 
-  .ql-mathjax {
-    span {
-      border: 1px dotted #07b4fd;
-    }
-
-    &:focus {
-      outline: none;
-    }
-    &.selected {
-      background-color: #ACCEF7;
-    }
-
-    * {
-      pointer-events: none;
-    }
+  .ql-container {
+    border: none;
   }
 
-  p:after,
-  li:after {
-    content: '' !important;
+  .ql-editor {
+    min-height: 202px;
+    margin: 8px;
+    padding: 0;
+    border: none;
+
+    .ql-mathjax {
+      span {
+        border: 1px dotted #07b4fd;
+      }
+  
+      &:focus {
+        outline: none;
+      }
+      &.selected {
+        background-color: #ACCEF7;
+      }
+  
+      * {
+        pointer-events: none;
+      }
+    }
+  
+    p:after,
+    li:after {
+      content: '' !important;
+    }
+
+    p {
+      margin: 5px 0;
+      font-size: 14px;
+      line-height: 24px;
+      color: #323233;
+    }
+
+    table {
+      width: auto;
+  
+      td {
+        padding: 5px 10px;
+        border: 1px solid #DDD;
+      }
+    }
+
+    .fill-blank .blank-list-remove {
+      display: inline-block;
+      width: 60px;
+      height: 24px;
+      background-image: url(../assets/tiku-icons/fill-blank-order-delete.png);
+      background-size: 100% 100%;
+    
+      &:hover {
+        background-image: url(../assets/tiku-icons/fill-blank-order-delete-hover.png);
+      }
+    }
   }
 }
 
