@@ -157,4 +157,6 @@ class TkEditor {
   }
 }
 
+TkEditor.events = Quill.events;
+
 export default TkEditor;

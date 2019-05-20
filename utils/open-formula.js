@@ -84,7 +84,7 @@ function createFormulaContainer() {
 
   const iframe = document.createElement('iframe');
   iframe.id = 'formulaEditor';
-  iframe.src = '//mis.zuoyebang.cc/static/equation-editor/index.html';
+  iframe.src = '//jymis.zuoyebang.cc/static/equation-editor/index.html';
   iframe.width = '100%';
   iframe.height = '485px';
   box.appendChild(iframe);

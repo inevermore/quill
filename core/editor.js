@@ -294,6 +294,14 @@ function convertHTML(blot, index, length, isRoot = false) {
     const [start, end] = outerHTML.split(`>${innerHTML}<`);
     // TODO cleanup
     if (start === '<table') {
+      // 避免复制单个单元格时生成table start
+      const tableNode = document.createElement('table');
+      tableNode.innerHTML = parts.join('');
+      const tds = tableNode.querySelectorAll('td');
+      if (tds.length === 1) {
+        return tds[0].innerHTML;
+      }
+      // end
       return `<table style="border: 1px solid #000;">${parts.join('')}<${end}`;
     }
     return `${start}>${parts.join('')}<${end}`;

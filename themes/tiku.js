@@ -4,7 +4,6 @@ import LatexToImg from '../utils/latex-to-img';
 import ImgToLatex from '../utils/img-to-latex';
 import { isContain } from '../utils/dom-utils';
 import Emitter from '../core/emitter';
-import CustomEmitter from '../utils/custom-emitter';
 import debounce from '../utils/debounce';
 import FillBlankOrder from '../formats/fill-blank-order';
 import QlMathjax from '../formats/mathjax';
@@ -66,10 +65,10 @@ class TikuTheme extends TkBaseTheme {
     const deleteIndex = [];
     const addNodes = [];
     const nodes = root.getElementsByClassName(FillBlankOrder.className);
-    CustomEmitter.on(CustomEmitter.events.ADD_FILL_BLANK_ORDER, addNode => {
+    this.quill.emitter.on(Emitter.events.ADD_FILL_BLANK_ORDER, addNode => {
       addNodes.push(addNode);
     });
-    CustomEmitter.on(CustomEmitter.events.DELETE_FILL_BLANK_ORDER, index => {
+    this.quill.emitter.on(Emitter.events.DELETE_FILL_BLANK_ORDER, index => {
       deleteIndex.push(index);
       debounce(() => {
         if (deleteIndex.length > 0) {

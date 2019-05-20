@@ -54,7 +54,6 @@ const editor = new Editor({
     response: ['url'],
   },
 });
-setInterval(() => console.log(blankList), 2000);
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {
@@ -62,23 +61,31 @@ function blankOrderChange(type, list, len) {
   } else {
     blankList.splice(list[0] - 1, list.length);
   }
-  console.log(len)
+  console.log(list,len)
 }
-// const editor1 = new Editor({
-//   container: '#tikuEditor1',
-//   theme: 'tiku',
-//   events: {
-//     getFormat,
-//   },
-//   options,
-//   uploader: {
-//     param: 'upfile',
-//     url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
-//     method: 'post',
-//     maxSize: 600,
-//     response: ['url'],
-//   }
-// });
+
+editor.quill.on(Editor.events.EDITOR_CHANGE, (type, range) => {
+  if (type === Editor.events.TEXT_CHANGE) {
+    console.log('text-change')
+  }
+});
+
+const editor1 = new Editor({
+  container: '#tikuEditor1',
+  theme: 'tiku',
+  events: {
+    getFormat,
+    blankOrderChange,
+  },
+  options,
+  uploader: {
+    param: 'upfile',
+    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['url'],
+  }
+});
 function getFormat(format) {
 }
 
