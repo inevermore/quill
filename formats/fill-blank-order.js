@@ -1,8 +1,6 @@
 import Embed from '../blots/embed';
 import Emitter from '../core/emitter';
 
-const GUARD_TEXT = '\uFEFF';
-
 class FillBlankOrder extends Embed {
   static create() {
     const node = super.create();
@@ -13,16 +11,6 @@ class FillBlankOrder extends Embed {
 
   constructor(scroll, node) {
     super(scroll, node);
-    this.contentNode = document.createElement('em');
-    this.contentNode.setAttribute('contenteditable', false);
-    Array.from(this.domNode.childNodes).forEach(childNode => {
-      this.contentNode.appendChild(childNode);
-    });
-    this.leftGuard = document.createTextNode(GUARD_TEXT);
-    this.rightGuard = document.createTextNode(GUARD_TEXT);
-    this.domNode.appendChild(this.leftGuard);
-    this.domNode.appendChild(this.contentNode);
-    this.domNode.appendChild(this.rightGuard);
     node.children[0].classList.add('blank-list-remove');
     this.scroll.emitter.emit(Emitter.events.ADD_FILL_BLANK_ORDER, node);
   }

@@ -1,3 +1,12 @@
+## 0.2.2
+
+* DELETE remove emitter set-content event
+
+## 0.2.1
+
+* FIX 填空题空格、填空题下划线、括号、公式setContent时产生错误数据的bug
+* UPDATE 调整填空题样式问题，避免外部样式影响
+
 ## 0.2.0
 
 * ADD 调整fill-blank-order结构以和原数据保持一致

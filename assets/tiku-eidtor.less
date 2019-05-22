@@ -52,17 +52,34 @@
       }
     }
 
-    .fill-blank .blank-list-remove {
-      display: inline-block;
-      width: 60px;
-      height: 24px;
-      background-image: url(../assets/tiku-icons/fill-blank-order-delete.png);
-      background-size: 100% 100%;
-    
-      &:hover {
-        background-image: url(../assets/tiku-icons/fill-blank-order-delete-hover.png);
+    .fill-blank {
+      display: inline;
+      text-align: unset;
+      margin: unset;
+      border: none;
+
+      .blank-list-remove {
+        display: inline-block;
+        font-style: normal!important;
+        width: 60px;
+        height: 24px;
+        background-image: url(../assets/tiku-icons/fill-blank-order-delete.png);
+        background-size: 100% 100%;
+        text-align: left;
+        min-width: unset;
+        min-height: unset;
+        line-height: unset;
+        font-size: unset;
+        border: none;
+        border-radius: 0;
+      
+        &:hover {
+          background-image: url(../assets/tiku-icons/fill-blank-order-delete-hover.png);
+        }
       }
     }
+
+
   }
 }
 

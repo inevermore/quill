@@ -6,6 +6,12 @@ const GUARD_TEXT = '\uFEFF';
 class Embed extends EmbedBlot {
   constructor(scroll, node) {
     super(scroll, node);
+    if (
+      node.children.length > 0 &&
+      node.children[0].tagName.toUpperCase() === 'SPAN'
+    ) {
+      return;
+    }
     this.contentNode = document.createElement('span');
     this.contentNode.setAttribute('contenteditable', false);
     Array.from(this.domNode.childNodes).forEach(childNode => {
