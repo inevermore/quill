@@ -10,18 +10,19 @@ class Embed extends EmbedBlot {
       node.children.length > 0 &&
       node.children[0].tagName.toUpperCase() === 'SPAN'
     ) {
-      return;
+      [this.leftGuard, this.contentNode, this.rightGuard] = node.childNodes;
+    } else {
+      this.contentNode = document.createElement('span');
+      this.contentNode.setAttribute('contenteditable', false);
+      Array.from(this.domNode.childNodes).forEach(childNode => {
+        this.contentNode.appendChild(childNode);
+      });
+      this.leftGuard = document.createTextNode(GUARD_TEXT);
+      this.rightGuard = document.createTextNode(GUARD_TEXT);
+      this.domNode.appendChild(this.leftGuard);
+      this.domNode.appendChild(this.contentNode);
+      this.domNode.appendChild(this.rightGuard);
     }
-    this.contentNode = document.createElement('span');
-    this.contentNode.setAttribute('contenteditable', false);
-    Array.from(this.domNode.childNodes).forEach(childNode => {
-      this.contentNode.appendChild(childNode);
-    });
-    this.leftGuard = document.createTextNode(GUARD_TEXT);
-    this.rightGuard = document.createTextNode(GUARD_TEXT);
-    this.domNode.appendChild(this.leftGuard);
-    this.domNode.appendChild(this.contentNode);
-    this.domNode.appendChild(this.rightGuard);
   }
 
   index(node, offset) {

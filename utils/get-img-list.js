@@ -1,3 +1,5 @@
+import { mathjaxRender } from './latex-to-svg';
+
 function getMathImgSrcList(latexArr) {
   const BASE64_MAP = {
     ykparallelogram:
@@ -10,7 +12,7 @@ function getMathImgSrcList(latexArr) {
   // 因为公式编辑器已经在编辑过滤，所有这里不做filter
 
   return new Promise(resolve => {
-    latexToSvg(latexArr).then(svgs => {
+    mathjaxRender(latexArr).then(svgs => {
       const list = [];
       const promises = Array.from(svgs).map((svg, index) => {
         return new Promise(res => {
@@ -55,27 +57,4 @@ function getMathImgSrcList(latexArr) {
   });
 }
 
-function latexToSvg(latexArr) {
-  return new Promise(resolve => {
-    const container = document.createElement('div');
-    latexArr.forEach(latex => {
-      const div = document.createElement('div');
-      div.innerHTML = latex.replace(/>/g, '&gt;').replace(/</g, '&lt;');
-      container.appendChild(div);
-    });
-    if (window.MathJax === undefined) {
-      throw new Error('MathJax is needed. Please refer to demo');
-    }
-    window.MathJax.Hub.Queue(
-      ['Typeset', window.MathJax.Hub, container],
-      [
-        () => {
-          const svgs = container.querySelectorAll('svg');
-          resolve(svgs);
-        },
-      ],
-    );
-  });
-}
-
-export { getMathImgSrcList as default, latexToSvg };
+export default getMathImgSrcList;

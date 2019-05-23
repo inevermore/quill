@@ -22,12 +22,13 @@ const options = [
     { underline: 'wavy' },
     'fill-blank-brackets',
     'formula-editor',
-    'svg2latex',
     'latex2svg',
+    'svg2latex',
     'pinyin'
   ],
 ];
 const blankList = [];
+const str = '<div class="text-editor-wrapper"><p>1<span class="fill-blank" title="移除填空" data-index="1" id="0" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">1</span>﻿</span><span class="fill-blank" title="移除填空" data-index="2" id="1" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">2</span>﻿</span><span class="fill-blank" title="移除填空" data-index="3" id="2" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">3</span>﻿</span><span class="fill-blank" title="移除填空" data-index="4" id="3" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">4</span>﻿</span></p></div>'
 
 const editor = new Editor({
   container: '#tikuEditor',
@@ -54,6 +55,7 @@ const editor = new Editor({
     response: ['url'],
   },
 });
+// editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {
@@ -64,28 +66,24 @@ function blankOrderChange(type, list, len) {
   console.log(list,len)
 }
 
-editor.quill.on(Editor.events.EDITOR_CHANGE, (type, range) => {
-  if (type === Editor.events.TEXT_CHANGE) {
-    console.log('text-change')
+const editor1 = new Editor({
+  container: '#tikuEditor1',
+  theme: 'tiku',
+  events: {
+    getFormat,
+    blankOrderChange,
+  },
+  options,
+  uploader: {
+    param: 'upfile',
+    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['url'],
   }
 });
+editor1.setContent(str)
 
-// const editor1 = new Editor({
-//   container: '#tikuEditor1',
-//   theme: 'tiku',
-//   events: {
-//     getFormat,
-//     blankOrderChange,
-//   },
-//   options,
-//   uploader: {
-//     param: 'upfile',
-//     url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
-//     method: 'post',
-//     maxSize: 600,
-//     response: ['url'],
-//   }
-// });
 function getFormat(format) {
 }
 

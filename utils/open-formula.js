@@ -1,4 +1,4 @@
-import { latexToSvg } from './get-img-list';
+import { mathjaxRender } from './latex-to-svg';
 
 let insertFormula = () => {};
 let isLoaded = false;
@@ -53,7 +53,7 @@ window.addEventListener(
     if (data.type === 'sendEquationInfo') {
       const latex = data.data;
       if (latex === '$$') return;
-      const svg = await latexToSvg([latex]);
+      const svg = await mathjaxRender([latex]);
       showFormula(false);
       try {
         insertFormula({

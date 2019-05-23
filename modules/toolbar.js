@@ -246,6 +246,7 @@ function addSelect(container, format, values) {
 
 function buildPinyin(quill) {
   const select = document.createElement('div');
+  select.setAttribute('title', '插入拼音');
   select.classList.add('pinyin-select');
   select.innerHTML = `<div class="pinyin-select">
       <div class="pinyin-label">

@@ -9,7 +9,7 @@ function isLine(blot) {
 }
 
 class Scroll extends ScrollBlot {
-  constructor(registry, domNode, { emitter = {} } = {}) {
+  constructor(registry, domNode, { emitter }) {
     super(registry, domNode);
     this.emitter = emitter;
     this.batch = false;

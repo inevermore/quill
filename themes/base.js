@@ -123,9 +123,6 @@ class BaseTheme extends Theme {
         if (!name.startsWith('ql-')) return;
         name = name.slice('ql-'.length);
         if (icons[name] == null) return;
-        if (name === 'dotted') {
-          button.value = 'dotted underline';
-        }
         if (name === 'direction') {
           button.innerHTML = icons[name][''] + icons[name].rtl;
         } else if (typeof icons[name] === 'string') {

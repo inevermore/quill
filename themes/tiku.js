@@ -1,12 +1,13 @@
 import extend from 'extend';
 import TkBaseTheme from './tk-base';
-import LatexToImg from '../utils/latex-to-img';
-import ImgToLatex from '../utils/img-to-latex';
+import LatexToImg from '../utils/latex-to-svg';
+import ImgToLatex from '../utils/svg-to-latex';
 import { isContain } from '../utils/dom-utils';
 import Emitter from '../core/emitter';
 import debounce from '../utils/debounce';
 import FillBlankOrder from '../formats/fill-blank-order';
 import QlMathjax from '../formats/mathjax';
+import titles from '../config/titles';
 
 const TOOLBAR_CONFIG = [
   ['undo', 'redo'],
@@ -125,12 +126,22 @@ class TikuTheme extends TkBaseTheme {
     });
   }
 
+  // 设置按钮 title
   buildButtons(buttons) {
     Array.from(buttons).forEach(button => {
       const className = button.getAttribute('class') || '';
       className.split(/\s+/).forEach(name => {
         if (!name.startsWith('ql-')) return;
         name = name.slice('ql-'.length);
+        if (titles[name] == null) return;
+        if (typeof titles[name] === 'string') {
+          button.title = titles[name];
+        } else {
+          const value = button.value || '';
+          if (value != null && titles[name][value]) {
+            button.title = titles[name][value];
+          }
+        }
       });
     });
   }
@@ -200,6 +211,24 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
       },
     },
     table: true,
+    keyboard: {
+      bindings: {
+        openFormula: {
+          key: 'm',
+          ctrlKey: true,
+          handler() {
+            this.quill.showFormulaEditor();
+          },
+        },
+        latex2svg: {
+          key: 'b',
+          ctrlKey: true,
+          handler() {
+            LatexToImg(this.quill, false);
+          },
+        },
+      },
+    },
   },
 });
 

@@ -1,6 +1,6 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
-import ImgToLatex from './utils/img-to-latex';
+import ImgToLatex from './utils/svg-to-latex';
 
 class TkEditor {
   constructor(options) {

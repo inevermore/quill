@@ -1,4 +1,14 @@
-## 0.2.2
+## 0.2.4
+
+* FIX 填空题空格、填空题下划线、括号、公式二次编辑bug
+* UPDATE latex2svg转化逻辑，避免一个latex错误导致全部无法转化的问题
+* FIX latex中包含\$转化错误的bug
+
+## 0.2.31
+
+* try to fix bug
+
+## 0.2.3
 
 * DELETE remove emitter set-content event
 
