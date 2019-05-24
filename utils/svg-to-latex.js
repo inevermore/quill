@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 function imgToLatex(quill) {
   // 点击按钮执行的逻辑
   // 1. 如果有选中的range，只处理range

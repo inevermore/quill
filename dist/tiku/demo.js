@@ -28,7 +28,7 @@ const options = [
   ],
 ];
 const blankList = [];
-const str = '<div class="text-editor-wrapper"><p>1<span class="fill-blank" title="移除填空" data-index="1" id="0" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">1</span>﻿</span><span class="fill-blank" title="移除填空" data-index="2" id="1" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">2</span>﻿</span><span class="fill-blank" title="移除填空" data-index="3" id="2" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">3</span>﻿</span><span class="fill-blank" title="移除填空" data-index="4" id="3" style="font-style: normal;">﻿<span contenteditable="false" class="blank-list-remove">4</span>﻿</span></p></div>'
+const str = '<div class="text-editor-wrapper"><p><span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="1" id="0">﻿<span contenteditable="false" class="blank-list-remove">1</span>﻿</span>jo<span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="2" id="1">﻿<span contenteditable="false" class="blank-list-remove">2</span>﻿</span></p> <p><span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="1" id="0">﻿<span contenteditable="false" class="blank-list-remove">1</span>﻿</span>jo<span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="2" id="1">﻿<span contenteditable="false" class="blank-list-remove">2</span>﻿</span></p></div>'
 
 const editor = new Editor({
   container: '#tikuEditor',
@@ -55,7 +55,7 @@ const editor = new Editor({
     response: ['url'],
   },
 });
-// editor.setContent(str)
+editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {
@@ -85,10 +85,11 @@ const editor1 = new Editor({
 editor1.setContent(str)
 
 function getFormat(format) {
+  console.log(editor.getSelection())
 }
 
 const button = document.createElement('button');
-button.innerText = 'setContent'
+button.innerText = 'setContent';
 button.addEventListener('click', () => {
   editor.setContent(editor.getContent());
 });

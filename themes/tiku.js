@@ -1,7 +1,6 @@
 import extend from 'extend';
 import TkBaseTheme from './tk-base';
-import LatexToImg from '../utils/latex-to-svg';
-import ImgToLatex from '../utils/svg-to-latex';
+import imgToLatex from '../utils/svg-to-latex';
 import { isContain } from '../utils/dom-utils';
 import Emitter from '../core/emitter';
 import debounce from '../utils/debounce';
@@ -176,10 +175,10 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           this.quill.showFormulaEditor();
         },
         svg2latex() {
-          ImgToLatex(this.quill);
+          imgToLatex(this.quill);
         },
         latex2svg() {
-          LatexToImg(this.quill, false);
+          this.quill.latex2svg();
         },
         'fill-blank-underline': function() {
           const savedIndex = this.quill.selection.savedRange.index;
@@ -224,7 +223,7 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           key: 'b',
           ctrlKey: true,
           handler() {
-            LatexToImg(this.quill, false);
+            this.quill.latex2svg();
           },
         },
       },

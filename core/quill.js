@@ -10,6 +10,7 @@ import logger from './logger';
 import Theme from './theme';
 import QlMathjax from '../formats/mathjax';
 import openFormula from '../utils/open-formula';
+import latexToSvg from '../utils/latex-to-svg';
 
 const debug = logger('quill');
 
@@ -503,6 +504,10 @@ class Quill {
 
   showFormulaEditor(latex = '') {
     openFormula(latex, this.insertFormula.bind(this));
+  }
+
+  latex2svg(isFilter = false) {
+    latexToSvg(this, isFilter);
   }
 }
 

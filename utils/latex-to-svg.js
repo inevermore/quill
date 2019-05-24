@@ -2,27 +2,27 @@ import QlMathjax from '../formats/mathjax';
 
 let dirtyList = [];
 
-export default async function latexToSvg(editor, notConvertImg) {
+export default async function latexToSvg(quill, notConvertImg) {
   let converting = false;
   if (converting) {
     alert('正在转换中，请勿连续点击'); // eslint-disable-line no-alert
     return;
   }
   converting = true;
-  const html = editor
+  const html = quill
     .getContent()
     .replace(/\\\$/g, 'MATHCUSTOM')
     .replace(/\n/g, '');
   if (notConvertImg) {
-    editor.setContent(
+    quill.setContent(
       html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),
     );
     converting = false;
   } else {
-    const latexArr = html.match(/\$(.*?)\$/g) || [];
+    const latexArr = (html.match(/\$(.*?)\$/g) || []).map(filter);
     const svgList = await mathjaxRender(latexArr);
     let count = 0;
-    editor.setContent(
+    quill.setContent(
       html
         .replace(/\$(.*?)\$/g, () => {
           let svg = latexArr[count];
@@ -52,7 +52,6 @@ export default async function latexToSvg(editor, notConvertImg) {
 }
 
 export function mathjaxRender(latexArr) {
-  latexArr = latexArr.map(filter);
   return new Promise(resolve => {
     const container = document.createElement('div');
     latexArr.forEach(latex => {
@@ -81,7 +80,6 @@ export function mathjaxRender(latexArr) {
 }
 
 function filter(latex) {
-  console.log('latex', latex)
   const WHITE_LIST = /[0-9a-zA-Z\u4e00-\u9fa5%\\()[\]{}|^_/*+-<>=!.&,'↲:$ ①②③④⑤⑥⑦⑧⑨⑩]+/;
   latex = latex
     .replace(/&nbsp;/g, '')
