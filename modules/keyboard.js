@@ -468,6 +468,10 @@ function handleBackspace(range, context) {
   if (context.offset === 0) {
     const [prev] = this.quill.getLine(range.index - 1);
     if (prev != null) {
+      if (prev.statics.blotName === 'table') {
+        prev.table().remove();
+        return;
+      }
       if (prev.length() > 1 || prev.statics.blotName === 'table') {
         const curFormats = line.formats();
         const prevFormats = this.quill.getFormat(range.index - 1, 1);

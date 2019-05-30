@@ -17,6 +17,10 @@
     .ql-mathjax {
       svg {
         border: 1px dotted #07b4fd;
+        
+        * {
+          pointer-events: none;
+        }
       }
   
       &:focus {
@@ -26,9 +30,7 @@
         background-color: #ACCEF7;
       }
   
-      * {
-        pointer-events: none;
-      }
+
     }
   
     p:after,
@@ -44,11 +46,10 @@
     }
 
     table {
-      width: auto;
-  
       td {
         padding: 5px 10px;
         border: 1px solid #DDD;
+        word-break: break-all;
       }
     }
 

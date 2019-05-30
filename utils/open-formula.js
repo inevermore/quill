@@ -16,6 +16,7 @@ function openFormula(latex = '', fn) {
       2}px`;
     container.style.top = `${(window.innerHeight - container.offsetHeight) /
       2}px`;
+    listenMessage();
   }
 
   showFormula(true);
@@ -47,27 +48,29 @@ function setFormulaValue(latex) {
   );
 }
 
-window.addEventListener(
-  'message',
-  async ({ data }) => {
-    if (data.type === 'sendEquationInfo') {
-      const latex = data.data;
-      if (latex === '$$') return;
-      const svg = await mathjaxRender([latex]);
-      showFormula(false);
-      try {
-        insertFormula({
-          latex: latex.slice(1, -1),
-          svg: svg[0].outerHTML,
-        });
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('insert formula', err);
+function listenMessage() {
+  window.addEventListener(
+    'message',
+    async ({ data }) => {
+      if (data.type === 'sendEquationInfo') {
+        const latex = data.data;
+        if (latex === '$$') return;
+        const svg = await mathjaxRender([latex]);
+        showFormula(false);
+        try {
+          insertFormula({
+            latex: latex.slice(1, -1),
+            svg: svg[0].outerHTML,
+          });
+        } catch (err) {
+          // eslint-disable-next-line no-console
+          console.error('insert formula', err);
+        }
       }
-    }
-  },
-  false,
-);
+    },
+    false,
+  );
+}
 
 function createFormulaContainer() {
   const dialog = document.createElement('div');

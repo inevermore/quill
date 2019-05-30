@@ -46,13 +46,17 @@ class TikuTheme extends TkBaseTheme {
     quill.root.addEventListener('dblclick', e => {
       e.preventDefault();
       e.stopPropagation();
-      const node = isContain(e.target, quill.root, quill.formulaImgClass);
+      let node = isContain(e.target, quill.root, quill.formulaImgClass);
+      if (!node && e.target.tagName.toUpperCase() === 'SVG') {
+        node = e.target.parentNode.parentNode;
+      }
       if (node) {
         quill.editFormula(node);
       }
     });
     this.handleEvents();
     this.addModule('image-resizer');
+    // this.addModule('table-menu');
   }
 
   extendToolbar(toolbar) {
