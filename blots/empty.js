@@ -2,7 +2,7 @@ import { EmbedBlot } from 'parchment';
 
 class ParagraphMark extends EmbedBlot {
   static value() {
-    return '';
+    return undefined;
   }
 
   optimize() {

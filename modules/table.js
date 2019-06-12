@@ -51,7 +51,7 @@ class Table extends Module {
     this.quill.setSelection(offset, Quill.sources.SILENT);
   }
 
-  getTable(range = this.quill.getSelection()) {
+  getTable(range = this.quill.getSelection(true)) {
     if (range == null) return [null, null, null, -1];
     const [cell, offset] = this.quill.getLine(range.index);
     if (cell == null || cell.statics.blotName !== TableCell.blotName) {
@@ -63,7 +63,7 @@ class Table extends Module {
   }
 
   insertColumn(offset) {
-    const range = this.quill.getSelection();
+    const range = this.quill.getSelection(true);
     const [table, row, cell] = this.getTable(range);
     if (cell == null) return;
     const column = cell.cellOffset();
@@ -89,7 +89,7 @@ class Table extends Module {
   }
 
   insertRow(offset) {
-    const range = this.quill.getSelection();
+    const range = this.quill.getSelection(true);
     const [table, row, cell] = this.getTable(range);
     if (cell == null) return;
     const index = row.rowOffset();
@@ -116,7 +116,7 @@ class Table extends Module {
 
   insertTable(rows, columns) {
     const rangeIndex =
-      (this.quill.getSelection() && this.quill.getSelection().index) ||
+      (this.quill.getSelection(true) && this.quill.getSelection(true).index) ||
       this.quill.selection.savedRange.index;
     if (rangeIndex == null) return;
     const delta = new Array(rows).fill(0).reduce(memo => {

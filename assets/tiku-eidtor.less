@@ -29,8 +29,6 @@
       &.selected svg {
         background-color: #ACCEF7;
       }
-  
-
     }
   
     p:after,
@@ -46,10 +44,22 @@
     }
 
     table {
+      margin-bottom: 10px;
+
       td {
         padding: 5px 10px;
         border: 1px solid #DDD;
         word-break: break-all;
+        position: relative;
+
+        &.tkspec-table-diagonal-normal {
+          background: linear-gradient(to top right,
+          rgba(0,0,0,0) 0%,
+          rgba(0,0,0,0) calc(50% - 0.8px),
+          #ddd 50%,
+          rgba(0,0,0,0) calc(50% + 0.8px),
+          rgba(0,0,0,0) 100%);
+        }
       }
     }
 
@@ -79,8 +89,74 @@
         }
       }
     }
+  }
 
+  .table-menu-wrapper {
+    display: none;
+    position: absolute;
+    width: 120px;
+    padding: 3px;
+    border-radius: 6px;
+    box-shadow: 0 3px 4px rgba(0,0,0,.2);
+    border: 1px solid rgba(0,0,0,.2);
+    background: #fff;
 
+    .table-menu-item {
+      height: 20px;
+      padding: 1px;
+      display: flex;
+      cursor: default;
+
+      .table-menu-icon-box {
+        display: inline-block;
+        height: 20px;
+        width: 20px;
+        background-size: 100% 100%;
+      }
+
+      .table-menu-item-title {
+        font-size: 12px;
+        line-height: 20px;
+        padding-left: 10px;
+      }
+
+      &:hover {
+        padding: 0!important;
+        background-color: #fff5d4;
+        border: 1px solid #dcac6c;
+      }
+
+      &.table-menu-delete-table i {
+        background-image: url(./tiku-icons/table-delete.png);
+      }
+      &.table-menu-delete-row i {
+        background-image: url(./tiku-icons/table-delete-row.png);
+      }
+      &.table-menu-delete-col i {
+        background-image: url(./tiku-icons/table-delete-col.png);
+      }
+      &.table-menu-insert-col-left i {
+        background-image: url(./tiku-icons/table-insert-col-left.png);
+      }
+      &.table-menu-insert-col-right i {
+        background-image: url(./tiku-icons/table-insert-col-right.png);
+      }
+      &.table-menu-insert-row-above i {
+        background-image: url(./tiku-icons/table-insert-row-above.png);
+      }
+      &.table-menu-insert-row-below i {
+        background-image: url(./tiku-icons/table-insert-row-below.png);
+      }
+      &.table-menu-align-left i {
+        background-image: url(./tiku-icons/align-left.png);
+      }
+      &.table-menu-align-center i {
+        background-image: url(./tiku-icons/align-center.png);
+      }
+      &.table-menu-align-right i {
+        background-image: url(./tiku-icons/align-right.png);
+      }
+    }
   }
 }
 
@@ -99,6 +175,7 @@
     width: 32px;
     height: 22px;
     padding: 0;
+    outline: none;
     cursor: initial;
     user-select: auto !important;
 
@@ -211,6 +288,10 @@
       background-size: 100%;
       background-image: url(../assets/tiku-icons/latex2svg.png) !important;
     }
+    &.ql-table-insert .button-icon {
+      background-size: 100%;
+      background-image: url(../assets/tiku-icons/table-insert.png) !important;
+    }
   }
 
   .seperate-line {
@@ -224,8 +305,9 @@
   }
 
   .pinyin-select {
-    display: flex;
+    display: inline-flex;
     position: relative;
+    float: left;
     .pinyin-label {
       display: inline-flex;
       height: 22px;
@@ -292,6 +374,54 @@
         &:hover {
           background-color: #fff5d4;
           border: 1px solid #dcac6c;
+        }
+      }
+    }
+  }
+
+  .table-insert {
+    position: relative;
+    float: left;
+
+    .button-icon {
+      background-size: 100%;
+      background-image: url(../assets/tiku-icons/table-insert.png) !important;
+    }
+
+    .select-area {
+      display: none;
+      width: 232px;
+      position: absolute;
+      top: 30px;
+      left: 16px;
+      transform: translateX(-50%);
+      padding: 10px 16px;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 4px 8px rgba(82, 88, 102, .2);
+      z-index: 1;
+      cursor: auto;
+
+      .table-title {
+        font-size: 12px;
+        color: #95a1ad;
+        line-height: 1;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .tr {
+        .td {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          background: #edeff0;
+          border-right: 4px solid #fff;
+          border-bottom: 4px solid #fff;
+
+          &.active {
+            background: #35cc67;
+          }
         }
       }
     }

@@ -1,14 +1,17 @@
+/* eslint-disable no-alert */
 import QlMathjax from '../formats/mathjax';
 
-let dirtyList = [];
+const SYMBOL_LATEX_MAP = {
+  '°': '^\\circ ',
+  '∵': '\\because ',
+  '∴': '\\therefore ',
+  '△': '\\triangle ',
+  '÷': '\\div ',
+  '⊥': '\\bot ',
+  '∠': '\\angle ',
+};
 
 export default async function latexToSvg(quill, notConvertImg) {
-  let converting = false;
-  if (converting) {
-    alert('正在转换中，请勿连续点击'); // eslint-disable-line no-alert
-    return;
-  }
-  converting = true;
   const html = quill
     .getContent()
     .replace(/\\\$/g, 'MATHCUSTOM')
@@ -17,10 +20,10 @@ export default async function latexToSvg(quill, notConvertImg) {
     quill.setContent(
       html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),
     );
-    converting = false;
   } else {
     const latexArr = (html.match(/\$(.*?)\$/g) || []).map(filter);
     const svgList = await mathjaxRender(latexArr);
+    const errSvg = [];
     let count = 0;
     quill.setContent(
       html
@@ -32,23 +35,18 @@ export default async function latexToSvg(quill, notConvertImg) {
               innerHTML: svgList[count].outerHTML,
             });
             svg = math.outerHTML;
+          } else {
+            errSvg.push(svg);
           }
           count += 1;
           return svg;
         })
         .replace(/MATHCUSTOM/g, '\\$'),
     );
-    converting = false;
+    if (errSvg.length) {
+      alert(`不识别的LaTex码，请检查以下LaTex是否正确：${errSvg.join('、')}`);
+    }
   }
-  if (dirtyList.length) {
-    // eslint-disable-next-line no-alert
-    alert(
-      `数学公式中存在非法字符: ${dirtyList
-        .map(v => `'${v}'`)
-        .join(', ')} 请重新以latex录入`,
-    );
-  }
-  dirtyList = [];
 }
 
 export function mathjaxRender(latexArr) {
@@ -94,8 +92,7 @@ function filter(latex) {
       ) {
         return v;
       }
-      dirtyList.push(v);
-      return '';
+      return SYMBOL_LATEX_MAP[v] ? SYMBOL_LATEX_MAP[v] : `\\color{red}{${v}}`;
     })
     .join('');
 }

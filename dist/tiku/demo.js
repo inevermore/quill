@@ -1,9 +1,9 @@
 import Editor from '../../index';
-import latexToSvg from '../../utils/latex-to-svg';
 
 const options = [
   ['undo', 'redo'],
   [
+    { bold: 'normal' },
     { italic: 'normal' },
     { strike: 'normal' },
     { align: 'center' },
@@ -25,11 +25,13 @@ const options = [
     'formula-editor',
     'latex2svg',
     'svg2latex',
-    'pinyin'
+    'pinyin',
+    'table-insert',
   ],
 ];
 const blankList = [];
-const str = '<div class="text-editor-wrapper"><p><span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="1" id="0">﻿<span contenteditable="false" class="blank-list-remove">1</span>﻿</span>jo<span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="2" id="1">﻿<span contenteditable="false" class="blank-list-remove">2</span>﻿</span></p> <p><span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="1" id="0">﻿<span contenteditable="false" class="blank-list-remove">1</span>﻿</span>jo<span class="fill-blank" title="移除填空" style="font-style: normal;" data-index="2" id="1">﻿<span contenteditable="false" class="blank-list-remove">2</span>﻿</span></p></div>'
+const str = '<div class="text-editor-wrapper"><p>如图所示，用量角器度量$\\angle 1$，可以读出$\\angle 1$的度数为<span class="yikespec-bracket" contenteditable="false" onselectstart="return false">（&nbsp;&nbsp;&nbsp;）</span>．</p><p>&nbsp;</p><p><img src="https://img.zuoyebang.cc/zyb_db8fd03e2124d922e09cb673863e78d9.jpg" title="https://img.zuoyebang.cc/zyb_db8fd03e2124d922e09cb673863e78d9.jpg.jpg"></p></div>'
+// const str = '<div class="text-editor-wrapper"><p>  1234   </p><table align="center"><tbody><tr><td data-row="row-cib7" class="tkspec-table-diagonal-normal"><span class="paragraph-mark"></span></td><td data-row="row-cib7"><span class="paragraph-mark"></span></td><td data-row="row-cib7"><span class="paragraph-mark"></span></td><td data-row="row-cib7"><span class="paragraph-mark"></span></td><td data-row="row-cib7"><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-41oi"><span class="paragraph-mark"></span></td><td data-row="row-41oi"><span class="paragraph-mark"></span></td><td data-row="row-41oi"><span class="paragraph-mark"></span></td><td data-row="row-41oi"><span class="paragraph-mark"></span></td><td data-row="row-41oi"><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-0nql"><span class="paragraph-mark"></span></td><td data-row="row-0nql"><span class="paragraph-mark"></span></td><td data-row="row-0nql"><span class="paragraph-mark"></span></td><td data-row="row-0nql"><span class="paragraph-mark"></span></td><td data-row="row-0nql"><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-jjgf"><span class="paragraph-mark"></span></td><td data-row="row-jjgf"><span class="paragraph-mark"></span></td><td data-row="row-jjgf"><span class="paragraph-mark"></span></td><td data-row="row-jjgf"><span class="paragraph-mark"></span></td><td data-row="row-jjgf"><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-d7sy"><span class="paragraph-mark"></span></td><td data-row="row-d7sy"><span class="paragraph-mark"></span></td><td data-row="row-d7sy"><span class="paragraph-mark"></span></td><td data-row="row-d7sy"><span class="paragraph-mark"></span></td><td data-row="row-d7sy"><span class="paragraph-mark"></span></td></tr></tbody></table>1234</div>'
 
 const editor = new Editor({
   container: '#tikuEditor',
@@ -56,6 +58,7 @@ const editor = new Editor({
     response: ['url'],
   },
 });
+editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {
@@ -87,68 +90,19 @@ function getFormat(format) {
   console.log(console.log(format));
 }
 
-const table = editor.quill.getModule('table');
 const button = document.createElement('button');
-button.innerText = 'insert table';
+button.innerText = 'setContent';
 button.addEventListener('click', () => {
-  table.insertTable(5,5)
+  editor.setContent(editor.getContent());
 });
 document.body.appendChild(button);
 
+const table1 = editor.quill.getModule('table');
+const button1 = document.createElement('button');
+button1.innerText = 'insert table diagonal';
+button1.addEventListener('click', () => {
+  editor.format('table-diagonal', 'normal')
+});
+document.body.appendChild(button1);
+
 window.editor = editor;
-
-function getPer(str) {
-  if (str === '') {
-    return;
-  }
-  const arr = str.split('');
-  permution(arr, 0)
-}
-let count = 0;
-function permution(arr, begin) {
-  if (begin === arr.length) {
-    // console.log(arr);
-  } else {
-    for (let i = begin; i < arr.length; i++) {
-      console.log(++count);
-      [arr[i], arr[begin]] = [arr[begin], arr[i]];
-      permution(arr, begin+1);
-      [arr[begin], arr[i]] = [arr[i], arr[begin]];
-    }
-  }
-}
-getPer('abc');
-
-function loop(arr, start) {
-  const walked = new Array(arr.length * arr[0].length).fill(false);
-  walk(arr, walked, start);
-}
-function walk(arr, walked, pos) {
-  const [x, y] = pos;
-  const m = arr[0].length;
-  const n = arr.length;
-  if (walked[y*m + x]) {
-    return;
-  }
-  console.log(arr[y][x]); 
- 
-  walked[y * m + x] = true;
-  if (y > 0) {
-    walk(arr, walked, [x, y-1]);
-  }
-  if (x < m - 1) {
-    walk(arr, walked, [x+1, y]);
-  }
-  if (y < n - 1) {
-    walk(arr, walked, [x, y + 1])
-  }
-  if (x > 0) {
-    walk(arr, walked, [x - 1, y])
-  }
-}
-// loop([
-//   [1, 2,  3,  4],
-//   [5, 6,  7,  8],
-//   [9, 10, 11, 12],
-//   ['a', 'b', 'c', 'd']
-// ], [1,1])

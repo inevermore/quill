@@ -19,6 +19,7 @@ import Image from './formats/image';
 import Table from './modules/table';
 import Toolbar from './modules/toolbar';
 import ImageResizer from './modules/image-resizer';
+import TableMenu from './modules/table-menu';
 
 import Icons from './ui/icons';
 import Picker from './ui/picker';
@@ -34,6 +35,7 @@ import { FontStyle } from './formats/font';
 import { SizeStyle } from './formats/size';
 import LineHeightStyle from './formats/line-height';
 import ParagraphBottomSpaceClass from './formats/paragraph-bottom-space';
+import TableDiagonal from './formats/table-diagonal';
 // import TextLineBreak from './formats/text-line-break';
 
 Quill.register(
@@ -45,6 +47,7 @@ Quill.register(
     'attributors/class/dotted': DottedClass,
     'attributors/class/italic': ItalicClass,
     'attributors/class/strike': Strike,
+    'attributors/class/table-diagonal': TableDiagonal,
 
     'attributors/style/font': FontStyle,
     'attributors/style/size': SizeStyle,
@@ -58,11 +61,13 @@ Quill.register(
 Quill.register(
   {
     'formats/image': Image,
+    'formats/table-diagonal': TableDiagonal,
     // 'formats/text-line-break': TextLineBreak,
 
     'modules/table': Table,
     'modules/toolbar': Toolbar,
     'modules/image-resizer': ImageResizer,
+    'modules/table-menu': TableMenu,
 
     'themes/snow': SnowTheme,
     'themes/tiku': TikuTheme,

@@ -458,10 +458,16 @@ class Quill {
   }
 
   setContent(content) {
+    // this.setContents([]);
     const div = document.createElement('div');
     div.innerHTML = content;
     const html =
       (div.firstElementChild && div.firstElementChild.innerHTML) || '';
+    // const contents = this.clipboard.convert({
+    //   html: `${html}<p></p>`,
+    //   text: '',
+    // });
+    // this.setContents(contents);
     // this.clipboard.onPaste({ index: 0, length: 0 }, { html });
     this.root.innerHTML = html;
   }
