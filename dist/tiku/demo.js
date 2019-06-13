@@ -58,7 +58,7 @@ const editor = new Editor({
     response: ['url'],
   },
 });
-editor.setContent(str)
+// editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {

@@ -47,6 +47,7 @@ class History extends Module {
     this.ignoreChange = false;
     const index = getLastChangeIndex(this.quill.scroll, delta[source]);
     this.quill.setSelection(index);
+    this.updateIcon();
   }
 
   updateIcon() {
@@ -65,8 +66,8 @@ class History extends Module {
   clear() {
     this.stack = { undo: [], redo: [] };
     this.updateIcon();
-    observeArray(this.stack.redo, this.updateIcon.bind(this));
-    observeArray(this.stack.undo, this.updateIcon.bind(this));
+    // observeArray(this.stack.redo, this.updateIcon.bind(this));
+    // observeArray(this.stack.undo, this.updateIcon.bind(this));
   }
 
   cutoff() {
@@ -76,7 +77,7 @@ class History extends Module {
   record(changeDelta, oldDelta) {
     if (changeDelta.ops.length === 0) return;
     this.stack.redo = [];
-    observeArray(this.stack.redo, this.updateIcon.bind(this));
+    // observeArray(this.stack.redo, this.updateIcon.bind(this));
     let undoDelta = guessUndoDelta(changeDelta);
     if (undoDelta == null) {
       undoDelta = this.quill.getContents().diff(oldDelta);
@@ -99,6 +100,7 @@ class History extends Module {
     if (this.stack.undo.length > this.options.maxStack) {
       this.stack.undo.shift();
     }
+    this.updateIcon();
   }
 
   redo() {
@@ -168,29 +170,29 @@ function guessUndoDelta(delta) {
   return failed ? null : undoDelta;
 }
 
-function def(obj, key, val) {
-  Object.defineProperty(obj, key, {
-    value: val,
-    enumerable: false,
-    writable: true,
-    configurable: true,
-  });
-}
+// function def(obj, key, val) {
+//   Object.defineProperty(obj, key, {
+//     value: val,
+//     enumerable: false,
+//     writable: true,
+//     configurable: true,
+//   });
+// }
 
-function observeArray(arr, event) {
-  const methods = ['push', 'pop', 'shift', 'unshift'];
-  const arrayProto = Array.prototype;
-  const arrayMethods = Object.create(arrayProto);
-  methods.forEach(method => {
-    // cache original method
-    const original = arrayProto[method];
-    def(arrayMethods, method, (...args) => {
-      const result = original.apply(arr, args);
-      event();
-      return result;
-    });
-    arr.__proto__ = arrayMethods; // eslint-disable-line no-proto
-  });
-}
+// function observeArray(arr, event) {
+//   const methods = ['push', 'pop', 'shift', 'unshift'];
+//   const arrayProto = Array.prototype;
+//   const arrayMethods = Object.create(arrayProto);
+//   methods.forEach(method => {
+//     // cache original method
+//     const original = arrayProto[method];
+//     def(arrayMethods, method, (...args) => {
+//       const result = original.apply(arr, args);
+//       event();
+//       return result;
+//     });
+//     arr.__proto__ = arrayMethods; // eslint-disable-line no-proto
+//   });
+// }
 
 export { History as default, getLastChangeIndex };

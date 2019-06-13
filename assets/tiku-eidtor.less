@@ -90,6 +90,7 @@
     box-shadow: 0 3px 4px rgba(0,0,0,.2);
     border: 1px solid rgba(0,0,0,.2);
     background: #fff;
+    z-index: 200;
 
     .table-menu-item {
       height: 20px;
@@ -179,9 +180,12 @@
       border-color: grey;
     }
 
-    &.tk-disable-history .button-icon {
-      opacity: .3;
-    }
+    &.tk-disable-history {
+      pointer-events: none;
+      .button-icon {
+        opacity: .3;
+      }
+    } 
 
     .button-icon {
       display: inline-block;

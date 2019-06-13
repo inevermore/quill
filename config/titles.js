@@ -28,4 +28,5 @@ export default {
   'fill-blank-brackets': '标准括号',
   'text-indent': '首行缩进',
   'fill-blank-order': '插入空格',
+  bold: '加粗',
 };

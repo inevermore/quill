@@ -26,6 +26,7 @@ class TableInsert {
     this.quill = quill;
     const container = document.createElement('div');
     container.classList.add('table-insert');
+    container.setAttribute('title', '插入表格');
     container.appendChild(this.createButton());
     container.appendChild(this.createSelectArea());
     document.addEventListener('click', ({ target }) => {

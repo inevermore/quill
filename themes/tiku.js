@@ -170,7 +170,9 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           this.quill.history.undo();
         },
         clear() {
-          this.quill.setContents([]);
+          if (window.confirm('确定清空当前文档么？')) {
+            this.quill.setContents([]);
+          }
         },
         'select-all': function() {
           this.quill.setSelection(0, this.quill.getLength());
