@@ -4,7 +4,7 @@ import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
 import buildPinyin from '../ui/build-pinyin';
-import tableInsert from '../ui/build-table-insert';
+import TableInsert from '../ui/build-table-insert';
 
 const debug = logger('quill:toolbar');
 
@@ -182,7 +182,8 @@ function addControls(container, groups, quill) {
     group.classList.add('ql-formats');
     controls.forEach(control => {
       if (control === 'table-insert') {
-        group.appendChild(tableInsert.buildTableInsert(quill));
+        const tableInsert = new TableInsert().buildTableInsert(quill);
+        group.appendChild(tableInsert);
       } else if (control === 'pinyin') {
         group.appendChild(buildPinyin(quill));
       } else if (typeof control === 'string') {

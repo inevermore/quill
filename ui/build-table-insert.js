@@ -114,4 +114,4 @@ class TableInsert {
   }
 }
 
-export default new TableInsert();
+export default TableInsert;

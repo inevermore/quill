@@ -300,18 +300,18 @@ function isLine(node) {
   ].includes(node.tagName.toLowerCase());
 }
 
-const preNodes = new WeakMap();
-function isPre(node) {
-  if (node == null) return false;
-  if (!preNodes.has(node)) {
-    if (node.tagName === 'PRE') {
-      preNodes.set(node, true);
-    } else {
-      preNodes.set(node, isPre(node.parentNode));
-    }
-  }
-  return preNodes.get(node);
-}
+// const preNodes = new WeakMap();
+// function isPre(node) {
+//   if (node == null) return false;
+//   if (!preNodes.has(node)) {
+//     if (node.tagName === 'PRE') {
+//       preNodes.set(node, true);
+//     } else {
+//       preNodes.set(node, isPre(node.parentNode));
+//     }
+//   }
+//   return preNodes.get(node);
+// }
 
 function traverse(scroll, node, elementMatchers, textMatchers, nodeMatches) {
   // Post-order
@@ -545,7 +545,7 @@ function matchTable(node, delta) {
 }
 
 function matchText(node, delta) {
-  let text = node.data;
+  const text = node.data;
   // Word represents empty line with <o:p>&nbsp;</o:p>
   if (node.parentNode.tagName === 'O:P') {
     return delta.insert(text.trim());
@@ -553,26 +553,26 @@ function matchText(node, delta) {
   if (text.trim().length === 0 && text.includes('\n')) {
     return delta;
   }
-  if (!isPre(node)) {
-    const replacer = (collapse, match) => {
-      const replaced = match.replace(/[^\u00a0]/g, ''); // \u00a0 is nbsp;
-      return replaced.length < 1 && collapse ? ' ' : replaced;
-    };
-    text = text.replace(/\r\n/g, ' ').replace(/\n/g, '');
-    text = text.replace(/\s\s+/g, replacer.bind(replacer, true)); // collapse whitespace
-    if (
-      (node.previousSibling == null && isLine(node.parentNode)) ||
-      (node.previousSibling != null && isLine(node.previousSibling))
-    ) {
-      text = text.replace(/^\s+/, replacer.bind(replacer, false));
-    }
-    if (
-      (node.nextSibling == null && isLine(node.parentNode)) ||
-      (node.nextSibling != null && isLine(node.nextSibling))
-    ) {
-      text = text.replace(/\s+$/, replacer.bind(replacer, false));
-    }
-  }
+  // if (!isPre(node)) {
+  //   const replacer = (collapse, match) => {
+  //     const replaced = match.replace(/[^\u00a0]/g, ''); // \u00a0 is nbsp;
+  //     return replaced.length < 1 && collapse ? ' ' : replaced;
+  //   };
+  //   text = text.replace(/\r\n/g, ' ').replace(/\n/g, '');
+  //   text = text.replace(/\s\s+/g, replacer.bind(replacer, true)); // collapse whitespace
+  //   if (
+  //     (node.previousSibling == null && isLine(node.parentNode)) ||
+  //     (node.previousSibling != null && isLine(node.previousSibling))
+  //   ) {
+  //     text = text.replace(/^\s+/, replacer.bind(replacer, false));
+  //   }
+  //   if (
+  //     (node.nextSibling == null && isLine(node.parentNode)) ||
+  //     (node.nextSibling != null && isLine(node.nextSibling))
+  //   ) {
+  //     text = text.replace(/\s+$/, replacer.bind(replacer, false));
+  //   }
+  // }
   return delta.insert(text);
 }
 

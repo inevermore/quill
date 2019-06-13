@@ -1,6 +1,6 @@
 {
   "name": "text-editor",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
@@ -36,7 +36,6 @@
     "extend": "^3.0.2",
     "parchment": "2.0.0-dev.0",
     "quill-delta": "4.1.0",
-    "quill-table": "^1.0.0",
     "url-loader": "^1.1.2"
   },
   "devDependencies": {
