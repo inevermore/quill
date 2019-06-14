@@ -178,8 +178,9 @@ function addControls(container, groups, quill) {
     groups = [groups];
   }
   groups.forEach((controls, index) => {
-    const group = document.createElement('span');
-    group.classList.add('ql-formats');
+    const group = container;
+    // const group = document.createElement('span');
+    // group.classList.add('ql-formats');
     controls.forEach(control => {
       if (control === 'table-insert') {
         const tableInsert = new TableInsert().buildTableInsert(quill);
@@ -198,7 +199,7 @@ function addControls(container, groups, quill) {
         }
       }
     });
-    container.appendChild(group);
+    // container.appendChild(group);
     const line = document.createElement('i');
     line.classList.add('seperate-line');
     if (index !== groups.length - 1) {

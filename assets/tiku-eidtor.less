@@ -152,6 +152,8 @@
 }
 
 .ql-toolbar.ql-tiku {
+  display: flex;
+  flex-wrap: wrap;
   position: sticky;
   top: 0;
   padding: 5px;
@@ -163,7 +165,7 @@
 
   button {
     display: inline-block;
-    width: 32px;
+    flex: 0 0 32px;
     height: 22px;
     padding: 0;
     outline: none;
@@ -289,8 +291,6 @@
   }
 
   .seperate-line {
-    display: inline-block;
-    vertical-align: middle;
     width: 1px;
     height: 20px;
     margin: 2px 4px 2px 3px;
@@ -299,9 +299,9 @@
   }
 
   .pinyin-select {
-    display: inline-flex;
     position: relative;
-    float: left;
+    background: white;
+
     .pinyin-label {
       display: inline-flex;
       height: 22px;
@@ -375,7 +375,10 @@
 
   .table-insert {
     position: relative;
-    float: left;
+
+    button {
+      width: 32px;
+    }
 
     .button-icon {
       background-size: 100%;

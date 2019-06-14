@@ -62,7 +62,7 @@ class TableMenu extends Module {
         title: '表格右浮动',
         handler: table => {
           const [tableContainer] = table.getTable();
-          tableContainer.domNode.setAttribute('align', 'right');
+          tableContainer.domNode.setAttribute('tkalign', 'right');
         },
       },
       {

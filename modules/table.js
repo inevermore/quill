@@ -119,12 +119,29 @@ class Table extends Module {
       (this.quill.getSelection(true) && this.quill.getSelection(true).index) ||
       this.quill.selection.savedRange.index;
     if (rangeIndex == null) return;
+    const [line, offset] = this.quill.getLine(rangeIndex);
+    const initDelta = new Delta();
+    // 非行首
+    if (offset !== 0) {
+      // 行尾
+      if (offset === line.length() - 1) {
+        initDelta.retain(rangeIndex + 1);
+      } else {
+        initDelta.retain(rangeIndex).insert('\n');
+      }
+    }
     const delta = new Array(rows).fill(0).reduce(memo => {
       const text = new Array(columns).fill('\n').join('');
       return memo.insert(text, { table: tableId() });
-    }, new Delta().retain(rangeIndex));
+    }, initDelta);
+    if (offset !== 0 && offset === line.length() - 1) {
+      delta.insert('\n');
+    }
     this.quill.updateContents(delta, Quill.sources.USER);
-    this.quill.setSelection(rangeIndex, Quill.sources.SILENT);
+    this.quill.setSelection(
+      offset === 0 ? rangeIndex : rangeIndex + 1,
+      Quill.sources.SILENT,
+    );
     this.balanceTables();
   }
 
