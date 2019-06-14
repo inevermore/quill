@@ -2,7 +2,6 @@ import extend from 'extend';
 import Delta from 'quill-delta';
 import BaseTheme from './base';
 import icons from '../ui/icons';
-import Quill from '../core/quill';
 
 const LINE_SEPARATOR = '\u2028';
 
@@ -69,11 +68,11 @@ TikuBaseTheme.DEFAULTS = extend(true, {}, BaseTheme.DEFAULTS, {
               .retain(range.index)
               .delete(range.length)
               .insert(LINE_SEPARATOR);
-            this.quill.updateContents(delta, Quill.sources.USER);
+            this.quill.updateContents(delta, 'user');
             this.quill.history.cutoff();
 
             // Position cursor after inserted linebreak
-            this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+            this.quill.setSelection(range.index + 1, 'silent');
           },
         },
       },
