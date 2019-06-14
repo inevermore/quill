@@ -26,7 +26,7 @@ const debug = logger('quill:clipboard');
 const CLIPBOARD_CONFIG = [
   [Node.TEXT_NODE, matchText],
   [Node.TEXT_NODE, matchNewline],
-  // [Node.TEXT_NODE, matchTextLineBreak],
+  [Node.TEXT_NODE, matchTextLineBreak],
   // ['br', matchBreak],
   ['br', matchBreakText],
   [Node.ELEMENT_NODE, matchNewline],
@@ -576,9 +576,9 @@ function matchText(node, delta) {
   return delta.insert(text);
 }
 
-// function matchTextLineBreak(node) {
-//   return new Delta().insert(toDeltaText(node.data));
-// }
+function matchTextLineBreak(node) {
+  return new Delta().insert(toDeltaText(node.data));
+}
 
 function matchUnderline(node, delta) {
   let value = 'normal';
@@ -599,6 +599,21 @@ function getStyle(node, key) {
     return (style && style.split(':')[1]) || '';
   }
   return '';
+}
+
+/**
+ * @param {string} domText
+ * @return {string} the Delta-text equivalent of domText
+ */
+function toDeltaText(domText) {
+  return (
+    domText
+      // Text node content that ends in \n\n is rendered as two blank lines.
+      // Convert to one line separator, only. Assume the second blank line
+      // will be handled by the \n that marks the end of all paragraphs in Quill.
+      .replace(/\n\n$/, LINE_SEPARATOR)
+      .replace(/\n/g, LINE_SEPARATOR)
+  );
 }
 
 export {

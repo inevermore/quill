@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import extend from 'extend';
 import TkBaseTheme from './tk-base';
 import imgToLatex from '../utils/svg-to-latex';

@@ -129,6 +129,8 @@ class Table extends Module {
       } else {
         initDelta.retain(rangeIndex).insert('\n');
       }
+    } else {
+      initDelta.retain(rangeIndex);
     }
     const delta = new Array(rows).fill(0).reduce(memo => {
       const text = new Array(columns).fill('\n').join('');
