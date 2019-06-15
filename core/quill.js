@@ -11,6 +11,7 @@ import Theme from './theme';
 import QlMathjax from '../formats/mathjax';
 import openFormula from '../utils/open-formula';
 import latexToSvg from '../utils/latex-to-svg';
+import { getSvgLatex } from '../utils/svg-to-latex';
 import TikuTheme from '../themes/tiku';
 
 const debug = logger('quill');
@@ -475,8 +476,14 @@ class Quill {
     }
   }
 
-  getContent() {
+  getContent(latexMode) {
     const copy = this.root.cloneNode(true);
+    if (latexMode) {
+      const imgs = copy.querySelectorAll(`.${this.formulaImgClass}`);
+      Array.from(imgs).forEach(img => {
+        img.outerHTML = `$${getSvgLatex(img)}$`;
+      });
+    }
     copy.querySelectorAll('.ql-cursor').forEach(el => {
       el.parentNode.removeChild(el);
     });

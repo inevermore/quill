@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 import extend from 'extend';
 import TkBaseTheme from './tk-base';
-import imgToLatex from '../utils/svg-to-latex';
+import svgToLatex from '../utils/svg-to-latex';
 import { isContain } from '../utils/dom-utils';
 import Emitter from '../core/emitter';
 import debounce from '../utils/debounce';
@@ -182,7 +182,7 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           this.quill.showFormulaEditor();
         },
         svg2latex() {
-          imgToLatex(this.quill);
+          svgToLatex(this.quill);
         },
         latex2svg() {
           this.quill.latex2svg();
@@ -227,10 +227,17 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           },
         },
         latex2svg: {
-          key: 'b',
-          ctrlKey: true,
+          key: 's',
+          altKey: true,
           handler() {
             this.quill.latex2svg();
+          },
+        },
+        svg2latex: {
+          key: 'x',
+          altKey: true,
+          handler() {
+            svgToLatex(this.quill);
           },
         },
       },

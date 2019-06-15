@@ -1,6 +1,5 @@
 import extend from 'extend';
 import Quill, { register } from './quill';
-import imgToLatex from './utils/svg-to-latex';
 
 class TkEditor {
   constructor(options) {
@@ -83,10 +82,7 @@ class TkEditor {
   }
 
   getContent(latexMode = false) {
-    if (latexMode) {
-      imgToLatex(this.quill);
-    }
-    return this.quill.getContent();
+    return this.quill.getContent(latexMode);
   }
 
   getData() {

@@ -12,10 +12,7 @@ const SYMBOL_LATEX_MAP = {
 };
 
 export default async function latexToSvg(quill, notConvertImg) {
-  const html = quill
-    .getContent()
-    .replace(/\\\$/g, 'MATHCUSTOM')
-    .replace(/\n/g, '');
+  const html = quill.getContent().replace(/\\\$/g, 'MATHCUSTOM');
   if (notConvertImg) {
     quill.setContent(
       html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),

@@ -22,7 +22,10 @@ class Keyboard extends Module {
     ) {
       return false;
     }
-    return binding.key === evt.key || binding.key === evt.which;
+    return (
+      binding.key === String.fromCharCode(evt.keyCode).toLowerCase() ||
+      binding.key === evt.which
+    );
   }
 
   constructor(quill, options) {
@@ -112,9 +115,12 @@ class Keyboard extends Module {
   listen() {
     this.quill.root.addEventListener('keydown', evt => {
       if (evt.defaultPrevented || evt.isComposing) return;
-
-      const bindings = this.bindings[evt.key] || [];
+      const bindings =
+        this.bindings[String.fromCharCode(evt.keyCode).toLowerCase()] || [];
+      console.log(this.bindings)
+      console.log(bindings);
       const matches = bindings.filter(binding => Keyboard.match(evt, binding));
+      console.log(matches);
       if (matches.length === 0) return;
       const range = this.quill.getSelection();
       if (range == null || !this.quill.hasFocus()) return;
