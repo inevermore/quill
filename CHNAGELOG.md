@@ -1,3 +1,8 @@
+## 0.3.6
+
+* ADD 快捷键：svg2latex（alt + x）、latex2svg（alt + s）
+* UPDATE latex/svg互转代码
+
 ## 0.3.5
 
 * FIX 撤回/重做在vue中的bug

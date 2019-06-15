@@ -117,10 +117,7 @@ class Keyboard extends Module {
       if (evt.defaultPrevented || evt.isComposing) return;
       const bindings =
         this.bindings[String.fromCharCode(evt.keyCode).toLowerCase()] || [];
-      console.log(this.bindings)
-      console.log(bindings);
       const matches = bindings.filter(binding => Keyboard.match(evt, binding));
-      console.log(matches);
       if (matches.length === 0) return;
       const range = this.quill.getSelection();
       if (range == null || !this.quill.hasFocus()) return;
