@@ -13,8 +13,8 @@ export default {
     normal: '字体下划线',
     wavy: '下划线-曲线',
   },
-  svg2latex: 'SVG 转为 LaTex',
-  latex2svg: 'LaTex 转为 SVG(ctrl+b)',
+  svg2latex: 'SVG 转为 LaTex(alt+x)',
+  latex2svg: 'LaTex 转为 SVG(alt+s)',
   'fill-blank-underline': '标准下划线',
   pinyin: '插入拼音',
   align: {

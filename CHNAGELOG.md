@@ -1,3 +1,7 @@
+## 0.3.61
+
+* UPDATE latex2svg、svg2latex快捷键提示
+
 ## 0.3.6
 
 * ADD 快捷键：svg2latex（alt + x）、latex2svg（alt + s）
