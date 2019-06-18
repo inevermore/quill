@@ -1,3 +1,7 @@
+## 0.3.62
+
+* bugfix 回车、删除按键行为不符合预期
+
 ## 0.3.61
 
 * UPDATE latex2svg、svg2latex快捷键提示
