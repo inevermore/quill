@@ -23,6 +23,7 @@ class Keyboard extends Module {
       return false;
     }
     return (
+      binding.key === evt.key ||
       binding.key === String.fromCharCode(evt.keyCode).toLowerCase() ||
       binding.key === evt.which
     );
@@ -116,7 +117,9 @@ class Keyboard extends Module {
     this.quill.root.addEventListener('keydown', evt => {
       if (evt.defaultPrevented || evt.isComposing) return;
       const bindings =
-        this.bindings[String.fromCharCode(evt.keyCode).toLowerCase()] || [];
+        this.bindings[evt.key] ||
+        this.bindings[String.fromCharCode(evt.keyCode).toLowerCase()] ||
+        [];
       const matches = bindings.filter(binding => Keyboard.match(evt, binding));
       if (matches.length === 0) return;
       const range = this.quill.getSelection();

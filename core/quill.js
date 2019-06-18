@@ -474,7 +474,6 @@ class Quill {
     } else {
       this.root.innerHTML = html;
     }
-    this.history.clear();
   }
 
   getContent(latexMode) {
