@@ -47,8 +47,8 @@ class Image extends EmbedBlot {
   static value(domNode) {
     return {
       src: domNode.getAttribute('src'),
-      width: domNode.getAttribute('width'),
-      height: domNode.getAttribute('height'),
+      width: domNode.getAttribute('width') || '',
+      height: domNode.getAttribute('height') || '',
     };
   }
 

@@ -5,16 +5,35 @@ class TableCell extends Block {
   static create(value) {
     const node = super.create();
     if (value) {
-      node.setAttribute('data-row', value);
+      node.setAttribute('data-row', value.datarow);
+      node.setAttribute('rowspan', value.rowspan || 1);
+      node.setAttribute('colspan', value.colspan || 1);
     } else {
       node.setAttribute('data-row', tableId());
+      node.setAttribute('rowspan', 1);
+      node.setAttribute('colspan', 1);
     }
     return node;
   }
 
   static formats(domNode) {
     if (domNode.hasAttribute('data-row')) {
-      return domNode.getAttribute('data-row');
+      return {
+        datarow: domNode.getAttribute('data-row'),
+        rowspan: domNode.getAttribute('rowspan') || 1,
+        colspan: domNode.getAttribute('colspan') || 1,
+      };
+    }
+    return undefined;
+  }
+
+  static value(domNode) {
+    if (domNode.hasAttribute('data-row')) {
+      return {
+        datarow: domNode.getAttribute('data-row'),
+        rowspan: domNode.getAttribute('rowspan') || 1,
+        colspan: domNode.getAttribute('colspan') || 1,
+      };
     }
     return undefined;
   }
@@ -28,7 +47,9 @@ class TableCell extends Block {
 
   format(name, value) {
     if (name === TableCell.blotName && value) {
-      this.domNode.setAttribute('data-row', value);
+      this.domNode.setAttribute('data-row', value.datarow);
+      this.domNode.setAttribute('rowspan', value.rowspan || 1);
+      this.domNode.setAttribute('colspan', value.colspan || 1);
     } else {
       super.format(name, value);
     }
@@ -60,9 +81,9 @@ class TableRow extends Container {
       const nextHead = this.next.children.head.formats();
       const nextTail = this.next.children.tail.formats();
       return (
-        thisHead.table === thisTail.table &&
-        thisHead.table === nextHead.table &&
-        thisHead.table === nextTail.table
+        thisHead.table.datarow === thisTail.table.datarow &&
+        thisHead.table.datarow === nextHead.table.datarow &&
+        thisHead.table.datarow === nextTail.table.datarow
       );
     }
     return false;
@@ -74,7 +95,7 @@ class TableRow extends Container {
       if (child.next == null) return;
       const childFormats = child.formats();
       const nextFormats = child.next.formats();
-      if (childFormats.table !== nextFormats.table) {
+      if (childFormats.table.datarow !== nextFormats.table.datarow) {
         const next = this.splitAfter(child);
         if (next) {
           next.optimize();
@@ -107,21 +128,21 @@ TableBody.tagName = 'TBODY';
 
 class TableContainer extends Container {
   balanceCells() {
-    const rows = this.descendants(TableRow);
-    const maxColumns = rows.reduce((max, row) => {
-      return Math.max(row.children.length, max);
-    }, 0);
-    rows.forEach(row => {
-      new Array(maxColumns - row.children.length).fill(0).forEach(() => {
-        let value;
-        if (row.children.head != null) {
-          value = TableCell.formats(row.children.head.domNode);
-        }
-        const blot = this.scroll.create(TableCell.blotName, value);
-        row.appendChild(blot);
-        blot.optimize(); // Add break blot
-      });
-    });
+    // const rows = this.descendants(TableRow);
+    // const maxColumns = rows.reduce((max, row) => {
+    //   return Math.max(row.children.length, max);
+    // }, 0);
+    // rows.forEach(row => {
+    //   new Array(maxColumns - row.children.length).fill(0).forEach(() => {
+    //     let value;
+    //     if (row.children.head != null) {
+    //       value = TableCell.formats(row.children.head.domNode);
+    //     }
+    //     const blot = this.scroll.create(TableCell.blotName, value);
+    //     row.appendChild(blot);
+    //     blot.optimize(); // Add break blot
+    //   });
+    // });
   }
 
   cells(column) {
@@ -145,7 +166,9 @@ class TableContainer extends Container {
     body.children.forEach(row => {
       const ref = row.children.at(index);
       const value = TableCell.formats(row.children.head.domNode);
-      const cell = this.scroll.create(TableCell.blotName, value);
+      const cell = this.scroll.create(TableCell.blotName, {
+        datarow: value.datarow,
+      });
       row.insertBefore(cell, ref);
     });
   }
@@ -154,13 +177,17 @@ class TableContainer extends Container {
     const [body] = this.descendant(TableBody);
     if (body == null || body.children.head == null) return;
     const id = tableId();
-    const row = this.scroll.create(TableRow.blotName);
-    body.children.head.children.forEach(() => {
-      const cell = this.scroll.create(TableCell.blotName, id);
-      row.appendChild(cell);
+    const newRow = this.scroll.create(TableRow.blotName);
+    const rows = this.descendants(TableRow);
+    const maxColumns = rows.reduce((max, row) => {
+      return Math.max(row.children.length, max);
+    }, 0);
+    new Array(maxColumns).fill(0).forEach(() => {
+      const cell = this.scroll.create(TableCell.blotName, { datarow: id });
+      newRow.appendChild(cell);
     });
     const ref = body.children.at(index);
-    body.insertBefore(row, ref);
+    body.insertBefore(newRow, ref);
   }
 
   rows() {

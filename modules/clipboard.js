@@ -36,7 +36,7 @@ const CLIPBOARD_CONFIG = [
   [Node.ELEMENT_NODE, matchTkStyles],
   // ['ol, ul', matchList],
   ['ol', matchList],
-  ['tr', matchTable],
+  ['td', matchTableCell],
   ['b', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['strong', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['i', matchAlias.bind(matchAlias, { italic: 'normal' })],
@@ -534,14 +534,19 @@ function matchTkStyles(node, delta) {
   return delta;
 }
 
-function matchTable(node, delta) {
+function matchTableCell(node, delta) {
+  const tr = node.parentNode;
   const table =
-    node.parentNode.tagName === 'TABLE'
-      ? node.parentNode
-      : node.parentNode.parentNode;
+    tr.parentNode.tagName === 'TABLE'
+      ? tr.parentNode
+      : tr.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));
-  const row = rows.indexOf(node) + 1;
-  return applyFormat(delta, 'table', row);
+  const row = rows.indexOf(tr) + 1;
+  return applyFormat(delta, 'table', {
+    datarow: row,
+    rowspan: Number(node.getAttribute('rowspan')) || 1,
+    colspan: Number(node.getAttribute('colspan')) || 1,
+  });
 }
 
 function matchText(node, delta) {
