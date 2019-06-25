@@ -1,3 +1,7 @@
+## 0.3.73
+
+* bugfix some table problems
+
 ## 0.3.72
 
 * update 同步线上latex过滤逻辑

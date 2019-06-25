@@ -134,7 +134,7 @@ class Table extends Module {
     }
     const delta = new Array(rows).fill(0).reduce(memo => {
       const text = new Array(columns).fill('\n').join('');
-      return memo.insert(text, { table: tableId() });
+      return memo.insert(text, { table: { datarow: tableId() } });
     }, initDelta);
     if (offset !== 0 && offset === line.length() - 1) {
       delta.insert('\n');

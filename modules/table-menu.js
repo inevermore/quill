@@ -46,7 +46,8 @@ class TableMenu extends Module {
         title: '表格左浮动',
         handler: table => {
           const [tableContainer] = table.getTable();
-          tableContainer.domNode.setAttribute('align', '');
+          tableContainer.domNode.setAttribute('align', 'left');
+          tableContainer.domNode.removeAttribute('tkalign');
         },
       },
       {
@@ -55,6 +56,7 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('align', 'center');
+          tableContainer.domNode.removeAttribute('tkalign');
         },
       },
       {
@@ -63,6 +65,7 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('tkalign', 'right');
+          tableContainer.domNode.removeAttribute('align');
         },
       },
       {

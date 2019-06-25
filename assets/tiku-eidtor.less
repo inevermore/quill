@@ -187,9 +187,14 @@
     }
 
     &.tk-disable-history {
-      pointer-events: none;
       .button-icon {
         opacity: .3;
+      }
+
+      &:hover .button-icon {
+        border-color: transparent;
+        background-color: initial;
+        border-radius: 0;
       }
     } 
 
