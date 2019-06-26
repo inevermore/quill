@@ -134,13 +134,13 @@ class TkEditor {
 
     const { index } = range;
     if (index === 0) {
-      return ['', this.quill.getSemanticHTML()];
+      return ['', this.quill.getSplitSemanticHTML()];
     }
     if (index === this.quill.getLength() - 1) {
-      return [this.quill.getSemanticHTML(), ''];
+      return [this.quill.getSplitSemanticHTML(), ''];
     }
-    const prev = this.quill.getSemanticHTML(0, index);
-    const next = this.quill.getSemanticHTML(index, this.quill.getLength());
+    const prev = this.quill.getSplitSemanticHTML(0, index);
+    const next = this.quill.getSplitSemanticHTML(index, this.quill.getLength());
     return [this.quill.wrapContent(prev), this.quill.wrapContent(next)];
   }
 

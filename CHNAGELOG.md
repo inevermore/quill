@@ -1,3 +1,8 @@
+## 0.3.74
+
+* bugfix windows系统复制粘贴出现换行
+* bugfix 首行缩进换行时光标位置错误
+
 ## 0.3.73
 
 * bugfix some table problems

@@ -333,6 +333,11 @@ class Quill {
     return this.editor.getHTML(index, length);
   }
 
+  getSplitSemanticHTML(index = 0, length = this.getLength() - index) {
+    [index, length] = overload(index, length);
+    return this.editor.getSplitHTML(index, length);
+  }
+
   getText(index = 0, length = this.getLength() - index) {
     [index, length] = overload(index, length);
     return this.editor.getText(index, length);
