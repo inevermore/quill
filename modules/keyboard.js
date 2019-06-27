@@ -549,10 +549,12 @@ function handleEnter(range, context) {
     }
     return formats;
   }, {});
+  const [prev] = this.quill.getLine(range.index - 1);
   this.quill.insertText(range.index, '\n', lineFormats, Quill.sources.USER);
   // Earlier scroll.deleteAt might have messed up our selection,
   // so insertText's built in selection preservation is not reliable
-  this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+  const offset = prev && prev.statics.blotName === 'table' ? 0 : 1;
+  this.quill.setSelection(range.index + offset, Quill.sources.SILENT);
   this.quill.focus();
   Object.keys(context.format).forEach(name => {
     if (lineFormats[name] != null) return;
@@ -610,7 +612,7 @@ function makeEmbedArrowHandler(key, shiftKey) {
         index += range.length + 1;
       }
       const [leaf] = this.quill.getLeaf(index);
-      if (!(leaf instanceof EmbedBlot)) return true;
+      if (!(leaf instanceof EmbedBlot) || leaf instanceof Empty) return true;
       if (key === 'ArrowLeft') {
         if (shiftKey) {
           this.quill.setSelection(
