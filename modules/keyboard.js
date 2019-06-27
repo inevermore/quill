@@ -7,6 +7,7 @@ import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
 import Empty from '../blots/empty';
+import Cursor from '../blots/cursor';
 import Emitter from '../core/emitter';
 
 const debug = logger('quill:keyboard');
@@ -608,11 +609,19 @@ function makeEmbedArrowHandler(key, shiftKey) {
     [where]: /^$/,
     handler(range) {
       let { index } = range;
+      let [leaf] = this.quill.getLeaf(index);
       if (key === 'ArrowRight') {
         index += range.length + 1;
       }
-      const [leaf] = this.quill.getLeaf(index);
-      if (!(leaf instanceof EmbedBlot) || leaf instanceof Empty) return true;
+      // bugfix 未选中文本进行格式化时（如加粗），按右键光标移动行尾
+      if (!(leaf instanceof Cursor)) {
+        [leaf] = this.quill.getLeaf(index);
+      }
+
+      if (!(leaf instanceof EmbedBlot) || leaf instanceof Empty) {
+        return true;
+      }
+
       if (key === 'ArrowLeft') {
         if (shiftKey) {
           this.quill.setSelection(
