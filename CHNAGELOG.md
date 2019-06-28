@@ -1,3 +1,7 @@
+## 0.3.78
+
+* bugfix 若干bug
+
 ## 0.3.74
 
 * bugfix windows系统复制粘贴出现换行

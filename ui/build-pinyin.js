@@ -53,7 +53,6 @@ export default function buildPinyin(quill) {
   });
   optionsDiv.addEventListener('click', ({ target }) => {
     if (target.classList.contains('pinyin-item')) {
-      quill.focus();
       const { index } = quill.selection.savedRange;
       quill.insertText(index, target.innerText);
       quill.update();

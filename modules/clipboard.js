@@ -75,6 +75,9 @@ const OLD_CLASS = {
   fillBlankBrackets: 'yikespec-bracket',
   fillBlankUnderline: 'yikespec-underline-blank',
   fillBlankOrder: 'fill-blank',
+  textAlignCenter: 'yikespec-align-center',
+  textAlignLeft: 'yikespec-align-left',
+  textAlignRigth: 'yikespec-align-right',
 };
 const LINE_SEPARATOR = '\u2028';
 
@@ -241,7 +244,7 @@ function applyFormat(delta, format, value) {
     }
     return newDelta.insert(
       op.insert,
-      extend({}, { [format]: value }, op.attributes),
+      extend({}, op.attributes, { [format]: value }),
     );
   }, new Delta());
 }
@@ -477,13 +480,14 @@ function matchStyles(node, delta) {
   ) {
     formats.bold = 'normal';
   }
+  if (parseFloat(style.textIndent || 0) > 0) {
+    // Could be 0.5in
+    formats['text-indent'] = 'normal';
+  }
   if (Object.keys(formats).length > 0) {
     delta = applyFormat(delta, formats);
   }
-  if (parseFloat(style.textIndent || 0) > 0) {
-    // Could be 0.5in
-    return new Delta().insert('\t').concat(delta);
-  }
+
   return delta;
 }
 
@@ -522,11 +526,20 @@ function matchTkStyles(node, delta) {
   if (classList.contains(OLD_CLASS.fillBlankOrder)) {
     return new Delta().insert({ 'fill-blank-order': {} });
   }
+  if (classList.contains(OLD_CLASS.textAlignCenter)) {
+    formats.align = 'center';
+  }
+  if (classList.contains(OLD_CLASS.textAlignLeft)) {
+    formats.align = 'left';
+  }
+  if (classList.contains(OLD_CLASS.textAlignRight)) {
+    formats.align = 'right';
+  }
   if (
     parseFloat(getStyle(node, 'text-indent') || 0) > 0 ||
     classList.contains(OLD_CLASS.indent)
   ) {
-    formats.indent = 'normal';
+    formats['text-indent'] = 'normal';
   }
   if (Object.keys(formats).length > 0) {
     delta = applyFormat(delta, formats);

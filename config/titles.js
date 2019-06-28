@@ -2,8 +2,8 @@ export default {
   clear: '清空文档',
   image: '单图上传',
   script: {
-    sub: '上标',
-    super: '下标',
+    sub: '下标',
+    super: '上标',
   },
   'select-all': '全选',
   undo: '撤销',
