@@ -55,6 +55,7 @@ export default function buildPinyin(quill) {
     if (target.classList.contains('pinyin-item')) {
       const { index } = quill.selection.savedRange;
       quill.insertText(index, target.innerText);
+      quill.setSelection(index + 1, 0);
       quill.update();
       optionsDiv.classList.add('options-hide');
       placeholder.innerText = target.innerText;

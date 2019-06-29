@@ -144,6 +144,7 @@ class Table extends Module {
       offset === 0 ? rangeIndex : rangeIndex + 1,
       Quill.sources.SILENT,
     );
+    this.quill.focus();
     this.balanceTables();
   }
 

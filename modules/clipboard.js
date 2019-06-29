@@ -77,7 +77,7 @@ const OLD_CLASS = {
   fillBlankOrder: 'fill-blank',
   textAlignCenter: 'yikespec-align-center',
   textAlignLeft: 'yikespec-align-left',
-  textAlignRigth: 'yikespec-align-right',
+  textAlignRight: 'yikespec-align-right',
 };
 const LINE_SEPARATOR = '\u2028';
 

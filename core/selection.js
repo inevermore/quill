@@ -3,6 +3,7 @@ import clone from 'clone';
 import equal from 'deep-equal';
 import Emitter from './emitter';
 import logger from './logger';
+import Empty from '../blots/empty';
 
 const debug = logger('quill:selection');
 
@@ -161,6 +162,9 @@ class Selection {
       }
       rect = range.getBoundingClientRect();
     } else {
+      if (leaf instanceof Empty) {
+        leaf = leaf.parent;
+      }
       rect = leaf.domNode.getBoundingClientRect();
       if (offset > 0) side = 'right';
     }
