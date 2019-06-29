@@ -40,7 +40,21 @@ class TableCell extends Block {
 
   cellOffset() {
     if (this.parent) {
-      return this.parent.children.indexOf(this);
+      const { children } = this.parent;
+      console.log(children.reduce((sum, child) => {
+        if (children.indexOf(this) >= children.indexOf(child)) {
+          return sum + child.formats().table.colspan * 1;
+        }
+        return sum;
+      }, -1), 'celloffset')
+      return children.reduce((sum, child) => {
+        if (children.indexOf(this) >= children.indexOf(child)) {
+          return sum + child.formats().table.colspan * 1;
+        }
+        return sum;
+      }, -1);
+
+      // return this.parent.children.indexOf(this);
     }
     return -1;
   }
@@ -118,6 +132,25 @@ class TableRow extends Container {
   table() {
     return this.parent && this.parent.parent;
   }
+
+  rowLength() {
+    return this.children.reduce((sum, child) => {
+      const { colspan } = TableCell.formats(child.domNode);
+      return sum + colspan * 1;
+    }, 0);
+  }
+
+  getCellByIndex(index) {
+    const next = this.children.iterator();
+    let cur = next();
+    let sum = 0;
+    while (cur && sum < index) {
+      const { colspan } = TableCell.formats(cur.domNode);
+      sum += colspan * 1;
+      cur = next();
+    }
+    return cur;
+  }
 }
 TableRow.blotName = 'table-row';
 TableRow.tagName = 'TR';
@@ -128,32 +161,32 @@ TableBody.tagName = 'TBODY';
 
 class TableContainer extends Container {
   balanceCells() {
-    // const rows = this.descendants(TableRow);
-    // const maxColumns = rows.reduce((max, row) => {
-    //   return Math.max(row.children.length, max);
-    // }, 0);
-    // rows.forEach(row => {
-    //   new Array(maxColumns - row.children.length).fill(0).forEach(() => {
-    //     let value;
-    //     if (row.children.head != null) {
-    //       value = TableCell.formats(row.children.head.domNode);
-    //     }
-    //     const blot = this.scroll.create(TableCell.blotName, value);
-    //     row.appendChild(blot);
-    //     blot.optimize(); // Add break blot
-    //   });
-    // });
+    const rows = this.descendants(TableRow);
+    const maxColumns = rows.reduce((max, row) => {
+      return Math.max(row.rowLength(), max);
+    }, 0);
+    rows.forEach(row => {
+      new Array(maxColumns - row.rowLength()).fill(0).forEach(() => {
+        let value;
+        if (row.children.head != null) {
+          value = TableCell.formats(row.children.head.domNode);
+        }
+        const blot = this.scroll.create(TableCell.blotName, value);
+        row.appendChild(blot);
+        blot.optimize(); // Add break blot
+      });
+    });
   }
 
   cells(column) {
-    return this.rows().map(row => row.children.at(column));
+    return this.rows().map(row => row.getCellByIndex(column));
   }
 
   deleteColumn(index) {
     const [body] = this.descendant(TableBody);
     if (body == null || body.children.head == null) return;
     body.children.forEach(row => {
-      const cell = row.children.at(index);
+      const cell = row.getCellByIndex(index);
       if (cell != null) {
         cell.remove();
       }
@@ -164,7 +197,7 @@ class TableContainer extends Container {
     const [body] = this.descendant(TableBody);
     if (body == null || body.children.head == null) return;
     body.children.forEach(row => {
-      const ref = row.children.at(index);
+      const ref = row.getCellByIndex(index);
       const value = TableCell.formats(row.children.head.domNode);
       const cell = this.scroll.create(TableCell.blotName, {
         datarow: value.datarow,
