@@ -41,12 +41,6 @@ class TableCell extends Block {
   cellOffset() {
     if (this.parent) {
       const { children } = this.parent;
-      console.log(children.reduce((sum, child) => {
-        if (children.indexOf(this) >= children.indexOf(child)) {
-          return sum + child.formats().table.colspan * 1;
-        }
-        return sum;
-      }, -1), 'celloffset')
       return children.reduce((sum, child) => {
         if (children.indexOf(this) >= children.indexOf(child)) {
           return sum + child.formats().table.colspan * 1;
