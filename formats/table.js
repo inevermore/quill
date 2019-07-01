@@ -8,20 +8,31 @@ class TableCell extends Block {
       node.setAttribute('data-row', value.datarow);
       node.setAttribute('rowspan', value.rowspan || 1);
       node.setAttribute('colspan', value.colspan || 1);
+      node.setAttribute('tbalign', value.tbalign || '');
     } else {
       node.setAttribute('data-row', tableId());
       node.setAttribute('rowspan', 1);
       node.setAttribute('colspan', 1);
+      node.setAttribute('tbalign', '');
     }
     return node;
   }
 
   static formats(domNode) {
     if (domNode.hasAttribute('data-row')) {
+      const tr = domNode.parentNode;
+      const table =
+        tr.parentNode.tagName === 'TABLE'
+          ? tr.parentNode
+          : tr.parentNode.parentNode;
       return {
         datarow: domNode.getAttribute('data-row'),
         rowspan: domNode.getAttribute('rowspan') || 1,
         colspan: domNode.getAttribute('colspan') || 1,
+        tbalign:
+          table.getAttribute('table-align') ||
+          table.getAttribute('align') ||
+          '',
       };
     }
     return undefined;
@@ -29,10 +40,19 @@ class TableCell extends Block {
 
   static value(domNode) {
     if (domNode.hasAttribute('data-row')) {
+      const tr = domNode.parentNode;
+      const table =
+        tr.parentNode.tagName === 'TABLE'
+          ? tr.parentNode
+          : tr.parentNode.parentNode;
       return {
         datarow: domNode.getAttribute('data-row'),
         rowspan: domNode.getAttribute('rowspan') || 1,
         colspan: domNode.getAttribute('colspan') || 1,
+        tbalign:
+          table.getAttribute('table-align') ||
+          table.getAttribute('align') ||
+          '',
       };
     }
     return undefined;
@@ -47,8 +67,6 @@ class TableCell extends Block {
         }
         return sum;
       }, -1);
-
-      // return this.parent.children.indexOf(this);
     }
     return -1;
   }
@@ -58,6 +76,7 @@ class TableCell extends Block {
       this.domNode.setAttribute('data-row', value.datarow);
       this.domNode.setAttribute('rowspan', value.rowspan || 1);
       this.domNode.setAttribute('colspan', value.colspan || 1);
+      this.domNode.setAttribute('tbalign', value.tbalign || '');
     } else {
       super.format(name, value);
     }
@@ -154,6 +173,17 @@ TableBody.blotName = 'table-body';
 TableBody.tagName = 'TBODY';
 
 class TableContainer extends Container {
+  static create(value) {
+    const domNode = super.create(value);
+    Promise.resolve().then(() => {
+      const td = domNode.querySelector('td');
+      if (td) {
+        domNode.setAttribute('table-align', td.getAttribute('tbalign') || '');
+      }
+    });
+    return domNode;
+  }
+
   balanceCells() {
     const rows = this.descendants(TableRow);
     const maxColumns = rows.reduce((max, row) => {

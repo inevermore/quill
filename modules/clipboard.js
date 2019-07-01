@@ -554,11 +554,14 @@ function matchTableCell(node, delta) {
       ? tr.parentNode
       : tr.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));
-  const row = rows.indexOf(tr) + 1;
+  const datarow = rows.indexOf(tr) + 1;
+  const tbalign =
+    table.getAttribute('table-align') || table.getAttribute('align');
   return applyFormat(delta, 'table', {
-    datarow: row,
+    datarow,
     rowspan: Number(node.getAttribute('rowspan')) || 1,
     colspan: Number(node.getAttribute('colspan')) || 1,
+    tbalign,
   });
 }
 

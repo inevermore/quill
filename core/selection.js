@@ -141,7 +141,7 @@ class Selection {
     if (leaf == null) return null;
     [node, offset] = leaf.position(offset, true);
     const range = document.createRange();
-    if (length > 0) {
+    if (length > 0 && !(leaf instanceof Empty)) {
       range.setStart(node, offset);
       [leaf, offset] = this.scroll.leaf(index + length);
       if (leaf == null) return null;
@@ -286,6 +286,7 @@ class Selection {
 
   scrollIntoView(scrollingContainer) {
     const range = this.lastRange;
+    console.log('range', range);
     if (range == null) return;
     const bounds = this.getBounds(range.index, range.length);
     if (bounds == null) return;
