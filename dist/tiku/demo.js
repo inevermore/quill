@@ -1,4 +1,5 @@
 import Editor from '../../index';
+const Quill = Editor.Quill;
 
 const options = [
   ['undo', 'redo'],
@@ -28,6 +29,7 @@ const options = [
     'pinyin',
     'table-insert',
   ],
+  // [{ list: 'ordered' }]
 ];
 const blankList = [];
 // const str = `<div class="text-editor-wrapper"><p><span class="fill-blank" title="移除填空" data-index="1" id="0" style="font-style: normal;">&#65279;<span contenteditable="false" class="blank-list-remove">1</span>&#65279;</span>&#8203;</p><p>如图所示，用量角器度量$\\angle 1$，可以读出$\\angle 1$的度数为<span class="tkspec-embed-text tkspec-fill-blank-brackets">&#65279;<span contenteditable="false">（   ）</span>&#65279;</span>．</p><p>123</p><table><tbody><tr><td data-row="row-jml4" class="tkspec-table-diagonal-normal">         a
@@ -123,7 +125,22 @@ const editor = new Editor({
     response: ['url'],
   },
 });
-editor.setContent(str)
+// Quill.register('formats/list', List);
+// let List = Quill.import('formats/list');
+// class ListStyle extends List {
+//   static create (value) {
+//     console.log('value')
+//     let node = super.create();
+//     node.className = 'ql-list-' + value;
+//     return node;
+//   }
+//   // 重写formats方法，验证
+//   static formats (domNode) {
+//     return domNode.className.substring(8);
+//   }
+// }
+// Quill.register(ListStyle);
+// editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {
