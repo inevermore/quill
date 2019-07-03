@@ -110,6 +110,7 @@ class Clipboard extends Module {
     }
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const container = doc.body;
+    handleTablePaste(container);
     const nodeMatches = new WeakMap();
     const [elementMatchers, textMatchers] = this.prepareMatching(
       container,
@@ -462,7 +463,7 @@ function matchList(node, delta) {
 function matchNewline(node, delta) {
   if (!deltaEndsWith(delta, '\n')) {
     if (
-      isLine(node) ||
+      (isLine(node) && !isTable(node)) ||
       (delta.length() > 0 && node.nextSibling && isLine(node.nextSibling))
     ) {
       delta.insert('\n');
@@ -639,6 +640,24 @@ function toDeltaText(domText) {
       .replace(/\n\n$/, LINE_SEPARATOR)
       .replace(/\n/g, LINE_SEPARATOR)
   );
+}
+
+function handleTablePaste(container) {
+  Array.from(container.querySelectorAll('td')).forEach(item => {
+    Array.from(item.querySelectorAll('p')).forEach(para => {
+      const span = document.createElement('span');
+      para.getAttributeNames().forEach(attr => {
+        span.setAttribute(attr, para.getAttribute(attr));
+        span.innerHTML = para.innerHTML;
+      });
+      para.outerHTML = span.outerHTML;
+    });
+  });
+}
+
+function isTable(node) {
+  const tableTags = ['TABLE', 'TBODY', 'TR', 'TD'];
+  return tableTags.indexOf(node.tagName) > -1;
 }
 
 export {

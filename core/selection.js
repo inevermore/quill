@@ -286,7 +286,6 @@ class Selection {
 
   scrollIntoView(scrollingContainer) {
     const range = this.lastRange;
-    console.log('range', range);
     if (range == null) return;
     const bounds = this.getBounds(range.index, range.length);
     if (bounds == null) return;

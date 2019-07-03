@@ -8,6 +8,7 @@ import debounce from '../utils/debounce';
 import FillBlankOrder from '../formats/fill-blank-order';
 import QlMathjax from '../formats/mathjax';
 import titles from '../config/titles';
+import tableInsert from '../ui/build-table-insert';
 
 const TOOLBAR_CONFIG = [
   ['undo', 'redo'],
@@ -213,6 +214,9 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           const savedIndex = this.quill.selection.savedRange.index;
           this.quill.insertEmbed(savedIndex, 'fill-blank-order', '1');
           this.quill.setSelection(savedIndex + 1, 0);
+        },
+        'table-insert': function() {
+          tableInsert.show(this.quill);
         },
       },
     },

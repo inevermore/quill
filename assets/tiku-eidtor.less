@@ -381,58 +381,41 @@
       }
     }
   }
+}
 
-  .table-insert {
-    position: relative;
+.select-area {
+  display: none;
+  width: 232px;
+  position: fixed;
+  padding: 10px 16px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(82, 88, 102, .2);
+  z-index: 500;
+  cursor: auto;
 
-    button {
-      width: 32px;
-    }
+  .table-title {
+    font-size: 12px;
+    color: #95a1ad;
+    line-height: 1;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
 
-    .button-icon {
-      background-size: 100%;
-      background-image: url(../assets/tiku-icons/table-insert.png) !important;
-    }
+  .tr {
+    .td {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: #edeff0;
+      border-right: 4px solid #fff;
+      border-bottom: 4px solid #fff;
 
-    .select-area {
-      display: none;
-      width: 232px;
-      position: absolute;
-      top: 30px;
-      left: 16px;
-      transform: translateX(-50%);
-      padding: 10px 16px;
-      border-radius: 4px;
-      background: #fff;
-      box-shadow: 0 4px 8px rgba(82, 88, 102, .2);
-      z-index: 1;
-      cursor: auto;
-
-      .table-title {
-        font-size: 12px;
-        color: #95a1ad;
-        line-height: 1;
-        margin-top: 0;
-        margin-bottom: 10px;
-      }
-
-      .tr {
-        .td {
-          display: inline-block;
-          width: 20px;
-          height: 20px;
-          background: #edeff0;
-          border-right: 4px solid #fff;
-          border-bottom: 4px solid #fff;
-
-          &.active {
-            background: #35cc67;
-          }
-        }
+      &.active {
+        background: #35cc67;
       }
     }
   }
-
 }
 
 .formula-dialog {

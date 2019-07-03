@@ -1,11 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
-const ROW_NUM = 8;
-const COL_NUM = 10;
+const ROW_NUM = 8; // 最大行数
+const COL_NUM = 10; // 最大列数
+const MARGIN_TOP = 10; // 选择区域距 button 距离
+
+let tds = [];
 
 class TableInsert {
   constructor() {
-    this.tds = [];
     this.title = null;
     const update = this.update.bind(this);
     this.activeIndex = new Proxy(
@@ -20,36 +22,15 @@ class TableInsert {
     );
     this.resetActiveIndex();
     this.defaultTitle = '选择表格大小';
-  }
-
-  buildTableInsert(quill) {
-    this.quill = quill;
-    const container = document.createElement('div');
-    container.classList.add('table-insert');
-    container.setAttribute('title', '插入表格');
-    container.appendChild(this.createButton());
-    container.appendChild(this.createSelectArea());
-    document.addEventListener('click', ({ target }) => {
-      if (!container.contains(target)) {
-        this.show(false);
-      }
-    });
-    return container;
-  }
-
-  createButton() {
-    const button = document.createElement('button');
-    const icon = document.createElement('i');
-    icon.classList.add('button-icon');
-    button.appendChild(icon);
-    button.addEventListener('click', this.show.bind(this, true));
-    return button;
+    this.selectArea = this.createSelectArea();
+    this.button = null;
+    document.addEventListener('click', this.clickEvent.bind(this));
+    document.body.appendChild(this.selectArea);
   }
 
   createSelectArea() {
     const container = document.createElement('div');
     container.classList.add('select-area');
-    this.selectArea = container;
     this.title = document.createElement('p');
     this.title.classList.add('table-title');
     this.title.innerText = this.defaultTitle;
@@ -73,13 +54,24 @@ class TableInsert {
     }
     choose.addEventListener('mouseleave', this.resetActiveIndex.bind(this));
     choose.addEventListener('click', this.insertTable.bind(this));
-    this.tds = choose.getElementsByClassName('td');
+    tds = choose.getElementsByClassName('td');
     container.appendChild(choose);
     return container;
   }
 
+  clickEvent({ target }) {
+    if (
+      !(
+        (this.button && this.button.contains(target)) ||
+        this.selectArea.contains(target)
+      )
+    ) {
+      this.hide();
+    }
+  }
+
   update() {
-    for (const node of this.tds) {
+    for (const node of tds) {
       const { row, col } = node.dataset;
       if (row <= this.activeIndex.row && col <= this.activeIndex.col) {
         node.classList.add('active');
@@ -106,13 +98,33 @@ class TableInsert {
   insertTable() {
     const table = this.quill.getModule('table');
     table.insertTable(this.activeIndex.row + 1, this.activeIndex.col + 1);
-    this.show(false);
+    this.hide();
   }
 
-  show(bool) {
-    const displayAttr = bool ? 'block' : 'none';
-    this.selectArea.style.display = displayAttr;
+  show(quill) {
+    this.quill = quill;
+    this.selectArea.style.display = 'block';
+    this.button = this.quill.toolbarContainer.querySelector('.ql-table-insert');
+    this.setPosition(this.button);
+  }
+
+  setPosition(button) {
+    const btnRect = button.getBoundingClientRect();
+    let left =
+      btnRect.left - (this.selectArea.offsetWidth - btnRect.width) * 0.5;
+    if (left + this.selectArea.offsetWidth > window.innerWidth) {
+      left = window.innerWidth - this.selectArea.offsetWidth;
+    }
+    this.selectArea.style.left = `${Math.max(left, 0)}px`;
+    this.selectArea.style.top = `${btnRect.top +
+      btnRect.height +
+      MARGIN_TOP}px`;
+  }
+
+  hide() {
+    this.selectArea.style.display = 'none';
+    this.button = null;
   }
 }
 
-export default TableInsert;
+export default new TableInsert();
