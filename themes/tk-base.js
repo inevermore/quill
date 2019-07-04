@@ -21,11 +21,12 @@ class TikuBaseTheme extends BaseTheme {
             if (format == null) {
               return;
             }
-
             if (Array.isArray(item[key])) {
               format.whitelist = item[key];
             } else if (Array.isArray(format.whitelist)) {
-              format.whitelist.push(item[key]);
+              if (format.whitelist.indexOf(item[key]) === -1) {
+                format.whitelist.push(item[key]);
+              }
             } else {
               format.whitelist = [item[key]];
             }

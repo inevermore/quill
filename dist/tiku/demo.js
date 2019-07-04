@@ -29,7 +29,7 @@ const options = [
     'pinyin',
     'table-insert',
   ],
-  // [{ list: 'ordered' }]
+  [{ list: 'ordered' }]
 ];
 const blankList = [];
 // const str = `<div class="text-editor-wrapper"><p><span class="fill-blank" title="移除填空" data-index="1" id="0" style="font-style: normal;">&#65279;<span contenteditable="false" class="blank-list-remove">1</span>&#65279;</span>&#8203;</p><p>如图所示，用量角器度量$\\angle 1$，可以读出$\\angle 1$的度数为<span class="tkspec-embed-text tkspec-fill-blank-brackets">&#65279;<span contenteditable="false">（   ）</span>&#65279;</span>．</p><p>123</p><table><tbody><tr><td data-row="row-jml4" class="tkspec-table-diagonal-normal">         a

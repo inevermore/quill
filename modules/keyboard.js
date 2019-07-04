@@ -9,6 +9,7 @@ import Module from '../core/module';
 import Empty from '../blots/empty';
 import Cursor from '../blots/cursor';
 import Emitter from '../core/emitter';
+import List from '../formats/list';
 
 const debug = logger('quill:keyboard');
 
@@ -384,6 +385,9 @@ Keyboard.DEFAULTS = {
       prefix: /^\s*?(\d+\.|-|\*|\[ ?\]|\[x\])$/,
       handler(range, context) {
         if (this.quill.scroll.query('list') == null) return true;
+        if (this.quill.enableSingleLine) {
+          return true;
+        }
         const { length } = context.prefix;
         const [line, offset] = this.quill.getLine(range.index);
         if (offset > length) return true;
@@ -402,6 +406,9 @@ Keyboard.DEFAULTS = {
             break;
           default:
             value = 'ordered';
+        }
+        if (List.whitelist.indexOf(value) < 0) {
+          return true;
         }
         this.quill.insertText(range.index, ' ', Quill.sources.USER);
         this.quill.history.cutoff();

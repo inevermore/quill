@@ -61,7 +61,6 @@ Quill.register(
 Quill.register(
   {
     'formats/image': Image,
-    'formats/list': List,
     'formats/table-diagonal': TableDiagonal,
     // 'formats/text-line-break': TextLineBreak,
 

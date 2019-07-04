@@ -106,6 +106,9 @@ class TableInsert {
     this.selectArea.style.display = 'block';
     this.button = this.quill.toolbarContainer.querySelector('.ql-table-insert');
     this.setPosition(this.button);
+    document.addEventListener('scroll', () => {
+      this.hide();
+    });
   }
 
   setPosition(button) {

@@ -1,3 +1,9 @@
+## 0.4.0
+
+* update list功能增加白名单机制
+* update enableSingleLine 禁止list auto fill
+* bugfix 提高table插入浮层优先级；fix插入表格触发滚动问题；滑动时隐藏table插入浮层
+
 ## 0.3.85
 
 * update 插入表格区域样式调整
