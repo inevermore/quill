@@ -349,36 +349,35 @@
         }
       }
     }
-  
-    .pinyin-options {
-      position: absolute;
-      top: 22px;
-      width: 122px;
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      border: 1px solid rgba(0,0,0,.2);
-      border-radius: 6px;
-      box-shadow: 0 3px 4px rgba(0,0,0,.2);
-      background-color: white;
-      z-index: 10;
+  }
+}
 
-      &.options-hide {
-        display: none;
-      }
-  
-      .pinyin-item {
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        line-height: 28px;
-        border: 1px solid transparent;
+.pinyin-options {
+  position: fixed;
+  width: 122px;
+  display: none;
+  flex-wrap: wrap;
+  flex-direction: row;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 6px;
+  box-shadow: 0 3px 4px rgba(0,0,0,.2);
+  background-color: white;
+  z-index: 2000;
 
-        &:hover {
-          background-color: #fff5d4;
-          border: 1px solid #dcac6c;
-        }
-      }
+  &.options-hide {
+    display: none;
+  }
+
+  .pinyin-item {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 28px;
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: #fff5d4;
+      border: 1px solid #dcac6c;
     }
   }
 }
@@ -509,4 +508,3 @@
     }
   }
 }
-

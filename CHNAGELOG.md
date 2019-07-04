@@ -1,3 +1,9 @@
+## 0.4.1
+
+* update table内保留换行样式
+* style 提升插入拼音浮层优先级
+* style 调整对角线色值
+
 ## 0.4.0
 
 * update list功能增加白名单机制
