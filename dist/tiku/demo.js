@@ -41,65 +41,7 @@ const blankList = [];
 // 所              用             试剂</td><td width="339" valign="top" style="word-break: break-all;">       主要实验操作         </td></tr><tr><td width="40" valign="top" style="word-break: break-all;">A</td><td width="396" valign="top" style="word-break: break-all;"><img class="kfformula" src="https://img.zuoyebang.cc/zyb_7219d6f220a4760be35bcc70883bb89b.jpg" style="width: 48px;">（<img class="kfformula" src="https://img.zuoyebang.cc/zyb_61425b655907665dd0f4de8a23d26623.jpg" style="width: 35px;">）</td><td width="190" valign="top"><img class="kfformula" src="http://img.zuoyebang.cc/zyb_6e94a2b3acab85f3ff9035a593d3d490.jpg" style="width: 36px;"></td><td width="339" valign="top" style="word-break: break-all;">溶解、过滤</td></tr><tr><td width="40" valign="top" style="word-break: break-all;">B</td><td width="396" valign="top" style="word-break: break-all;"><img class="kfformula" src="https://img.zuoyebang.cc/zyb_4b765e2ea020b061921f2510b6b91bb6.jpg" style="width: 43.5px;">（<img class="kfformula" src="https://img.zuoyebang.cc/zyb_56df8b9a847829415bbc19892e795318.jpg" style="width: 58.5px;">）</td><td width="190" valign="top"><img class="kfformula" src="http://img.zuoyebang.cc/zyb_96d904a4ad344d89604a6a594422ead9.jpg" style="width: 53px;"></td><td width="339" valign="top" style="word-break: break-all;">溶解、过滤、蒸发</td></tr><tr><td width="40" valign="top" style="word-break: break-all;">C</td><td width="396" valign="top" style="word-break: break-all;"><img class="kfformula" src="https://img.zuoyebang.cc/zyb_5b51776f7dfdefed28ac9427670291d6.jpg" style="width: 32px;">（<img class="kfformula" src="https://img.zuoyebang.cc/zyb_3816a2c1ad886f0b0a1424364c3b2e77.jpg" style="width: 27.5px;">）</td><td width="190" valign="top"><img class="kfformula" src="http://img.zuoyebang.cc/zyb_3493d76b38946c816e2d2631403dd688.jpg" style="width: 21px;"></td><td width="339" valign="top" style="word-break: break-all;">点燃</td></tr><tr><td width="40" valign="top" style="word-break: break-all;">D</td><td width="396" valign="top" style="word-break: break-all;"><img class="kfformula" src="https://img.zuoyebang.cc/zyb_95168275750c769512db76aaacf0da81.jpg" style="width: 39px;">（<img class="kfformula" src="http://img.zuoyebang.cc/zyb_6e94a2b3acab85f3ff9035a593d3d490.jpg" style="width: 36px;">）</td><td width="190" valign="top" style="word-break: break-all;">浓<img class="kfformula" src="https://img.zuoyebang.cc/zyb_29eb6cfcd5e6f50e3a3503818bc3d97f.jpg" style="width: 54px;"></td><td width="339" valign="top" style="word-break: break-all;">洗气</td></tr></tbody></table></div>`
 // const str = `<div class="text-editor-wrapper"><p class="yikespec-text-indent" style="text-indent: 1.5em; text-align: left;">①我曾说</p></div>`
 // const str = `<div class="text-editor-wrapper"><p class="yikespec-text-indent">①我曾说</p></div>`
-const str = `<div class="text-editor-wrapper"><table align="center"
-style='border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
-mso-yfti-tbllook:1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt'>
-<tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes'>
- <td width=138 valign=top style='width:138.15pt;border:solid windowtext 1.0pt;
- mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal>123</p>
- </td><td width=138 valign=top style='width:138.15pt;border:solid windowtext 1.0pt;
- border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
- solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US>456<o:p></o:p></span></p>
- </td>
- <td width=138 valign=top style='width:138.2pt;border:solid windowtext 1.0pt;
- border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
- solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US>789<o:p></o:p></span></p>
- </td>
-</tr>
-<tr style='mso-yfti-irow:1'>
- <td width=138 valign=top style='width:138.15pt;border:solid windowtext 1.0pt;
- border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
- padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
- </td>
- <td width=138 valign=top style='width:138.15pt;border-top:none;border-left:
- none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
- mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
- mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal>阿伟发<span lang=EN-US><o:p></o:p></span></p>
- </td>
- <td width=138 valign=top style='width:138.2pt;border-top:none;border-left:
- none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
- mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
- mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
- </td>
-</tr>
-<tr style='mso-yfti-irow:2;mso-yfti-lastrow:yes'>
- <td width=138 valign=top style='width:138.15pt;border:solid windowtext 1.0pt;
- border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
- padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
- </td>
- <td width=138 valign=top style='width:138.15pt;border-top:none;border-left:
- none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
- mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
- mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
- </td>
- <td width=138 valign=top style='width:138.2pt;border-top:none;border-left:
- none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
- mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
- mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt'>
- <p class=MsoNormal><span lang=EN-US>Zxf<o:p></o:p></span></p>
- </td>
-</tr>
-</table>
-</div>
-`
+const str = `<div class="text-editor-wrapper"><img width="50px" class="kfformula" src="https://img.zuoyebang.cc/zyb_a4f574e79e82d6524597995dc9cf0e3e.jpg" style="width: 55px;"></div>`
 const editor = new Editor({
   container: '#tikuEditor',
   theme: 'tiku',

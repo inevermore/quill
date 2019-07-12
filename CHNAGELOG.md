@@ -1,3 +1,16 @@
+## 0.4.22
+
+* del 去除autoprefixer warning样式
+* add 兼容历史下划线样式
+
+## 0.4.21
+
+* update 调整加点字实现方案
+
+## 0.4.2
+
+* bugfix scroll事件监听问题
+
 ## 0.4.1
 
 * update table内保留换行样式

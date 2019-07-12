@@ -6,12 +6,12 @@
 /* 加点字 */
 .yikespec-dotted {
   position: relative;
-  display: box;
-  display: -webkit-inline-flex;
-  display: -moz-inline-box;
-  /* Firefox 19 */
-  display: -ms-inline-flexbox;
-  display: -o-inline-flex;
+  // display: box;
+  // display: -webkit-inline-flex;
+  // display: -moz-inline-box;
+  // /* Firefox 19 */
+  // display: -ms-inline-flexbox;
+  // display: -o-inline-flex;
   display: inline-flex;
   text-align: center;
   text-indent: 0;
@@ -41,17 +41,11 @@
   }
 }
 
-@supports(-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: dot) {
-  .tkspec-dotted-normal {
-    -webkit-text-emphasis-position: under;
-    -webkit-text-emphasis: dot;
-  }
-}
-
-@supports(not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {
-  .tkspec-dotted-normal {
-    border-bottom: 2px dotted black;
-  }
+.tkspec-dotted-normal {
+  text-emphasis-position: under left;
+  -webkit-text-emphasis-position: under left;
+  text-emphasis: dot;
+  -webkit-text-emphasis: dot;
 }
 
 /* 上边加点 */
@@ -99,6 +93,7 @@
 
 /* 波浪线 */
 .yikespec-wavy,
+.yikespec-line-wave,
 .tkspec-underline-wavy {
   background: url(https://yy-s.zuoyebang.cc/static/standardstyle/font-wavyLine.svg) repeat-x;
   background-position-y: 1px;

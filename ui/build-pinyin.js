@@ -49,9 +49,13 @@ class PinyinOptions {
         this.hide();
       }
     });
-    document.addEventListener('scroll', () => {
-      this.hide();
-    });
+    window.addEventListener(
+      'scroll',
+      () => {
+        this.hide();
+      },
+      true,
+    );
     document.body.appendChild(this.container);
   }
 
