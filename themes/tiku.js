@@ -1,5 +1,6 @@
 /* eslint-disable no-alert */
 import extend from 'extend';
+import Delta from 'quill-delta';
 import TkBaseTheme from './tk-base';
 import svgToLatex from '../utils/svg-to-latex';
 import { isContain } from '../utils/dom-utils';
@@ -189,31 +190,41 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
           this.quill.latex2svg();
         },
         'fill-blank-underline': function() {
-          const savedIndex = this.quill.selection.savedRange.index;
-          this.quill.insertEmbed(
-            savedIndex,
-            'embed-text',
-            this.quill.embedTextMap.FILL_BLANK_UNDERLINE,
-          );
-          this.quill.setSelection(savedIndex + 1, 0);
+          const { index, length } = this.quill.selection.savedRange;
+          const update = new Delta()
+            .retain(index)
+            .delete(length)
+            .insert({
+              'embed-text': this.quill.embedTextMap.FILL_BLANK_UNDERLINE,
+            });
+          this.quill.updateContents(update, Emitter.sources.USER);
+          this.quill.setSelection(index + 1, 0);
         },
         pinyin(value) {
           const savedIndex = this.quill.selection.savedRange.index;
           this.quill.insertText(savedIndex, value);
         },
         'fill-blank-brackets': function() {
-          const savedIndex = this.quill.selection.savedRange.index;
-          this.quill.insertEmbed(
-            savedIndex,
-            'embed-text',
-            this.quill.embedTextMap.FILL_BLANK_BRACKETS,
-          );
-          this.quill.setSelection(savedIndex + 1, 0);
+          const { index, length } = this.quill.selection.savedRange;
+          const update = new Delta()
+            .retain(index)
+            .delete(length)
+            .insert({
+              'embed-text': this.quill.embedTextMap.FILL_BLANK_BRACKETS,
+            });
+          this.quill.updateContents(update, Emitter.sources.USER);
+          this.quill.setSelection(index + 1, 0);
         },
         'fill-blank-order': function() {
-          const savedIndex = this.quill.selection.savedRange.index;
-          this.quill.insertEmbed(savedIndex, 'fill-blank-order', '1');
-          this.quill.setSelection(savedIndex + 1, 0);
+          const { index, length } = this.quill.selection.savedRange;
+          const update = new Delta()
+            .retain(index)
+            .delete(length)
+            .insert({
+              'fill-blank-order': '1',
+            });
+          this.quill.updateContents(update, Emitter.sources.USER);
+          this.quill.setSelection(index + 1, 0);
         },
         'table-insert': function() {
           tableInsert.show(this.quill);
