@@ -142,7 +142,7 @@ class Quill {
       },
       FILL_BLANK_UNDERLINE: {
         className: 'tkspec-fill-blank-underline',
-        text: '________',
+        text: '    ',
       },
     };
   }
@@ -500,7 +500,7 @@ class Quill {
   }
 
   insertFormula(objList) {
-    const savedRangeIndex = this.selection.savedRange.index;
+    const { index, length } = this.selection.savedRange;
     // 编辑模式下替换 img 节点
     if (this.editedFormula) {
       this.editedFormula.outerHTML = QlMathjax.create({
@@ -509,12 +509,18 @@ class Quill {
       }).outerHTML;
       this.editedFormula = null;
     } else if (objList.latex) {
-      this.insertEmbed(savedRangeIndex, 'ql-mathjax', {
-        latex: `${objList.latex}`,
-        innerHTML: objList.svg,
-      });
+      const update = new Delta()
+        .retain(index)
+        .delete(length)
+        .insert({
+          'ql-mathjax': {
+            latex: `${objList.latex}`,
+            innerHTML: objList.svg,
+          },
+        });
+      this.updateContents(update, Emitter.sources.USER);
       this.root.focus();
-      this.setSelection(savedRangeIndex + 1, 0);
+      this.setSelection(index + 1, Emitter.sources.SILENT);
     }
   }
 
