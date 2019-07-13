@@ -4,7 +4,7 @@ const CLASS_NAME = 'tkspec-embed-text';
 class EmbedText extends Embed {
   static create(value) {
     const node = super.create();
-    node.innerText = value.text;
+    node.innerHTML = value.text;
     node.classList.add(value.className);
     return node;
   }

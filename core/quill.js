@@ -138,11 +138,11 @@ class Quill {
     this.embedTextMap = {
       FILL_BLANK_BRACKETS: {
         className: 'tkspec-fill-blank-brackets',
-        text: '（   ）',
+        text: '（&nbsp;&nbsp;&nbsp;）',
       },
       FILL_BLANK_UNDERLINE: {
         className: 'tkspec-fill-blank-underline',
-        text: '    ',
+        text: '&nbsp;&nbsp;&nbsp;&nbsp;',
       },
     };
   }
