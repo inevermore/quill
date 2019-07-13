@@ -223,9 +223,7 @@ class TableContainer extends Container {
     body.children.forEach(row => {
       const ref = row.getCellByIndex(index);
       const value = TableCell.formats(row.children.head.domNode);
-      const cell = this.scroll.create(TableCell.blotName, {
-        datarow: value.datarow,
-      });
+      const cell = this.scroll.create(TableCell.blotName, value);
       row.insertBefore(cell, ref);
     });
   }
@@ -236,11 +234,13 @@ class TableContainer extends Container {
     const id = tableId();
     const newRow = this.scroll.create(TableRow.blotName);
     const rows = this.descendants(TableRow);
+    const value = TableCell.formats(rows[0].children.head.domNode);
+    value.datarow = id;
     const maxColumns = rows.reduce((max, row) => {
       return Math.max(row.children.length, max);
     }, 0);
     new Array(maxColumns).fill(0).forEach(() => {
-      const cell = this.scroll.create(TableCell.blotName, { datarow: id });
+      const cell = this.scroll.create(TableCell.blotName, value);
       newRow.appendChild(cell);
     });
     const ref = body.children.at(index);

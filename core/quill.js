@@ -492,6 +492,10 @@ class Quill {
     copy.querySelectorAll('.ql-cursor').forEach(el => {
       el.parentNode.removeChild(el);
     });
+    copy.querySelectorAll('table').forEach(table => {
+      const td = table.querySelector('td');
+      table.setAttribute('table-align', td.getAttribute('tbalign') || '');
+    });
     return this.wrapContent(copy.innerHTML);
   }
 

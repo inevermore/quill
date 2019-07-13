@@ -128,7 +128,19 @@ const table1 = editor.quill.getModule('table');
 const button1 = document.createElement('button');
 button1.innerText = 'insert table diagonal';
 button1.addEventListener('click', () => {
-  editor.format('table-diagonal', 'normal')
+  console.log('beore root.innerHTML', editor.quill.root.innerHTML)
+  editor.quill.latex2svg(true);
+  console.log('root.innerHTML', editor.quill.root.innerHTML)
+  const html = editor.getContent(true);
+  console.log('html', html)
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  const container = div.children[0];
+  const result = div.children[0].innerHTML;
+  if (result === '<p><span class="paragraph-mark"></span></p>') {
+    return '';
+  }
+  console.log(editor.getContent())
 });
 document.body.appendChild(button1);
 

@@ -47,6 +47,9 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('table-align', 'left');
+          tableContainer.domNode.querySelectorAll('td').forEach(td => {
+            td.setAttribute('tbalign', 'left');
+          });
         },
       },
       {
@@ -55,6 +58,9 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('table-align', 'center');
+          tableContainer.domNode.querySelectorAll('td').forEach(td => {
+            td.setAttribute('tbalign', 'center');
+          });
         },
       },
       {
@@ -63,6 +69,9 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('table-align', 'right');
+          tableContainer.domNode.querySelectorAll('td').forEach(td => {
+            td.setAttribute('tbalign', 'right');
+          });
         },
       },
       {
