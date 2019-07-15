@@ -1,3 +1,7 @@
+## 0.4.33
+
+* bugfix 优化latex svg转化逻辑
+
 ## 0.4.31
 
 * bugfix table居中样式丢失问题

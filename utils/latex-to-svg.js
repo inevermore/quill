@@ -19,21 +19,26 @@ export default async function latexToSvg(quill, notConvertImg) {
     );
   } else {
     const latexArr = (html.match(/\$(.*?)\$/g) || []).map(filter);
-    const svgList = await mathjaxRender(latexArr);
+    const objList = await mathjaxRender(latexArr);
     const errSvg = [];
     let count = 0;
     quill.setContent(
       html
         .replace(/\$(.*?)\$/g, () => {
-          let svg = latexArr[count];
-          if (svgList[count]) {
+          const obj = objList[count];
+          let svg = '';
+          if (obj.isRight) {
             const math = QlMathjax.create({
-              latex: latexArr[count].slice(1, -1),
-              innerHTML: svgList[count].outerHTML,
+              latex: obj.text
+                .slice(1, -1)
+                .replace(/&gt;/g, '>')
+                .replace(/&lt;/g, '<'),
+              innerHTML: obj.html,
             });
             svg = math.outerHTML;
           } else {
-            errSvg.push(svg);
+            svg = obj.html;
+            errSvg.push(obj.text);
           }
           count += 1;
           return svg;
@@ -64,8 +69,21 @@ export function mathjaxRender(latexArr) {
       ['Typeset', window.MathJax.Hub, container],
       [
         () => {
-          const svgs = Array.from(container.children).map(ele => {
-            return ele.querySelector('svg') || null;
+          const svgContainerList = container.querySelectorAll('.MathJax_SVG');
+          const svgs = Array.from(svgContainerList).map((svg, index) => {
+            const child = svg.children[0];
+            if (child.tagName === 'svg') {
+              return {
+                isRight: true,
+                html: child.outerHTML,
+                text: latexArr[index],
+              };
+            }
+            return {
+              isRight: false,
+              html: `$${child.innerHTML}$`,
+              text: child.innerText,
+            };
           });
           resolve(svgs);
         },

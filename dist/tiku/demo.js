@@ -84,7 +84,7 @@ const editor = new Editor({
 //   }
 // }
 // Quill.register(ListStyle);
-editor.setContent(str)
+// editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {
