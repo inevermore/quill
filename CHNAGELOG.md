@@ -1,3 +1,7 @@
+## 0.4.34
+
+* bugfix 插入公式bug
+
 ## 0.4.33
 
 * bugfix 优化latex svg转化逻辑

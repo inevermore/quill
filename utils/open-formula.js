@@ -60,7 +60,7 @@ function listenMessage() {
         try {
           insertFormula({
             latex: latex.slice(1, -1),
-            svg: svg[0].outerHTML,
+            svg: svg[0].html,
           });
         } catch (err) {
           // eslint-disable-next-line no-console
