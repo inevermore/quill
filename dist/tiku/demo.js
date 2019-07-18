@@ -43,7 +43,9 @@ const blankList = [];
 // const str = `<div class="text-editor-wrapper"><p class="yikespec-text-indent">①我曾说</p></div>`
 // const str = `<div class="text-editor-wrapper"><img width="50px" class="kfformula" src="https://img.zuoyebang.cc/zyb_a4f574e79e82d6524597995dc9cf0e3e.jpg" style="width: 55px;"></div>`
 // const str = `<div class="text-editor-wrapper"><table table-align="center"><tbody><tr><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td></tr></tbody></table><p><span class="paragraph-mark"></span></p></div>`
-const str = `<div class="text-editor-wrapper"><table table-align="center"><tbody><tr><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-lcvg" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-q191" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td></tr><tr><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="row-vxa9" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td></tr></tbody></table><p><span class="paragraph-mark"></span></p></div>`
+const str = `<div class="text-editor-wrapper"><table table-align=""><tbody><tr><td data-row="1" rowspan="1" colspan="1" tbalign="">     亲本序号
+ 1234</td><td class="tkspec-align-left" data-row="1" rowspan="1" colspan="1" tbalign="">$1$</td><td data-row="1" rowspan="1" colspan="1" tbalign="">$2$</td><td data-row="1" rowspan="1" colspan="1" tbalign="">$3$</td><td data-row="1" rowspan="1" colspan="1" tbalign="">$4$</td><td data-row="1" rowspan="1" colspan="1" tbalign="">$5$</td></tr><tr><td data-row="2" rowspan="1" colspan="1" tbalign="">染色体</td><td data-row="2" rowspan="1" colspan="1" tbalign=""><span class="paragraph-mark"></span></td><td data-row="2" rowspan="1" colspan="1" tbalign="">第Ⅱ染色体</td><td data-row="2" rowspan="1" colspan="1" tbalign="">$X$染色体</td><td data-row="2" rowspan="1" colspan="1" tbalign="">第Ⅲ染色体</td><td data-row="2" rowspan="1" colspan="1" tbalign="">第Ⅱ染色体</td></tr><tr><td data-row="3" rowspan="2" colspan="1" tbalign="">性状</td><td data-row="3" rowspan="2" colspan="1" tbalign="">野生型(显性纯合子)</td><td data-row="3" rowspan="1" colspan="1" tbalign="">残翅$(v)$</td><td data-row="3" rowspan="1" colspan="1" tbalign="">白眼$(a)$</td><td data-row="3" rowspan="1" colspan="1" tbalign="">毛身$(h)$</td><td data-row="3" rowspan="1" colspan="1" tbalign="">黑身$(b)$</td></tr><tr><td data-row="4" rowspan="1" colspan="4" tbalign="">其余性状均为纯合显性性状</td></tr></tbody></table></div>`
+// const str = `<div class="text-editor-wrapper">123$abcd$789$efgh$000</div>`
 const editor = new Editor({
   container: '#tikuEditor',
   theme: 'tiku',
@@ -69,22 +71,7 @@ const editor = new Editor({
     response: ['url'],
   },
 });
-// Quill.register('formats/list', List);
-// let List = Quill.import('formats/list');
-// class ListStyle extends List {
-//   static create (value) {
-//     console.log('value')
-//     let node = super.create();
-//     node.className = 'ql-list-' + value;
-//     return node;
-//   }
-//   // 重写formats方法，验证
-//   static formats (domNode) {
-//     return domNode.className.substring(8);
-//   }
-// }
-// Quill.register(ListStyle);
-// editor.setContent(str)
+editor.setContent(str)
 
 function blankOrderChange(type, list, len) {
   if (type === 'add') {

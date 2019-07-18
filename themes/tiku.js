@@ -116,11 +116,17 @@ class TikuTheme extends TkBaseTheme {
         mathjaxNode.classList.remove('selected');
       }
       const curMathjaxNode = isContain(target, root, QlMathjax.className);
+      let curNode = null;
       if (curMathjaxNode) {
         mathjaxNode = curMathjaxNode;
+        curNode = curMathjaxNode;
         mathjaxNode.classList.add('selected');
+      } else if (target.tagName === 'IMG') {
+        curNode = target;
+      }
+      if (curNode) {
         const range = document.createRange();
-        range.selectNodeContents(mathjaxNode);
+        range.selectNodeContents(curNode);
         const native = this.quill.selection.normalizeNative(range);
         this.quill.selection.setNativeRange(
           native.start.node,
@@ -128,6 +134,9 @@ class TikuTheme extends TkBaseTheme {
           native.end.node,
           native.end.offset,
         );
+        if (curNode.tagName === 'IMG') {
+          this.quill.setSelection(this.quill.getSelection().index, 1);
+        }
       }
     });
   }

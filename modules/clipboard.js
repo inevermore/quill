@@ -12,7 +12,7 @@ import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
 
-import { AlignStyle } from '../formats/align';
+import { AlignStyle, AlignClass } from '../formats/align';
 import { SizeStyle } from '../formats/size';
 import LineHeightStyle from '../formats/line-height';
 import { FontStyle } from '../formats/font';
@@ -37,6 +37,7 @@ const CLIPBOARD_CONFIG = [
   // ['ol, ul', matchList],
   ['ol', matchList],
   ['td', matchTableCell],
+  ['td', centerTableCell],
   ['b', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['strong', matchAlias.bind(matchAlias, { bold: 'normal' })],
   ['i', matchAlias.bind(matchAlias, { italic: 'normal' })],
@@ -566,6 +567,10 @@ function matchTableCell(node, delta) {
   });
 }
 
+function centerTableCell(node, delta) {
+  return applyFormat(delta, 'align', AlignClass.value(node) || 'center');
+}
+
 function matchText(node, delta) {
   let text = node.data;
   // Word represents empty line with <o:p>&nbsp;</o:p>
@@ -575,6 +580,7 @@ function matchText(node, delta) {
   if (text.trim().length === 0 && text.includes('\n')) {
     return delta;
   }
+
   if (!isPre(node)) {
     const replacer = (collapse, match) => {
       const replaced = match.replace(/[^\u00a0]/g, ''); // \u00a0 is nbsp;

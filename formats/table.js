@@ -1,5 +1,6 @@
 import Block from '../blots/block';
 import Container from '../blots/container';
+import { AlignClass } from './align';
 
 class TableCell extends Block {
   static create(value) {
@@ -15,6 +16,7 @@ class TableCell extends Block {
       node.setAttribute('colspan', 1);
       node.setAttribute('tbalign', '');
     }
+    AlignClass.add(node, AlignClass.value(node) || 'center');
     return node;
   }
 
@@ -185,21 +187,21 @@ class TableContainer extends Container {
   }
 
   balanceCells() {
-    const rows = this.descendants(TableRow);
-    const maxColumns = rows.reduce((max, row) => {
-      return Math.max(row.rowLength(), max);
-    }, 0);
-    rows.forEach(row => {
-      new Array(maxColumns - row.rowLength()).fill(0).forEach(() => {
-        let value;
-        if (row.children.head != null) {
-          value = TableCell.formats(row.children.head.domNode);
-        }
-        const blot = this.scroll.create(TableCell.blotName, value);
-        row.appendChild(blot);
-        blot.optimize(); // Add break blot
-      });
-    });
+    // const rows = this.descendants(TableRow);
+    // const maxColumns = rows.reduce((max, row) => {
+    //   return Math.max(row.rowLength(), max);
+    // }, 0);
+    // rows.forEach(row => {
+    //   new Array(maxColumns - row.rowLength()).fill(0).forEach(() => {
+    //     let value;
+    //     if (row.children.head != null) {
+    //       value = TableCell.formats(row.children.head.domNode);
+    //     }
+    //     const blot = this.scroll.create(TableCell.blotName, value);
+    //     row.appendChild(blot);
+    //     blot.optimize(); // Add break blot
+    //   });
+    // });
   }
 
   cells(column) {

@@ -1,11 +1,14 @@
 import { mathjaxRender } from './latex-to-svg';
 
-let insertFormula = () => {};
-let isLoaded = false;
+const OFFSET_LEFT = 320;
 
-function openFormula(latex = '', fn) {
-  insertFormula = fn;
-  let formulaContainer = document.querySelector('#formulaEditorContainer');
+let isLoaded = false;
+let quill = {};
+let formulaContainer = null;
+
+function openFormula(latex = '', quillObj) {
+  quill = quillObj;
+  formulaContainer = document.querySelector('#formulaEditorContainer');
   if (!formulaContainer) {
     formulaContainer = createFormulaContainer();
     document.body.appendChild(formulaContainer);
@@ -32,13 +35,26 @@ function openFormula(latex = '', fn) {
 }
 
 function showFormula(boolean) {
-  const formulaContainer = document.querySelector('#formulaEditorContainer');
   formulaContainer.style.visibility = boolean ? 'visible' : 'hidden';
+  if (!boolean) {
+    const { index } = quill.selection.savedRange;
+    quill.focus();
+    quill.setSelection(index + 1, 0, 'user');
+  } else {
+    initPosition(formulaContainer);
+  }
+}
+
+function initPosition() {
+  const editorBox = formulaContainer.children[0];
+  const left = window.innerWidth / 2 - editorBox.offsetWidth / 2;
+  const top = window.innerHeight / 2 - editorBox.offsetHeight / 2;
+  editorBox.style.left = `${Math.max(left + OFFSET_LEFT, 0)}px`;
+  editorBox.style.top = `${Math.max(top, 0)}px`;
 }
 
 function setFormulaValue(latex) {
-  const container = document.querySelector('#formulaEditorContainer');
-  const iframe = container.querySelector('iframe');
+  const iframe = formulaContainer.querySelector('iframe');
   iframe.contentWindow.postMessage(
     {
       type: 'getEquationInfo',
@@ -56,9 +72,8 @@ function listenMessage() {
         const latex = data.data;
         if (latex === '$$') return;
         const svg = await mathjaxRender([latex]);
-        showFormula(false);
         try {
-          insertFormula({
+          quill.insertFormula({
             latex: latex.slice(1, -1),
             svg: svg[0].html,
           });
@@ -66,6 +81,7 @@ function listenMessage() {
           // eslint-disable-next-line no-console
           console.error('insert formula', err);
         }
+        showFormula(false);
       }
     },
     false,

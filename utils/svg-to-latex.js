@@ -3,22 +3,23 @@ export default function svgToLatex(quill) {
   // 1. 如果有选中的range，只处理range
   const [range] = quill.selection.getRange();
   if (range && range.length > 0) {
-    // let nodeCount = 0;
-    // let latexCount = 0;
+    let nodeCount = 0;
+    let latexCount = 0;
     const { native } = quill.selection.getNativeRange();
     iterateNodes(native, domNode => {
-      if (
-        domNode.nodeType === Node.ELEMENT_NODE &&
-        domNode.classList.contains(quill.formulaImgClass)
-      ) {
-        const latex = `$${getSvgLatex(domNode)}$`;
-        // latexCount += latex.length;
-        domNode.outerHTML = latex;
-        // nodeCount += 1;
-      }
+      const latex = `$${getSvgLatex(domNode)}$`;
+      latexCount += latex.length;
+      domNode.outerHTML = latex;
+      nodeCount += 1;
     });
     // TODO: setSelection 未生效
-    // quill.setSelection(range.index, range.length - nodeCount + latexCount);
+    Promise.resolve().then(() => {
+      quill.setSelection(
+        range.index,
+        range.length - nodeCount + latexCount,
+        'user',
+      );
+    });
   } else {
     const imgs = quill.root.querySelectorAll(`.${quill.formulaImgClass}`);
     Array.from(imgs).forEach(img => {
@@ -47,12 +48,6 @@ function iterateNodes(range, fn) {
   const iterator = document.createNodeIterator(
     range.commonAncestorContainer,
     NodeFilter.SHOW_ALL, // pre-filter
-    {
-      // custom filter
-      acceptNode() {
-        return NodeFilter.FILTER_ACCEPT;
-      },
-    },
   );
 
   let flag = false;
@@ -62,7 +57,11 @@ function iterateNodes(range, fn) {
       continue;
     }
     flag = true;
-    fn(iterator.referenceNode);
+    const { tagName } = iterator.referenceNode;
+    if (tagName && tagName.toUpperCase() === 'SVG') {
+      const qlMathjaxNode = iterator.referenceNode.parentNode.parentNode;
+      fn(qlMathjaxNode);
+    }
     if (iterator.referenceNode === range.endContainer) break;
   }
 }

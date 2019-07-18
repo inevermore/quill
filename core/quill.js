@@ -8,7 +8,6 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
-import QlMathjax from '../formats/mathjax';
 import openFormula from '../utils/open-formula';
 import latexToSvg from '../utils/latex-to-svg';
 import { getSvgLatex } from '../utils/svg-to-latex';
@@ -132,7 +131,6 @@ class Quill {
       this.disable();
     }
     this.allowReadOnlyEdits = false;
-    this.editedFormula = null;
     this.tkEvents = this.options.events;
     this.wrapperClass = this.options.wrapperClass;
     this.embedTextMap = {
@@ -505,36 +503,24 @@ class Quill {
 
   insertFormula(objList) {
     const { index, length } = this.selection.savedRange;
-    // 编辑模式下替换 img 节点
-    if (this.editedFormula) {
-      this.editedFormula.outerHTML = QlMathjax.create({
-        latex: objList.latex,
-        innerHTML: objList.svg,
-      }).outerHTML;
-      this.editedFormula = null;
-    } else if (objList.latex) {
-      const update = new Delta()
-        .retain(index)
-        .delete(length)
-        .insert({
-          'ql-mathjax': {
-            latex: `${objList.latex}`,
-            innerHTML: objList.svg,
-          },
-        });
-      this.updateContents(update, Emitter.sources.USER);
-      this.root.focus();
-      this.setSelection(index + 1, Emitter.sources.SILENT);
-    }
+    const update = new Delta()
+      .retain(index)
+      .delete(length)
+      .insert({
+        'ql-mathjax': {
+          latex: `${objList.latex}`,
+          innerHTML: objList.svg,
+        },
+      });
+    this.updateContents(update, Emitter.sources.USER);
   }
 
   editFormula(node) {
-    this.editedFormula = node;
     this.showFormulaEditor(node.getAttribute('latex'));
   }
 
   showFormulaEditor(latex = '') {
-    openFormula(latex, this.insertFormula.bind(this));
+    openFormula(latex, this);
   }
 
   latex2svg(isFilter = false) {
