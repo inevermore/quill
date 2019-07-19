@@ -29,12 +29,12 @@ export default function svgToLatex(quill) {
 }
 
 export function getSvgLatex(node) {
-  return node.getAttribute('latex').replace(/[><]g/, item => {
+  return node.getAttribute('latex').replace(/[><]/g, item => {
     switch (item) {
-      case '<':
+      case '>':
         return '&gt;';
 
-      case '>':
+      case '<':
         return '&lt;';
 
       default:

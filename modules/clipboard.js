@@ -654,8 +654,8 @@ function handleTablePaste(container) {
       const span = document.createElement('span');
       para.getAttributeNames().forEach(attr => {
         span.setAttribute(attr, para.getAttribute(attr));
-        span.innerHTML = para.innerHTML;
       });
+      span.innerHTML = para.innerHTML;
       para.outerHTML = span.outerHTML;
     });
   });

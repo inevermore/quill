@@ -1,3 +1,11 @@
+## 0.4.52
+
+* bugfix 兼容表格内有p标签
+
+## 0.4.51
+
+* bugfix svg2latex bug
+
 ## 0.4.43
 
 * bugfix table居中
