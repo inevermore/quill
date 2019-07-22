@@ -1,6 +1,6 @@
 export default function svgToLatex(quill) {
   // 点击按钮执行的逻辑
-  // 1. 如果有选中的range，只处理range
+  // 如果有选中的range，只处理range；否则全部处理
   const [range] = quill.selection.getRange();
   if (range && range.length > 0) {
     let nodeCount = 0;
@@ -12,7 +12,7 @@ export default function svgToLatex(quill) {
       domNode.outerHTML = latex;
       nodeCount += 1;
     });
-    // TODO: setSelection 未生效
+    // 异步setSelection，在mutationObersever后设置
     Promise.resolve().then(() => {
       quill.setSelection(
         range.index,
@@ -51,6 +51,8 @@ function iterateNodes(range, fn) {
   );
 
   let flag = false;
+  // 将svg节点缓存统一处理，不要每次遍历都处理，以避免 iterator 遍历 bug
+  const nodes = [];
   while (iterator.nextNode()) {
     if (!flag && iterator.referenceNode !== range.startContainer) {
       // eslint-disable-next-line no-continue
@@ -60,8 +62,9 @@ function iterateNodes(range, fn) {
     const { tagName } = iterator.referenceNode;
     if (tagName && tagName.toUpperCase() === 'SVG') {
       const qlMathjaxNode = iterator.referenceNode.parentNode.parentNode;
-      fn(qlMathjaxNode);
+      nodes.push(qlMathjaxNode);
     }
     if (iterator.referenceNode === range.endContainer) break;
   }
+  nodes.forEach(fn);
 }

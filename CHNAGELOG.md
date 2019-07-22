@@ -1,3 +1,7 @@
+## 0.4.54
+
+* bugfix svg2latex
+
 ## 0.4.52
 
 * bugfix 兼容表格内有p标签
