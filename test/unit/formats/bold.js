@@ -1,18 +1,13 @@
-import Scroll from '../../../blots/scroll';
+import Editor from '../../../index';
 
 describe('Bold', function() {
   it('optimize and merge', function() {
-    const scroll = this.initialize(
-      Scroll,
-      '<p><strong>a</strong>b<strong>c</strong></p>',
+    const editor = this.initialize(
+      Editor,
+      '<p><strong>a</strong><b>b</b><strong>c</strong></p>',
     );
-    const bold = document.createElement('b');
-    bold.appendChild(scroll.domNode.firstChild.childNodes[1]);
-    scroll.domNode.firstChild.insertBefore(
-      bold,
-      scroll.domNode.firstChild.lastChild,
+    expect(editor.quill.root).toEqualHTML(
+      '<p><span class="tkspec-bold-normal">abc</span></p>',
     );
-    scroll.update();
-    expect(scroll.domNode).toEqualHTML('<p><strong>abc</strong></p>');
   });
 });

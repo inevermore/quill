@@ -17,12 +17,12 @@ import './helpers/unit';
 // import './unit/formats/color';
 // import './unit/formats/link';
 // import './unit/formats/script';
-// import './unit/formats/align';
+import './unit/formats/align';
 // import './unit/formats/code';
 // import './unit/formats/header';
 // import './unit/formats/indent';
 // import './unit/formats/list';
-// import './unit/formats/bold';
+import './unit/formats/bold';
 // import './unit/formats/table';
 
 // import './unit/modules/clipboard';
@@ -34,7 +34,7 @@ import './helpers/unit';
 
 // import './unit/ui/picker';
 // import './unit/theme/base/tooltip';
-import './unit1/formats/bold';
+// import './unit1/formats/bold';
 
 // Syntax version will otherwise be registered
 Quill.register(CodeBlockContainer, true);

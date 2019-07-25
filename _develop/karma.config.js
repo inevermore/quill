@@ -8,11 +8,12 @@ module.exports = config => {
     port: process.env.npm_package_config_ports_karma,
 
     files: [
-      {
-        pattern:
-          'http://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js',
-        served: true,
-      },
+      // {
+      //   pattern:
+      //     'http://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js',
+      //   served: true,
+      // },
+      { pattern: 'dist/yike-iframe.css', nocache: true },
       { pattern: 'dist/text-editor.css', nocache: true },
       { pattern: 'dist/unit.js', nocache: true },
       { pattern: 'dist/*.map', included: false, served: true, nocache: true },
@@ -25,7 +26,7 @@ module.exports = config => {
     frameworks: ['jasmine'],
     reporters: ['progress'],
     colors: true,
-    autoWatch: false,
+    autoWatch: true,
     singleRun: true,
     browsers: ['Chrome'],
 

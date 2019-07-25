@@ -523,8 +523,8 @@ class Quill {
     openFormula(latex, this);
   }
 
-  latex2svg(isFilter = false) {
-    latexToSvg(this, isFilter);
+  latex2svg(options) {
+    latexToSvg(this, options);
   }
 }
 

@@ -1,3 +1,7 @@
+## 0.4.55
+
+* add latex2svg 新增 noAlert 配置
+
 ## 0.4.54
 
 * bugfix svg2latex

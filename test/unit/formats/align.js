@@ -9,14 +9,14 @@ describe('Align', function() {
       new Delta().insert('0123').insert('\n', { align: 'center' }),
     );
     expect(editor.scroll.domNode).toEqualHTML(
-      '<p class="ql-align-center">0123</p>',
+      '<p class="tkspec-align-center">0123</p>',
     );
   });
 
   it('remove', function() {
     const editor = this.initialize(
       Editor,
-      '<p class="ql-align-center">0123</p>',
+      '<p class="tkspec-align-center">0123</p>',
     );
     editor.formatText(4, 1, { align: false });
     expect(editor.getDelta()).toEqual(new Delta().insert('0123\n'));
@@ -26,7 +26,7 @@ describe('Align', function() {
   it('whitelist', function() {
     const editor = this.initialize(
       Editor,
-      '<p class="ql-align-center">0123</p>',
+      '<p class="tkspec-align-center">0123</p>',
     );
     const initial = editor.scroll.domNode.innerHTML;
     editor.formatText(4, 1, { align: 'middle' });

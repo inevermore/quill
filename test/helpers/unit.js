@@ -3,9 +3,41 @@ import Editor from '../../core/editor';
 import Emitter from '../../core/emitter';
 import Selection from '../../core/selection';
 import Scroll from '../../blots/scroll';
+import './register';
 import Quill, { globalRegistry } from '../../core/quill';
 import TextEditor from '../../index';
 // import { register } from '../../quill';
+
+const editorOptions = [
+  ['undo', 'redo'],
+  [
+    { bold: 'normal' },
+    { italic: 'normal' },
+    { strike: 'normal' },
+    { align: 'center' },
+    { align: 'left' },
+    { align: 'right' },
+    { 'text-indent': 'normal' },
+    { script: 'super' },
+    { script: 'sub' },
+  ],
+  ['select-all', 'clear'],
+  ['image'],
+  [
+    'fill-blank-order',
+    { dotted: 'normal' },
+    'fill-blank-underline',
+    { underline: 'normal' },
+    { underline: 'wavy' },
+    'fill-blank-brackets',
+    'formula-editor',
+    'latex2svg',
+    'svg2latex',
+    'pinyin',
+    'table-insert',
+  ],
+  [{ list: 'ordered' }],
+];
 
 const div = document.createElement('div');
 div.id = 'test-container';
@@ -124,17 +156,18 @@ function initialize(klass, html, container = this.container, options = {}) {
     container.innerHTML = html.replace(/\n\s*/g, '');
   }
   if (klass === HTMLElement) return container;
+  if (klass === TextEditor) {
+    return new TextEditor({
+      container,
+      options: editorOptions,
+      theme: 'tiku',
+    });
+  }
   if (klass === Quill) return new Quill(container, options);
   const emitter = new Emitter();
   const scroll = new Scroll(globalRegistry, container, { emitter });
   if (klass === Scroll) return scroll;
   if (klass === Editor) return new Editor(scroll);
-  if (klass === TextEditor) {
-    return new TextEditor({
-      container,
-      theme: 'handout',
-    });
-  }
   if (klass === Selection) return new Selection(scroll, emitter);
   if (klass[0] === Editor && klass[1] === Selection) {
     return [new Editor(scroll), new Selection(scroll, emitter)];

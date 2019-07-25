@@ -1,6 +1,6 @@
 {
   "name": "text-editor",
-  "version": "0.4.54",
+  "version": "0.4.55",
   "description": "一课富文本编辑器，目前只适用与讲义系统",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
@@ -163,7 +163,8 @@
     "test:coverage": "webpack --env.coverage --config _develop/webpack.config.js; karma start _develop/karma.config.js --reporters coverage",
     "travis": "npm run lint && karma start _develop/karma.config.js --reporters dots,saucelabs",
     "release": "npm run build && npm publish",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "debug": "node --nolazy --inspect-brk=9229 ./node_modules/webpack/bin/webpack.js --mode development --watch --config ./_develop/webpack.config.js"
   },
   "keywords": [
     "editor",

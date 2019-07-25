@@ -11,9 +11,12 @@ const SYMBOL_LATEX_MAP = {
   '∠': '\\angle ',
 };
 
-export default async function latexToSvg(quill, notConvertImg) {
+export default async function latexToSvg(
+  quill,
+  { noConvert = false, noAlert = false } = {},
+) {
   const html = quill.getContent().replace(/\\\$/g, 'MATHCUSTOM');
-  if (notConvertImg) {
+  if (noConvert) {
     quill.setContent(
       html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),
     );
@@ -45,7 +48,7 @@ export default async function latexToSvg(quill, notConvertImg) {
         })
         .replace(/MATHCUSTOM/g, '\\$'),
     );
-    if (errSvg.length) {
+    if (errSvg.length && !noAlert) {
       alert(`不识别的LaTex码，请检查以下LaTex是否正确：${errSvg.join('、')}`);
     }
   }
