@@ -1,3 +1,7 @@
+## 1.0.2
+
+* bugfix 公式在首行时，工具栏svg2latex按钮失效
+
 ## 1.0.1
 
 * update latex2svg逻辑

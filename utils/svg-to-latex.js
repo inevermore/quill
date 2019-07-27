@@ -1,11 +1,10 @@
 export default function svgToLatex(quill) {
   // 点击按钮执行的逻辑
   // 如果有选中的range，只处理range；否则全部处理
-  const [range] = quill.selection.getRange();
+  const [range, native] = quill.selection.getRange();
   if (range && range.length > 0) {
     let nodeCount = 0;
     let latexCount = 0;
-    const { native } = quill.selection.getNativeRange();
     iterateNodes(native, domNode => {
       const latex = `$${getSvgLatex(domNode)}$`;
       latexCount += latex.length;
@@ -45,8 +44,9 @@ export function getSvgLatex(node) {
 
 // 遍历选区dom
 function iterateNodes(range, fn) {
+  const { start, end, native } = range;
   const iterator = document.createNodeIterator(
-    range.commonAncestorContainer,
+    native.commonAncestorContainer,
     NodeFilter.SHOW_ALL, // pre-filter
   );
 
@@ -54,7 +54,7 @@ function iterateNodes(range, fn) {
   // 将svg节点缓存统一处理，不要每次遍历都处理，以避免 iterator 遍历 bug
   const nodes = [];
   while (iterator.nextNode()) {
-    if (!flag && iterator.referenceNode !== range.startContainer) {
+    if (!flag && iterator.referenceNode !== start.node) {
       // eslint-disable-next-line no-continue
       continue;
     }
@@ -64,7 +64,7 @@ function iterateNodes(range, fn) {
       const qlMathjaxNode = iterator.referenceNode.parentNode.parentNode;
       nodes.push(qlMathjaxNode);
     }
-    if (iterator.referenceNode === range.endContainer) break;
+    if (iterator.referenceNode === end.node) break;
   }
   nodes.forEach(fn);
 }
