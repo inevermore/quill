@@ -21,7 +21,7 @@ export default async function latexToSvg(
       html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),
     );
   } else {
-    const latexArr = (html.match(/\$(.*?)\$/g) || []).map(filter);
+    const latexArr = html.match(/\$(.*?)\$/g) || [];
     const objList = await mathjaxRender(latexArr);
     const errSvg = [];
     let count = 0;
@@ -55,6 +55,7 @@ export default async function latexToSvg(
 }
 
 export function mathjaxRender(latexArr) {
+  latexArr = latexArr.map(filter);
   return new Promise(resolve => {
     const container = document.createElement('div');
     latexArr.forEach(latex => {
@@ -104,13 +105,20 @@ function filter(latex) {
   const tempArr = latex.split('');
   // eslint-disable-next-line prettier/prettier
   return tempArr.map((v, i) => {
+      let hasRed = false;
+      const redString = 'color{red}{';
+      if (i >= redString.length) {
+        // eslint-disable-next-line prettier/prettier
+        hasRed = tempArr.slice(i - redString, i).join('').indexOf(redString) >= 0;
+      }
       if (
         WHITE_LIST.test(v) ||
-        (v === '#' && tempArr.slice(i - 1, i + 4).join('') === '&#39;')
+        (v === '#' && tempArr.slice(i - 1, i + 4).join('') === '&#39;') ||
+        hasRed
       ) {
         return v;
       }
-      return SYMBOL_LATEX_MAP[v] ? SYMBOL_LATEX_MAP[v] : `\\color{red}{${v}}`;
+      return SYMBOL_LATEX_MAP[v] ? SYMBOL_LATEX_MAP[v] : `\\${redString}${v}}`;
     })
     .join('');
 }

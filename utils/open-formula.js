@@ -71,11 +71,11 @@ function listenMessage() {
       if (data.type === 'sendEquationInfo') {
         const latex = data.data;
         if (latex === '$$') return;
-        const svg = await mathjaxRender([latex]);
+        const obj = await mathjaxRender([latex]);
         try {
           quill.insertFormula({
-            latex: latex.slice(1, -1),
-            svg: svg[0].html,
+            latex: obj[0].text.slice(1, -1),
+            svg: obj[0].html,
           });
         } catch (err) {
           // eslint-disable-next-line no-console
