@@ -2,15 +2,18 @@ import Delta from 'quill-delta';
 import Quill from '../core/quill';
 import Module from '../core/module';
 import {
+  TableCellLine,
   TableCell,
   TableRow,
   TableBody,
   TableContainer,
-  tableId,
+  rowId,
+  cellId,
 } from '../formats/table';
 
 class Table extends Module {
   static register() {
+    Quill.register(TableCellLine);
     Quill.register(TableCell);
     Quill.register(TableRow);
     Quill.register(TableBody);
@@ -55,10 +58,14 @@ class Table extends Module {
     range = this.quill.getSelection() || this.quill.selection.savedRange,
   ) {
     if (range == null) return [null, null, null, -1];
-    const [cell, offset] = this.quill.getLine(range.index);
-    if (cell == null || cell.statics.blotName !== TableCell.blotName) {
+    const [cellLine, offset] = this.quill.getLine(range.index);
+    if (
+      cellLine == null ||
+      cellLine.statics.blotName !== TableCellLine.blotName
+    ) {
       return [null, null, null, -1];
     }
+    const cell = cellLine.parent;
     const row = cell.parent;
     const table = row.parent.parent;
     return [table, row, cell, offset];
@@ -135,8 +142,13 @@ class Table extends Module {
       initDelta.retain(rangeIndex);
     }
     const delta = new Array(rows).fill(0).reduce(memo => {
-      const text = new Array(columns).fill('\n').join('');
-      return memo.insert(text, { table: { datarow: tableId() } });
+      const row = rowId();
+      new Array(columns).fill('\n').forEach(col => {
+        memo.insert(col, {
+          'table-cell-line': { row, cell: cellId() },
+        });
+      });
+      return memo;
     }, initDelta);
     if (offset !== 0 && offset === line.length() - 1) {
       delta.insert('\n');

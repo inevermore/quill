@@ -111,7 +111,7 @@ class Clipboard extends Module {
     }
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const container = doc.body;
-    handleTablePaste(container);
+    // handleTablePaste(container);
     const nodeMatches = new WeakMap();
     const [elementMatchers, textMatchers] = this.prepareMatching(
       container,
@@ -128,7 +128,7 @@ class Clipboard extends Module {
     // Remove trailing newline
     if (
       deltaEndsWith(delta, '\n') &&
-      (delta.ops[delta.ops.length - 1].attributes == null || formats.table)
+      (delta.ops[delta.ops.length - 1].attributes == null)
     ) {
       return delta.compose(new Delta().retain(delta.length() - 1).delete(1));
     }
@@ -464,7 +464,7 @@ function matchList(node, delta) {
 function matchNewline(node, delta) {
   if (!deltaEndsWith(delta, '\n')) {
     if (
-      (isLine(node) && !isTable(node)) ||
+      isLine(node) ||
       (delta.length() > 0 && node.nextSibling && isLine(node.nextSibling))
     ) {
       delta.insert('\n');
@@ -556,18 +556,21 @@ function matchTableCell(node, delta) {
       ? tr.parentNode
       : tr.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));
-  const datarow = rows.indexOf(tr) + 1;
+  const row = rows.indexOf(tr) + 1;
   const tbalign =
     table.getAttribute('table-align') || table.getAttribute('align');
-  return applyFormat(delta, 'table', {
-    datarow,
+  const cells = Array.from(tr.querySelectorAll('td'));
+  return applyFormat(delta, 'table-cell-line', {
+    row,
     rowspan: Number(node.getAttribute('rowspan')) || 1,
     colspan: Number(node.getAttribute('colspan')) || 1,
     tbalign,
+    cell: cells.indexOf(node) + 1,
   });
 }
 
 function centerTableCell(node, delta) {
+  // return delta;
   return applyFormat(delta, 'align', AlignClass.value(node) || 'center');
 }
 
@@ -659,11 +662,6 @@ function handleTablePaste(container) {
       para.outerHTML = span.outerHTML;
     });
   });
-}
-
-function isTable(node) {
-  const tableTags = ['TABLE', 'TBODY', 'TR', 'TD'];
-  return tableTags.indexOf(node.tagName) > -1;
 }
 
 export {

@@ -325,38 +325,44 @@ Keyboard.DEFAULTS = {
         this.quill.scrollIntoView();
       },
     },
-    'table backspace': {
+    'table-cell-line backspace': {
       key: 'Backspace',
-      format: ['table'],
+      format: ['table-cell-line'],
       collapsed: true,
       offset: 0,
-      handler() {},
+      handler(range) {
+        const [line] = this.quill.getLine(range.index);
+        if (!line.prev || line.prev.statics.blotName !== 'table-cell-line') {
+          return false;
+        }
+        return true;
+      },
     },
-    'table delete': {
+    'table-cell-line delete': {
       key: 'Delete',
-      format: ['table'],
+      format: ['table-cell-line'],
       collapsed: true,
       suffix: /^$/,
       handler() {},
     },
-    'table enter': {
-      key: 'Enter',
-      shiftKey: null,
-      format: ['table'],
-      handler(range) {
-        const module = this.quill.getModule('table');
-        if (module) {
-          const LINE_SEPARATOR = '\u2028';
-          const delta = new Delta().retain(range.index).insert(LINE_SEPARATOR);
-          this.quill.updateContents(delta, Quill.sources.USER);
-          this.quill.setSelection(
-            range.index + 1,
-            range.length,
-            Quill.sources.SILENT,
-          );
-        }
-      },
-    },
+    // 'table enter': {
+    //   key: 'Enter',
+    //   shiftKey: null,
+    //   format: ['table'],
+    //   handler(range) {
+    //     const module = this.quill.getModule('table');
+    //     if (module) {
+    //       const LINE_SEPARATOR = '\u2028';
+    //       const delta = new Delta().retain(range.index).insert(LINE_SEPARATOR);
+    //       this.quill.updateContents(delta, Quill.sources.USER);
+    //       this.quill.setSelection(
+    //         range.index + 1,
+    //         range.length,
+    //         Quill.sources.SILENT,
+    //       );
+    //     }
+    //   },
+    // },
     'table tab': {
       key: 'Tab',
       shiftKey: null,
@@ -705,11 +711,12 @@ function makeTableArrowHandler(up) {
   return {
     key: up ? 'ArrowUp' : 'ArrowDown',
     collapsed: true,
-    format: ['table'],
+    format: ['table-cell-line'],
     handler(range, context) {
       // TODO move to table module
       const key = up ? 'prev' : 'next';
-      const cell = context.line;
+      const cellLine = context.line;
+      const cell = cellLine.parent;
       const targetRow = cell.parent[key];
       if (targetRow != null) {
         if (targetRow.statics.blotName === 'table-row') {
