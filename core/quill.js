@@ -503,12 +503,12 @@ class Quill {
 
   insertFormula(objList) {
     const { index, length } = this.selection.savedRange;
-    const { isRight, latex, html } = objList;
-    let insert = latex;
+    const { isRight, text, html } = objList;
+    let insert = html;
     if (isRight) {
       insert = {
         'ql-mathjax': {
-          latex,
+          latex: text.slice(1, -1),
           innerHTML: html,
         },
       };

@@ -1,3 +1,7 @@
+## 1.0.3
+
+* optimize 优化latex2svg，
+
 ## 1.0.2
 
 * bugfix 公式在首行时，工具栏svg2latex按钮失效

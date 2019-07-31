@@ -32,7 +32,7 @@ export default async function latexToSvg(
           let svg = '';
           if (obj.isRight) {
             const math = QlMathjax.create({
-              latex: obj.latex
+              latex: obj.text
                 .slice(1, -1)
                 .replace(/&gt;/g, '>')
                 .replace(/&lt;/g, '<'),
@@ -41,7 +41,7 @@ export default async function latexToSvg(
             svg = math.outerHTML;
           } else {
             svg = obj.html;
-            errSvg.push(obj.latex.slice(1, -1));
+            errSvg.push(obj.text.slice(1, -1));
           }
           count += 1;
           return svg;
@@ -73,20 +73,22 @@ export function mathjaxRender(latexArr) {
       ['Typeset', window.MathJax.Hub, container],
       [
         () => {
-          const svgContainerList = container.querySelectorAll('.MathJax_SVG');
-          const svgs = Array.from(svgContainerList).map((svg, index) => {
-            const child = svg.children[0];
-            if (child.tagName === 'svg') {
+          const svgContainerList = container.children;
+          const svgs = Array.from(svgContainerList).map((svgCon, index) => {
+            const mathjaxSvg = svgCon.querySelector('.MathJax_SVG');
+            const child = mathjaxSvg && mathjaxSvg.children[0];
+
+            if (child && child.tagName === 'svg') {
               return {
                 isRight: true,
                 html: child.outerHTML,
-                latex: latexArr[index],
+                text: latexArr[index],
               };
             }
             return {
               isRight: false,
               html: latexArr[index],
-              latex: latexArr[index],
+              text: latexArr[index],
             };
           });
           resolve(svgs);
