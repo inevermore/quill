@@ -73,10 +73,7 @@ function listenMessage() {
         if (latex === '$$') return;
         const obj = await mathjaxRender([latex]);
         try {
-          quill.insertFormula({
-            latex: obj[0].text.slice(1, -1),
-            svg: obj[0].html,
-          });
+          quill.insertFormula(obj[0]);
         } catch (err) {
           // eslint-disable-next-line no-console
           console.error('insert formula', err);

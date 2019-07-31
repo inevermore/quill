@@ -32,7 +32,7 @@ export default async function latexToSvg(
           let svg = '';
           if (obj.isRight) {
             const math = QlMathjax.create({
-              latex: obj.text
+              latex: obj.latex
                 .slice(1, -1)
                 .replace(/&gt;/g, '>')
                 .replace(/&lt;/g, '<'),
@@ -41,7 +41,7 @@ export default async function latexToSvg(
             svg = math.outerHTML;
           } else {
             svg = obj.html;
-            errSvg.push(obj.text);
+            errSvg.push(obj.latex.slice(1, -1));
           }
           count += 1;
           return svg;
@@ -80,13 +80,13 @@ export function mathjaxRender(latexArr) {
               return {
                 isRight: true,
                 html: child.outerHTML,
-                text: latexArr[index],
+                latex: latexArr[index],
               };
             }
             return {
               isRight: false,
-              html: `$${child.innerHTML}$`,
-              text: child.innerText,
+              html: latexArr[index],
+              latex: latexArr[index],
             };
           });
           resolve(svgs);
