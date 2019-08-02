@@ -1,3 +1,7 @@
+## 1.0.4
+
+* optimize 调整toolbar z-index，降低层级
+
 ## 1.0.3
 
 * optimize 优化latex2svg，
