@@ -12,6 +12,7 @@ const CELL_DEFAULT = {
 const TABLE_ATTRIBUTES = ['tbalign'];
 class TableCellLine extends Block {
   static create(value) {
+    console.log('create value', value)
     const node = super.create(value);
 
     CELL_IDENTITY_KEYS.forEach(key => {
@@ -33,7 +34,6 @@ class TableCellLine extends Block {
 
   static formats(domNode) {
     const formats = CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS)
-      .concat(TABLE_ATTRIBUTES)
       .reduce((format, attribute) => {
         if (domNode.hasAttribute(`data-${attribute}`)) {
           format[attribute] =
@@ -42,6 +42,7 @@ class TableCellLine extends Block {
         return format;
       }, {});
     formats.align = AlignClass.value(domNode) || 'center';
+    formats.tbalign = domNode.dataset.tbalign || '';
     return formats;
   }
 
@@ -69,17 +70,19 @@ class TableCellLine extends Block {
     const rowspan = this.domNode.getAttribute('data-rowspan');
     const colspan = this.domNode.getAttribute('data-colspan');
     const tbalign = this.domNode.getAttribute('data-tbalign');
-    if (
-      this.statics.requiredContainer &&
-      !(this.parent instanceof this.statics.requiredContainer)
-    ) {
-      this.wrap(this.statics.requiredContainer.blotName, {
-        cell,
-        row,
-        colspan,
-        rowspan,
-        tbalign,
-      });
+    const formats = TableCellLine.formats(this.domNode);
+    if (this.statics.requiredContainer) {
+      if (!(this.parent instanceof this.statics.requiredContainer)) {
+        this.wrap(this.statics.requiredContainer.blotName, {
+          cell,
+          row,
+          colspan,
+          rowspan,
+          tbalign,
+        });
+      } else if (formats.row !== this.parent.formats().row) {
+        this.parent.domNode.dataset.row = formats.row;
+      }
     }
     super.optimize(context);
   }
@@ -131,18 +134,6 @@ class TableCell extends Container {
     return node;
   }
 
-  static formats(domNode) {
-    if (domNode.hasAttribute('data-row')) {
-      return {
-        row: domNode.getAttribute('data-row'),
-        rowspan: domNode.getAttribute('rowspan') || 1,
-        colspan: domNode.getAttribute('colspan') || 1,
-        tbalign: domNode.dataset.tbalign || '',
-      };
-    }
-    return undefined;
-  }
-
   cellOffset() {
     if (this.parent) {
       return this.parent.children.indexOf(this);
@@ -168,32 +159,6 @@ class TableCell extends Container {
     }, formats);
   }
 
-  toggleAttribute(name, value) {
-    if (value) {
-      this.domNode.setAttribute(name, value);
-    } else {
-      this.domNode.removeAttribute(name);
-    }
-  }
-
-  formatChildren(name, value) {
-    this.children.forEach(child => {
-      child.format(name, value);
-    });
-  }
-
-  format(name, value) {
-    if (CELL_ATTRIBUTES.indexOf(name) > -1) {
-      this.toggleAttribute(name, value);
-      this.formatChildren(name, value);
-    } else if (['row'].indexOf(name) > -1) {
-      this.toggleAttribute(`data-${name}`, value);
-      this.formatChildren(name, value);
-    } else {
-      super.format(name, value);
-    }
-  }
-
   optimize(context) {
     const row = this.domNode.getAttribute('data-row');
     const tbalign = this.domNode.getAttribute('data-tbalign');
@@ -207,6 +172,21 @@ class TableCell extends Container {
         tbalign,
       });
     }
+    this.children.forEach(child => {
+      if (child.next == null) return;
+      const childFormats = TableCellLine.formats(child.domNode);
+      const nextFormats = TableCellLine.formats(child.next.domNode);
+      if (childFormats.cell !== nextFormats.cell) {
+        const next = this.splitAfter(child);
+        if (next) {
+          next.optimize();
+        }
+        // We might be able to merge with prev now
+        if (this.prev) {
+          this.prev.optimize();
+        }
+      }
+    });
     super.optimize(context);
   }
 
@@ -252,12 +232,12 @@ class TableRow extends Container {
   }
 
   formats() {
-    return ['row'].reduce((formats, attrName) => {
-      if (this.domNode.hasAttribute(`data-${attrName}`)) {
-        formats[attrName] = this.domNode.getAttribute(`data-${attrName}`);
-      }
-      return formats;
-    }, {});
+    if (this.domNode.dataset.row) {
+      return {
+        row: this.domNode.dataset.row,
+      };
+    }
+    return {};
   }
 
   optimize() {
@@ -270,13 +250,23 @@ class TableRow extends Container {
       this.wrap(this.statics.requiredContainer.blotName, { tbalign });
     }
 
-    // optimize function of ParentBlot
-    // note: modified this optimize function because
-    // TableRow should not be removed when the length of its children was 0
-    this.enforceAllowedChildren();
-    if (this.uiNode != null && this.uiNode !== this.domNode.firstChild) {
-      this.domNode.insertBefore(this.uiNode, this.domNode.firstChild);
-    }
+    this.children.forEach(child => {
+      if (child.next == null) return;
+      const childFormats = child.formats();
+      const nextFormats = child.next.formats();
+      if (childFormats.row !== nextFormats.row) {
+        const next = this.splitAfter(child);
+        if (next) {
+          next.optimize();
+        }
+        // We might be able to merge with prev now
+        if (this.prev) {
+          this.prev.optimize();
+        }
+      }
+    });
+
+    // this.enforceAllowedChildren();
 
     // optimize function of ContainerBlot
     if (this.children.length > 0 && this.next != null && this.checkMerge()) {
@@ -298,22 +288,10 @@ class TableRow extends Container {
 
   rowLength() {
     return this.children.reduce((sum, child) => {
-      const { colspan } = TableCell.formats(child.domNode);
+      const { colspan } = child.formats();
       return sum + colspan * 1;
     }, 0);
   }
-
-  // getCellByIndex(index) {
-  //   const next = this.children.iterator();
-  //   let cur = next();
-  //   let sum = 0;
-  //   while (cur && sum < index) {
-  //     const { colspan } = TableCell.formats(cur.domNode);
-  //     sum += colspan * 1;
-  //     cur = next();
-  //   }
-  //   return cur;
-  // }
 }
 TableRow.blotName = 'table-row';
 TableRow.tagName = 'TR';
@@ -347,15 +325,6 @@ class TableContainer extends Container {
     const domNode = super.create(value);
     domNode.setAttribute('table-align', value.tbalign);
     return domNode;
-  }
-
-  formats() {
-    return {
-      tbalign:
-        this.domNode.getAttribute('table-align') ||
-        this.domNode.getAttribute('align') ||
-        '',
-    };
   }
 
   balanceCells() {
@@ -396,9 +365,7 @@ class TableContainer extends Container {
     if (body == null || body.children.head == null) return;
     body.children.forEach(rowBlot => {
       const ref = rowBlot.children.at(index);
-      const { rowspan, row, tbalign } = TableCell.formats(
-        rowBlot.children.head.domNode,
-      );
+      const { rowspan, row, tbalign } = rowBlot.children.head.formats();
       const cell = this.scroll.create(TableCell.blotName, {
         rowspan,
         colspan: 1,
@@ -420,15 +387,26 @@ class TableContainer extends Container {
     const [body] = this.descendant(TableBody);
     if (body == null || body.children.head == null) return;
     const id = rowId();
-    const newRow = this.scroll.create(TableRow.blotName);
+    const newRow = this.scroll.create(TableRow.blotName, { row: id });
     const rows = this.descendants(TableRow);
-    const value = TableCell.formats(rows[0].children.head.domNode);
-    value.row = id;
+    const { rowspan, tbalign } = rows[0].children.head.formats();
     const maxColumns = rows.reduce((max, row) => {
       return Math.max(row.children.length, max);
     }, 0);
     new Array(maxColumns).fill(0).forEach(() => {
-      const cell = this.scroll.create(TableCell.blotName, value);
+      const cell = this.scroll.create(TableCell.blotName, {
+        row: id,
+        rowspan,
+        colspan: 1,
+        tbalign,
+      });
+      const cellLine = this.scroll.create(TableCellLine.blotName, {
+        row: id,
+        cell: cellId(),
+        rowspan,
+        tbalign,
+      });
+      cell.appendChild(cellLine);
       newRow.appendChild(cell);
     });
     const ref = body.children.at(index);

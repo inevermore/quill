@@ -560,12 +560,14 @@ function matchTableCell(node, delta) {
   const tbalign =
     table.getAttribute('table-align') || table.getAttribute('align');
   const cells = Array.from(tr.querySelectorAll('td'));
+  console.log('delta', delta);
   return applyFormat(delta, 'table-cell-line', {
     row,
     rowspan: Number(node.getAttribute('rowspan')) || 1,
     colspan: Number(node.getAttribute('colspan')) || 1,
     tbalign,
     cell: cells.indexOf(node) + 1,
+    align: AlignClass.value(node) || 'center',
   });
 }
 

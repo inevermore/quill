@@ -26,7 +26,7 @@ const source = [
   return path.resolve(__dirname, '..', file);
 });
 
-const jsRules = {
+let jsRules = {
   test: /\.js$/,
   include: source,
   use: [
@@ -132,7 +132,7 @@ const baseConfig = {
     extensions: ['.js', '.styl', '.less', '.ts'],
   },
   module: {
-    rules: [jsRules, stylRules, lessRules, svgRules, tsRules, imageRules],
+    rules: [stylRules, lessRules, svgRules, tsRules, imageRules],
     noParse: [
       /\/node_modules\/clone\/clone\.js$/,
       /\/node_modules\/eventemitter3\/index\.js$/,

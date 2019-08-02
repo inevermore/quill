@@ -47,9 +47,10 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('table-align', 'left');
-          tableContainer.domNode.querySelectorAll('td').forEach(td => {
-            td.setAttribute('tbalign', 'left');
-          });
+          // tableContainer.domNode.querySelectorAll('p').forEach(td => {
+          //   td.dataset.tbalign = 'left';
+          //   // td.setAttribute('tbalign', 'left');
+          // });
         },
       },
       {
@@ -58,9 +59,10 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('table-align', 'center');
-          tableContainer.domNode.querySelectorAll('td').forEach(td => {
-            td.setAttribute('tbalign', 'center');
-          });
+          // tableContainer.domNode.querySelectorAll('p').forEach(td => {
+          //   td.dataset.tbalign = 'center';
+          //   // td.setAttribute('tbalign', 'center');
+          // });
         },
       },
       {
@@ -69,9 +71,10 @@ class TableMenu extends Module {
         handler: table => {
           const [tableContainer] = table.getTable();
           tableContainer.domNode.setAttribute('table-align', 'right');
-          tableContainer.domNode.querySelectorAll('td').forEach(td => {
-            td.setAttribute('tbalign', 'right');
-          });
+          // tableContainer.domNode.querySelectorAll('p').forEach(td => {
+          //   td.dataset.tbalign = 'right';
+          //   // td.setAttribute('tbalign', 'right');
+          // });
         },
       },
       {

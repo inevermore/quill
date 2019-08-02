@@ -477,11 +477,10 @@ function handleBackspace(range, context) {
   let formats = {};
   if (context.offset === 0) {
     const [prev] = this.quill.getLine(range.index - 1);
+    if (line.prev.statics.blotName === 'table-container') {
+      line.prev.remove();
+    }
     if (prev != null) {
-      if (prev.statics.blotName === 'table') {
-        prev.table().remove();
-        return;
-      }
       if (prev.length() > 1 || prev.statics.blotName === 'table') {
         const curFormats = line.formats();
         const prevFormats = this.quill.getFormat(range.index - 1, 1);
@@ -716,8 +715,12 @@ function makeTableArrowHandler(up) {
       // TODO move to table module
       const key = up ? 'prev' : 'next';
       const cellLine = context.line;
+
       const cell = cellLine.parent;
       const targetRow = cell.parent[key];
+      if (cellLine[key]) {
+        return true;
+      }
       if (targetRow != null) {
         if (targetRow.statics.blotName === 'table-row') {
           let targetCell = targetRow.children.head;

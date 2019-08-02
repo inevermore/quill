@@ -84,7 +84,7 @@ class Table extends Module {
     }
     this.quill.setSelection(
       range.index + shift,
-      range.length,
+      1,
       Quill.sources.SILENT,
     );
   }
