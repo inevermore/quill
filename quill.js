@@ -35,7 +35,6 @@ import { FontStyle } from './formats/font';
 import { SizeStyle } from './formats/size';
 import LineHeightStyle from './formats/line-height';
 import ParagraphBottomSpaceClass from './formats/paragraph-bottom-space';
-import TableDiagonal from './formats/table-diagonal';
 // import TextLineBreak from './formats/text-line-break';
 
 Quill.register(
@@ -47,7 +46,6 @@ Quill.register(
     'attributors/class/dotted': DottedClass,
     'attributors/class/italic': ItalicClass,
     'attributors/class/strike': Strike,
-    'attributors/class/table-diagonal': TableDiagonal,
 
     'attributors/style/font': FontStyle,
     'attributors/style/size': SizeStyle,
@@ -61,7 +59,6 @@ Quill.register(
 Quill.register(
   {
     'formats/image': Image,
-    'formats/table-diagonal': TableDiagonal,
     // 'formats/text-line-break': TextLineBreak,
 
     'modules/table': Table,

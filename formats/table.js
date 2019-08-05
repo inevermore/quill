@@ -1,18 +1,19 @@
 import Block from '../blots/block';
 import Container from '../blots/container';
 import { AlignClass } from './align';
+import constant from '../config/constant';
 
 const CELL_IDENTITY_KEYS = ['row', 'cell'];
-const CELL_ATTRIBUTES = ['rowspan', 'colspan'];
+const CELL_ATTRIBUTES = ['rowspan', 'colspan', 'diagonal'];
 const CELL_DEFAULT = {
   rowspan: 1,
   colspan: 1,
   tbalign: '',
+  diagonal: '',
 };
 const TABLE_ATTRIBUTES = ['tbalign'];
 class TableCellLine extends Block {
   static create(value) {
-    console.log('create value', value)
     const node = super.create(value);
 
     CELL_IDENTITY_KEYS.forEach(key => {
@@ -34,15 +35,14 @@ class TableCellLine extends Block {
 
   static formats(domNode) {
     const formats = CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS)
+      .concat([TABLE_ATTRIBUTES])
       .reduce((format, attribute) => {
         if (domNode.hasAttribute(`data-${attribute}`)) {
-          format[attribute] =
-            domNode.getAttribute(`data-${attribute}`) || undefined;
+          format[attribute] = domNode.getAttribute(`data-${attribute}`) || '';
         }
         return format;
       }, {});
     formats.align = AlignClass.value(domNode) || 'center';
-    formats.tbalign = domNode.dataset.tbalign || '';
     return formats;
   }
 
@@ -65,11 +65,14 @@ class TableCellLine extends Block {
   optimize(context) {
     // cover shadowBlot's wrap call, pass params parentBlot initialize
     // needed
-    const row = this.domNode.getAttribute('data-row');
-    const cell = this.domNode.getAttribute('data-cell');
-    const rowspan = this.domNode.getAttribute('data-rowspan');
-    const colspan = this.domNode.getAttribute('data-colspan');
-    const tbalign = this.domNode.getAttribute('data-tbalign');
+    const {
+      row,
+      cell,
+      rowspan,
+      colspan,
+      tbalign,
+      diagonal,
+    } = TableCellLine.formats(this.domNode);
     const formats = TableCellLine.formats(this.domNode);
     if (this.statics.requiredContainer) {
       if (!(this.parent instanceof this.statics.requiredContainer)) {
@@ -79,9 +82,18 @@ class TableCellLine extends Block {
           colspan,
           rowspan,
           tbalign,
+          diagonal,
         });
-      } else if (formats.row !== this.parent.formats().row) {
+      } else if (
+        formats.row !== this.parent.formats().row ||
+        formats.tbalign !== this.parent.formats().tbalign ||
+        formats.diagonal !== this.parent.formats().diagonal
+      ) {
         this.parent.domNode.dataset.row = formats.row;
+        this.parent.domNode.dataset.tbalign = formats.tbalign;
+        if (formats.diagonal === 'normal') {
+          this.parent.domNode.classList.add(constant.tableDiagonalClass);
+        }
       }
     }
     super.optimize(context);
@@ -130,7 +142,10 @@ class TableCell extends Container {
     node.setAttribute('data-row', value.row);
     node.setAttribute('rowspan', value.rowspan);
     node.setAttribute('colspan', value.colspan);
-    node.setAttribute('data-tbalign', value.tbalign);
+    node.setAttribute('data-tbalign', value.tbalign || '');
+    if (value.diagonal === 'normal') {
+      node.classList.add(constant.tableDiagonalClass);
+    }
     return node;
   }
 
@@ -145,10 +160,10 @@ class TableCell extends Container {
     const formats = {};
 
     if (this.domNode.hasAttribute('data-row')) {
-      formats.row = this.domNode.getAttribute('data-row');
+      formats.row = this.domNode.dataset.row;
     }
 
-    formats.tbalign = this.domNode.getAttribute('data-tbalign') || '';
+    formats.tbalign = this.domNode.dataset.tbalign || '';
 
     return CELL_ATTRIBUTES.reduce((prev, attribute) => {
       if (this.domNode.hasAttribute(attribute)) {
@@ -160,8 +175,7 @@ class TableCell extends Container {
   }
 
   optimize(context) {
-    const row = this.domNode.getAttribute('data-row');
-    const tbalign = this.domNode.getAttribute('data-tbalign');
+    const { row, tbalign } = this.formats();
 
     if (
       this.statics.requiredContainer &&
@@ -171,6 +185,8 @@ class TableCell extends Container {
         row,
         tbalign,
       });
+    } else if (tbalign !== this.parent.formats().tbalign) {
+      this.parent.domNode.dataset.tbalign = tbalign;
     }
     this.children.forEach(child => {
       if (child.next == null) return;
@@ -226,15 +242,16 @@ class TableRow extends Container {
 
   static create(value) {
     const node = super.create(value);
-    node.setAttribute('data-row', value.row);
-    node.setAttribute('data-tbalign', value.tbalign);
+    if (value.tbalign) {
+      node.dataset.tbalign = value.tbalign;
+    }
     return node;
   }
 
   formats() {
-    if (this.domNode.dataset.row) {
+    if (this.domNode.dataset.tbalign) {
       return {
-        row: this.domNode.dataset.row,
+        tbalign: this.domNode.dataset.tbalign,
       };
     }
     return {};
@@ -242,12 +259,14 @@ class TableRow extends Container {
 
   optimize() {
     // optimize function of ShadowBlot
-    const tbalign = this.domNode.getAttribute('data-tbalign');
+    const { tbalign } = this.formats();
     if (
       this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)
     ) {
       this.wrap(this.statics.requiredContainer.blotName, { tbalign });
+    } else if (tbalign !== this.parent.domNode.dataset.tbalign) {
+      this.parent.domNode.dataset.tbalign = tbalign;
     }
 
     this.children.forEach(child => {
@@ -299,12 +318,14 @@ TableRow.tagName = 'TR';
 class TableBody extends Container {
   static create(value) {
     const node = super.create(value);
-    node.setAttribute('data-tbalign', value.tbalign);
+    if (value.tbalign) {
+      node.dataset.tbalign = value.tbalign;
+    }
     return node;
   }
 
   optimize(context) {
-    const tbalign = this.domNode.getAttribute('data-tbalign');
+    const { tbalign } = this.domNode.dataset;
 
     if (
       this.statics.requiredContainer &&
@@ -313,6 +334,8 @@ class TableBody extends Container {
       this.wrap(this.statics.requiredContainer.blotName, {
         tbalign,
       });
+    } else if (tbalign !== this.parent.domNode.getAttribute('table-align')) {
+      this.parent.domNode.setAttribute('table-align', tbalign || '');
     }
     super.optimize(context);
   }
@@ -322,9 +345,11 @@ TableBody.tagName = 'TBODY';
 
 class TableContainer extends Container {
   static create(value) {
-    const domNode = super.create(value);
-    domNode.setAttribute('table-align', value.tbalign);
-    return domNode;
+    const node = super.create(value);
+    if (value.tbalign) {
+      node.dataset.tbalign = value.tbalign;
+    }
+    return node;
   }
 
   balanceCells() {

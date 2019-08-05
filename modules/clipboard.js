@@ -20,6 +20,7 @@ import { ColorStyle } from '../formats/color';
 import { BackgroundStyle } from '../formats/background';
 import CodeBlock from '../formats/code';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
+import constant from '../config/constant';
 
 const debug = logger('quill:clipboard');
 
@@ -568,6 +569,7 @@ function matchTableCell(node, delta) {
     tbalign,
     cell: cells.indexOf(node) + 1,
     align: AlignClass.value(node) || 'center',
+    diagonal: node.classList.contains(constant.diagonal) && 'normal' || '',
   });
 }
 

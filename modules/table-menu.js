@@ -1,4 +1,6 @@
 import Module from '../core/module';
+import { TableCellLine } from '../formats/table';
+import constant from '../config/constant';
 
 class TableMenu extends Module {
   constructor(quill, options) {
@@ -45,50 +47,43 @@ class TableMenu extends Module {
         id: 'align-left',
         title: '表格左浮动',
         handler: table => {
-          const [tableContainer] = table.getTable();
-          tableContainer.domNode.setAttribute('table-align', 'left');
-          // tableContainer.domNode.querySelectorAll('p').forEach(td => {
-          //   td.dataset.tbalign = 'left';
-          //   // td.setAttribute('tbalign', 'left');
-          // });
+          alignTable(table, 'left');
         },
       },
       {
         id: 'align-center',
         title: '表格居中显示',
         handler: table => {
-          const [tableContainer] = table.getTable();
-          tableContainer.domNode.setAttribute('table-align', 'center');
-          // tableContainer.domNode.querySelectorAll('p').forEach(td => {
-          //   td.dataset.tbalign = 'center';
-          //   // td.setAttribute('tbalign', 'center');
-          // });
+          alignTable(table, 'center');
         },
       },
       {
         id: 'align-right',
         title: '表格右浮动',
         handler: table => {
-          const [tableContainer] = table.getTable();
-          tableContainer.domNode.setAttribute('table-align', 'right');
-          // tableContainer.domNode.querySelectorAll('p').forEach(td => {
-          //   td.dataset.tbalign = 'right';
-          //   // td.setAttribute('tbalign', 'right');
-          // });
+          alignTable(table, 'right');
         },
       },
       {
         id: 'insert-diagonal',
         title: '插入对角线',
-        handler: () => {
-          this.quill.format('table-diagonal', 'normal');
+        handler: table => {
+          const [, , cell] = table.getTable();
+          cell.domNode.classList.add(constant.tableDiagonalClass);
+          cell.descendants(TableCellLine).forEach(line => {
+            line.format('diagonal', 'normal');
+          });
         },
       },
       {
         id: 'delete-diagonal',
         title: '删除对角线',
-        handler: () => {
-          this.quill.format('table-diagonal', false);
+        handler: table => {
+          const [, , cell] = table.getTable();
+          cell.domNode.classList.remove(constant.tableDiagonalClass);
+          cell.descendants(TableCellLine).forEach(line => {
+            line.format('diagonal', '');
+          });
         },
       },
     ];
@@ -150,6 +145,16 @@ function containsByTable(node, root) {
     node = node.parentNode;
   }
   return false;
+}
+
+function alignTable(table, align) {
+  const [tableContainer] = table.getTable();
+  tableContainer.domNode.setAttribute('table-align', align);
+  const lines = tableContainer.descendants(TableCellLine);
+  lines.forEach(line => {
+    line.format('tbalign', align);
+    line.optimize();
+  });
 }
 
 export default TableMenu;
