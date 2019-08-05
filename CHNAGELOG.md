@@ -1,3 +1,7 @@
+## 1.0.5
+
+* optimize: 公式白名单增加字符
+
 ## 1.0.4
 
 * optimize 调整toolbar z-index，降低层级
