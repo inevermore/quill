@@ -99,7 +99,7 @@ export function mathjaxRender(latexArr) {
 }
 
 function filter(latex) {
-  const WHITE_LIST = /[0-9a-zA-Z\u4e00-\u9fa5%\\()[\]{}|^_/*+-<>=!.&,'↲:$ ①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳，。@‐—ⒶⒷ‰♀♂Ⓥ▴◆⚫∎⬛※▲▴▵▼▽▾▿☆★]+/;
+  const WHITE_LIST = /[0-9a-zA-Z\u4e00-\u9fa5%\\()[\]{}|^_/*+-<>=!.&,'↲:$ ①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳，。@‐—ⒶⒷ‰♀♂Ⓥ▴◆⚫∎⬛※▲▼▽☆★]+/;
   latex = latex
     .replace(/&nbsp;/g, ' ')
     .replace(/\/\//g, '\\ykparallel ')
