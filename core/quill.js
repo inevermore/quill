@@ -499,15 +499,20 @@ class Quill {
 
   insertFormula(objList) {
     const { index, length } = this.selection.savedRange;
+    const { isRight, text, html } = objList;
+    let insert = html;
+    if (isRight) {
+      insert = {
+        'ql-mathjax': {
+          latex: text.slice(1, -1),
+          innerHTML: html,
+        },
+      };
+    }
     const update = new Delta()
       .retain(index)
       .delete(length)
-      .insert({
-        'ql-mathjax': {
-          latex: `${objList.latex}`,
-          innerHTML: objList.svg,
-        },
-      });
+      .insert(insert);
     this.updateContents(update, Emitter.sources.USER);
   }
 

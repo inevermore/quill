@@ -1,3 +1,7 @@
+## 1.1.3
+
+* refactor: table 重构，单元格内段落使用p标签表示
+
 ## 1.0.2-beta.3
 
 * fix: table撤销插入行列bug
@@ -9,6 +13,22 @@
 ## 1.0.2-beta.1
 
 * fix: table重构兼容历史数据
+
+## 1.0.6
+
+* optimize: 公式白名单增加字符
+
+## 1.0.5
+
+* optimize: 公式白名单增加字符
+
+## 1.0.4
+
+* optimize 调整toolbar z-index，降低层级
+
+## 1.0.3
+
+* optimize 优化latex2svg，
 
 ## 1.0.2
 

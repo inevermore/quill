@@ -41,7 +41,7 @@ export default async function latexToSvg(
             svg = math.outerHTML;
           } else {
             svg = obj.html;
-            errSvg.push(obj.text);
+            errSvg.push(obj.text.slice(1, -1));
           }
           count += 1;
           return svg;
@@ -73,10 +73,12 @@ export function mathjaxRender(latexArr) {
       ['Typeset', window.MathJax.Hub, container],
       [
         () => {
-          const svgContainerList = container.querySelectorAll('.MathJax_SVG');
-          const svgs = Array.from(svgContainerList).map((svg, index) => {
-            const child = svg.children[0];
-            if (child.tagName === 'svg') {
+          const svgContainerList = container.children;
+          const svgs = Array.from(svgContainerList).map((svgCon, index) => {
+            const mathjaxSvg = svgCon.querySelector('.MathJax_SVG');
+            const child = mathjaxSvg && mathjaxSvg.children[0];
+
+            if (child && child.tagName === 'svg') {
               return {
                 isRight: true,
                 html: child.outerHTML,
@@ -85,8 +87,8 @@ export function mathjaxRender(latexArr) {
             }
             return {
               isRight: false,
-              html: `$${child.innerHTML}$`,
-              text: child.innerText,
+              html: latexArr[index],
+              text: latexArr[index],
             };
           });
           resolve(svgs);
@@ -97,7 +99,7 @@ export function mathjaxRender(latexArr) {
 }
 
 function filter(latex) {
-  const WHITE_LIST = /[0-9a-zA-Z\u4e00-\u9fa5%\\()[\]{}|^_/*+-<>=!.&,'↲:$ ①②③④⑤⑥⑦⑧⑨⑩，。@‐—ⒶⒷ‰♀♂Ⓥ▴◆⚫∎⬛]+/;
+  const WHITE_LIST = /[0-9a-zA-Z\u4e00-\u9fa5%\\()[\]{}|^_/*+-<>=!.&,'↲:$ ①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳，。@‐—ⒶⒷ‰♀♂Ⓥ▴◆⚫∎⬛※▲▼▽☆★]+/;
   latex = latex
     .replace(/&nbsp;/g, ' ')
     .replace(/\/\//g, '\\ykparallel ')
