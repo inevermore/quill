@@ -1,3 +1,15 @@
+## 1.0.2-beta.3
+
+* fix: table撤销插入行列bug
+
+## 1.0.2-beta.2
+
+* fix: getContent未获取到表格浮动样式
+
+## 1.0.2-beta.1
+
+* fix: table重构兼容历史数据
+
 ## 1.0.2
 
 * bugfix 公式在首行时，工具栏svg2latex按钮失效

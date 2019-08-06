@@ -67,9 +67,8 @@ class TableCellLine extends Block {
     }
   }
 
-  optimize(context) {
-    // cover shadowBlot's wrap call, pass params parentBlot initialize
-    // needed
+  optimize(...args) {
+    super.optimize(...args);
     const {
       row,
       cell,
@@ -101,7 +100,6 @@ class TableCellLine extends Block {
         }
       }
     }
-    super.optimize(context);
   }
 
   tableCell() {
@@ -180,7 +178,7 @@ class TableCell extends Container {
     }, formats);
   }
 
-  optimize(context) {
+  optimize(...args) {
     const { row, tbalign } = this.formats();
 
     if (
@@ -209,7 +207,7 @@ class TableCell extends Container {
         }
       }
     });
-    super.optimize(context);
+    super.optimize(...args);
   }
 
   row() {
@@ -263,8 +261,7 @@ class TableRow extends Container {
     return {};
   }
 
-  optimize() {
-    // optimize function of ShadowBlot
+  optimize(...args) {
     const { tbalign } = this.formats();
     if (
       this.statics.requiredContainer &&
@@ -284,20 +281,12 @@ class TableRow extends Container {
         if (next) {
           next.optimize();
         }
-        // We might be able to merge with prev now
         if (this.prev) {
           this.prev.optimize();
         }
       }
     });
-
-    // this.enforceAllowedChildren();
-
-    // optimize function of ContainerBlot
-    if (this.children.length > 0 && this.next != null && this.checkMerge()) {
-      this.next.moveChildren(this);
-      this.next.remove();
-    }
+    super.optimize(...args);
   }
 
   rowOffset() {
@@ -330,7 +319,8 @@ class TableBody extends Container {
     return node;
   }
 
-  optimize(context) {
+  optimize(...args) {
+    super.optimize(...args);
     const { tbalign } = this.domNode.dataset;
 
     if (
@@ -343,21 +333,12 @@ class TableBody extends Container {
     } else if (tbalign !== this.parent.domNode.getAttribute('table-align')) {
       this.parent.domNode.setAttribute('table-align', tbalign || '');
     }
-    super.optimize(context);
   }
 }
 TableBody.blotName = 'table-body';
 TableBody.tagName = 'TBODY';
 
 class TableContainer extends Container {
-  static create(value) {
-    const node = super.create(value);
-    if (value.tbalign) {
-      node.dataset.tbalign = value.tbalign;
-    }
-    return node;
-  }
-
   balanceCells() {
     // const rows = this.descendants(TableRow);
     // const maxColumns = rows.reduce((max, row) => {
@@ -461,7 +442,7 @@ TableRow.requiredContainer = TableBody;
 
 TableRow.allowedChildren = [TableCell];
 TableCell.requiredContainer = TableRow;
-TableCell.defaultChild = TableCellLine;
+// TableCell.defaultChild = TableCellLine;
 
 TableCell.allowedChildren = [TableCellLine];
 TableCellLine.requiredContainer = TableCell;

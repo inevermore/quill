@@ -185,9 +185,9 @@ class Clipboard extends Module {
   }
 
   onPaste(range, { text, html }) {
+    const formats = this.quill.getFormat(range.index);
     // eslint-disable-next-line no-console
     console.log(html);
-    const formats = this.quill.getFormat(range.index);
     const pastedDelta = this.convert({ text, html }, formats);
     debug.log('onPaste', pastedDelta, { text, html });
     const delta = new Delta()
@@ -303,19 +303,6 @@ function isLine(node) {
     'ul',
     'video',
   ].includes(node.tagName.toLowerCase());
-}
-
-const preNodes = new WeakMap();
-function isPre(node) {
-  if (node == null) return false;
-  if (!preNodes.has(node)) {
-    if (node.tagName === 'PRE') {
-      preNodes.set(node, true);
-    } else {
-      preNodes.set(node, isPre(node.parentNode));
-    }
-  }
-  return preNodes.get(node);
 }
 
 function traverse(scroll, node, elementMatchers, textMatchers, nodeMatches) {
@@ -461,18 +448,6 @@ function matchList(node, delta) {
   return applyFormat(delta, 'list', list);
 }
 
-function matchNewline(node, delta) {
-  if (!deltaEndsWith(delta, '\n')) {
-    if (
-      isLine(node) ||
-      (delta.length() > 0 && node.nextSibling && isLine(node.nextSibling))
-    ) {
-      delta.insert('\n');
-    }
-  }
-  return delta;
-}
-
 function matchStyles(node, delta) {
   const formats = {};
   const style = node.style || {};
@@ -582,7 +557,7 @@ function centerTableCell(node, delta) {
 }
 
 function matchText(node, delta) {
-  let text = node.data;
+  const text = node.data;
   // Word represents empty line with <o:p>&nbsp;</o:p>
   if (node.parentNode.tagName === 'O:P') {
     return delta.insert(text.trim());
@@ -591,31 +566,33 @@ function matchText(node, delta) {
     return delta;
   }
 
-  if (!isPre(node)) {
-    const replacer = (collapse, match) => {
-      const replaced = match.replace(/[^\u00a0]/g, ''); // \u00a0 is nbsp;
-      return replaced.length < 1 && collapse ? ' ' : replaced;
-    };
-    text = text.replace(/\r\n/g, ' ').replace(/\n/g, '');
-    text = text.replace(/\s\s+/g, replacer.bind(replacer, true)); // collapse whitespace
-    if (
-      (node.previousSibling == null && isLine(node.parentNode)) ||
-      (node.previousSibling != null && isLine(node.previousSibling))
-    ) {
-      text = text.replace(/^\s+/, replacer.bind(replacer, false));
-    }
-    if (
-      (node.nextSibling == null && isLine(node.parentNode)) ||
-      (node.nextSibling != null && isLine(node.nextSibling))
-    ) {
-      text = text.replace(/\s+$/, replacer.bind(replacer, false));
-    }
-  }
   return delta.insert(text);
 }
 
-function matchTextLineBreak(node) {
-  return new Delta().insert(toDeltaText(node.data));
+function matchNewline(node, delta) {
+  if (!deltaEndsWith(delta, '\n')) {
+    if (
+      isLine(node) ||
+      (delta.length() > 0 && node.nextSibling && isLine(node.nextSibling))
+    ) {
+      delta.insert('\n');
+    }
+  }
+  return delta;
+}
+
+function matchTextLineBreak(node, delta) {
+  // eslint-disable-next-line no-plusplus
+  for (let i = delta.ops.length - 1; i >= 0; i--) {
+    const op = delta.ops[i];
+    if (typeof op.insert !== 'string') break;
+    op.insert = op.insert
+      .replace(/\n$/g, '')
+      .replace(/^\n/g, '')
+      .replace(/\n\n$/, LINE_SEPARATOR)
+      .replace(/\n/g, LINE_SEPARATOR);
+  }
+  return delta;
 }
 
 function matchUnderline(node, delta) {
@@ -637,25 +614,6 @@ function getStyle(node, key) {
     return (style && style.split(':')[1]) || '';
   }
   return '';
-}
-
-/**
- * @param {string} domText
- * @return {string} the Delta-text equivalent of domText
- */
-function toDeltaText(domText) {
-  return (
-    domText
-      // Text node content that ends in \n\n is rendered as two blank lines.
-      // Convert to one line separator, only. Assume the second blank line
-      // will be handled by the \n that marks the end of all paragraphs in Quill.
-
-      // bugfix windows复制粘贴出现换行
-      .replace(/\n$/g, '')
-      .replace(/^\n/g, '')
-      .replace(/\n\n$/, LINE_SEPARATOR)
-      .replace(/\n/g, LINE_SEPARATOR)
-  );
 }
 
 export {

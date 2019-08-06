@@ -1,7 +1,7 @@
 {
   "name": "text-editor",
-  "version": "1.0.2-beta",
-  "description": "一课富文本编辑器，目前只适用与讲义系统",
+  "version": "1.0.2-beta.4",
+  "description": "一课教研富文本编辑器",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
   "files": [

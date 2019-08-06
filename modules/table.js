@@ -73,16 +73,16 @@ class Table extends Module {
 
   insertColumn(offset) {
     const range = this.quill.getSelection() || this.quill.selection.savedRange;
-    const [table, row, cell] = this.getTable(range);
+    const [table, , cell] = this.getTable(range);
     if (cell == null) return;
     const column = cell.cellOffset();
     table.insertColumn(column + offset);
     this.quill.update(Quill.sources.USER);
-    let shift = row.rowOffset();
-    if (offset === 0) {
-      shift += 1;
-    }
-    this.quill.setSelection(range.index + shift, 1, Quill.sources.SILENT);
+    // let shift = row.rowOffset();
+    // if (offset === 0) {
+    //   shift += 1;
+    // }
+    // this.quill.setSelection(range.index + shift, 1, Quill.sources.SILENT);
   }
 
   insertColumnLeft() {
@@ -100,15 +100,15 @@ class Table extends Module {
     const index = row.rowOffset();
     table.insertRow(index + offset);
     this.quill.update(Quill.sources.USER);
-    if (offset > 0) {
-      this.quill.setSelection(range, Quill.sources.SILENT);
-    } else {
-      this.quill.setSelection(
-        range.index + row.children.length,
-        range.length,
-        Quill.sources.SILENT,
-      );
-    }
+    // if (offset > 0) {
+    //   this.quill.setSelection(range, Quill.sources.SILENT);
+    // } else {
+    //   this.quill.setSelection(
+    //     range.index + row.children.length,
+    //     range.length,
+    //     Quill.sources.SILENT,
+    //   );
+    // }
   }
 
   insertRowAbove() {
