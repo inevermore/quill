@@ -82,11 +82,7 @@ class Table extends Module {
     if (offset === 0) {
       shift += 1;
     }
-    this.quill.setSelection(
-      range.index + shift,
-      1,
-      Quill.sources.SILENT,
-    );
+    this.quill.setSelection(range.index + shift, 1, Quill.sources.SILENT);
   }
 
   insertColumnLeft() {

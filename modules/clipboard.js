@@ -112,7 +112,6 @@ class Clipboard extends Module {
     }
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const container = doc.body;
-    // handleTablePaste(container);
     const nodeMatches = new WeakMap();
     const [elementMatchers, textMatchers] = this.prepareMatching(
       container,
@@ -129,7 +128,7 @@ class Clipboard extends Module {
     // Remove trailing newline
     if (
       deltaEndsWith(delta, '\n') &&
-      (delta.ops[delta.ops.length - 1].attributes == null)
+      delta.ops[delta.ops.length - 1].attributes == null
     ) {
       return delta.compose(new Delta().retain(delta.length() - 1).delete(1));
     }
@@ -561,15 +560,19 @@ function matchTableCell(node, delta) {
   const tbalign =
     table.getAttribute('table-align') || table.getAttribute('align');
   const cells = Array.from(tr.querySelectorAll('td'));
-  console.log('delta', delta);
-  return applyFormat(delta, 'table-cell-line', {
+  let applyDelta = delta;
+  if (delta && delta.ops.length === 0) {
+    applyDelta = new Delta().insert('\n');
+  }
+  return applyFormat(applyDelta, 'table-cell-line', {
     row,
     rowspan: Number(node.getAttribute('rowspan')) || 1,
     colspan: Number(node.getAttribute('colspan')) || 1,
     tbalign,
     cell: cells.indexOf(node) + 1,
     align: AlignClass.value(node) || 'center',
-    diagonal: node.classList.contains(constant.diagonal) && 'normal' || '',
+    diagonal:
+      (node.classList.contains(constant.tableDiagonalClass) && 'normal') || '',
   });
 }
 
@@ -653,19 +656,6 @@ function toDeltaText(domText) {
       .replace(/\n\n$/, LINE_SEPARATOR)
       .replace(/\n/g, LINE_SEPARATOR)
   );
-}
-
-function handleTablePaste(container) {
-  Array.from(container.querySelectorAll('td')).forEach(item => {
-    Array.from(item.querySelectorAll('p')).forEach(para => {
-      const span = document.createElement('span');
-      para.getAttributeNames().forEach(attr => {
-        span.setAttribute(attr, para.getAttribute(attr));
-      });
-      span.innerHTML = para.innerHTML;
-      para.outerHTML = span.outerHTML;
-    });
-  });
 }
 
 export {

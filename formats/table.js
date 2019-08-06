@@ -4,16 +4,15 @@ import { AlignClass } from './align';
 import constant from '../config/constant';
 
 const CELL_IDENTITY_KEYS = ['row', 'cell'];
-const CELL_ATTRIBUTES = ['rowspan', 'colspan', 'diagonal'];
+const CELL_ATTRIBUTES = ['rowspan', 'colspan'];
 const CELL_DEFAULT = {
   rowspan: 1,
   colspan: 1,
   tbalign: '',
-  diagonal: '',
 };
 const TABLE_ATTRIBUTES = ['tbalign'];
 class TableCellLine extends Block {
-  static create(value) {
+  static create(value = {}) {
     const node = super.create(value);
 
     CELL_IDENTITY_KEYS.forEach(key => {
@@ -27,6 +26,10 @@ class TableCellLine extends Block {
         value[attrName] || CELL_DEFAULT[attrName],
       );
     });
+
+    if (value.diagonal) {
+      node.dataset.diagonal = value.diagonal;
+    }
 
     AlignClass.add(node, AlignClass.value(node) || 'center');
 
@@ -42,6 +45,7 @@ class TableCellLine extends Block {
         }
         return format;
       }, {});
+    formats.diagonal = domNode.dataset.diagonal || '';
     formats.align = AlignClass.value(domNode) || 'center';
     return formats;
   }
@@ -50,6 +54,7 @@ class TableCellLine extends Block {
     if (
       CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS)
         .concat(TABLE_ATTRIBUTES)
+        .concat('diagonal')
         .indexOf(name) > -1
     ) {
       if (value) {
@@ -164,6 +169,7 @@ class TableCell extends Container {
     }
 
     formats.tbalign = this.domNode.dataset.tbalign || '';
+    formats.diagonal = this.domNode.dataset.diagonal || '';
 
     return CELL_ATTRIBUTES.reduce((prev, attribute) => {
       if (this.domNode.hasAttribute(attribute)) {
@@ -455,6 +461,7 @@ TableRow.requiredContainer = TableBody;
 
 TableRow.allowedChildren = [TableCell];
 TableCell.requiredContainer = TableRow;
+TableCell.defaultChild = TableCellLine;
 
 TableCell.allowedChildren = [TableCellLine];
 TableCellLine.requiredContainer = TableCell;
