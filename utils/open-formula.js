@@ -58,7 +58,7 @@ function setFormulaValue(latex) {
   iframe.contentWindow.postMessage(
     {
       type: 'getEquationInfo',
-      data: latex,
+      data: latex.replace(/&amp;/g, '&'),
     },
     '*',
   );
