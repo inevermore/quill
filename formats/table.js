@@ -3,33 +3,22 @@ import Container from '../blots/container';
 import { AlignClass } from './align';
 import constant from '../config/constant';
 
-const CELL_IDENTITY_KEYS = ['row', 'cell'];
-const CELL_ATTRIBUTES = ['rowspan', 'colspan'];
-const CELL_DEFAULT = {
-  rowspan: 1,
-  colspan: 1,
-  tbalign: '',
-};
-const TABLE_ATTRIBUTES = ['tbalign'];
+const CELL_ATTR = ['row', 'rowspan', 'colspan', 'diagonal', 'tbalign'];
+const LINE_ATTR = ['cell'];
+
 class TableCellLine extends Block {
   static create(value = {}) {
     const node = super.create(value);
 
-    CELL_IDENTITY_KEYS.forEach(key => {
+    ['row', 'cell'].forEach(key => {
       const identityMaker = key === 'row' ? rowId : cellId;
       node.setAttribute(`data-${key}`, value[key] || identityMaker());
     });
-
-    CELL_ATTRIBUTES.concat(TABLE_ATTRIBUTES).forEach(attrName => {
-      node.setAttribute(
-        `data-${attrName}`,
-        value[attrName] || CELL_DEFAULT[attrName],
-      );
+    ['rowspan', 'colspan', 'diagonal', 'tbalign'].forEach(attrName => {
+      if (value[attrName]) {
+        node.setAttribute(`data-${attrName}`, value[attrName]);
+      }
     });
-
-    if (value.diagonal) {
-      node.dataset.diagonal = value.diagonal;
-    }
 
     AlignClass.add(node, AlignClass.value(node) || 'center');
 
@@ -37,26 +26,18 @@ class TableCellLine extends Block {
   }
 
   static formats(domNode) {
-    const formats = CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS)
-      .concat([TABLE_ATTRIBUTES])
-      .reduce((format, attribute) => {
-        if (domNode.hasAttribute(`data-${attribute}`)) {
-          format[attribute] = domNode.getAttribute(`data-${attribute}`) || '';
-        }
-        return format;
-      }, {});
-    formats.diagonal = domNode.dataset.diagonal || '';
+    const formats = LINE_ATTR.concat(CELL_ATTR).reduce((format, attribute) => {
+      if (domNode.hasAttribute(`data-${attribute}`)) {
+        format[attribute] = domNode.getAttribute(`data-${attribute}`) || '';
+      }
+      return format;
+    }, {});
     formats.align = AlignClass.value(domNode) || 'center';
     return formats;
   }
 
   format(name, value) {
-    if (
-      CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS)
-        .concat(TABLE_ATTRIBUTES)
-        .concat('diagonal')
-        .indexOf(name) > -1
-    ) {
+    if (LINE_ATTR.concat(CELL_ATTR).indexOf(name) > -1) {
       if (value) {
         this.domNode.setAttribute(`data-${name}`, value);
       } else {
@@ -69,35 +50,25 @@ class TableCellLine extends Block {
 
   optimize(...args) {
     super.optimize(...args);
-    const {
-      row,
-      cell,
-      rowspan,
-      colspan,
-      tbalign,
-      diagonal,
-    } = TableCellLine.formats(this.domNode);
+    const { row, rowspan, colspan, tbalign, diagonal } = TableCellLine.formats(
+      this.domNode,
+    );
     const formats = TableCellLine.formats(this.domNode);
     if (this.statics.requiredContainer) {
       if (!(this.parent instanceof this.statics.requiredContainer)) {
         this.wrap(this.statics.requiredContainer.blotName, {
-          cell,
           row,
           colspan,
           rowspan,
           tbalign,
           diagonal,
         });
-      } else if (
-        formats.row !== this.parent.formats().row ||
-        formats.tbalign !== this.parent.formats().tbalign ||
-        formats.diagonal !== this.parent.formats().diagonal
-      ) {
-        this.parent.domNode.dataset.row = formats.row;
-        this.parent.domNode.dataset.tbalign = formats.tbalign;
-        if (formats.diagonal === 'normal') {
-          this.parent.domNode.classList.add(constant.tableDiagonalClass);
-        }
+      } else {
+        CELL_ATTR.forEach(key => {
+          if (formats[key] !== this.parent.formats()[key]) {
+            formatCell(this.parent.domNode, key, formats[key]);
+          }
+        });
       }
     }
   }
@@ -142,13 +113,9 @@ class TableCell extends Container {
     },
   ) {
     const node = super.create(value);
-    node.setAttribute('data-row', value.row);
-    node.setAttribute('rowspan', value.rowspan);
-    node.setAttribute('colspan', value.colspan);
-    node.setAttribute('data-tbalign', value.tbalign || '');
-    if (value.diagonal === 'normal') {
-      node.classList.add(constant.tableDiagonalClass);
-    }
+    Object.entries(value).forEach(([k, v]) => {
+      formatCell(node, k, v);
+    });
     return node;
   }
 
@@ -169,7 +136,7 @@ class TableCell extends Container {
     formats.tbalign = this.domNode.dataset.tbalign || '';
     formats.diagonal = this.domNode.dataset.diagonal || '';
 
-    return CELL_ATTRIBUTES.reduce((prev, attribute) => {
+    return ['rowspan', 'colspan'].reduce((prev, attribute) => {
       if (this.domNode.hasAttribute(attribute)) {
         prev[attribute] = this.domNode.getAttribute(attribute);
       }
@@ -190,7 +157,11 @@ class TableCell extends Container {
         tbalign,
       });
     } else if (tbalign !== this.parent.formats().tbalign) {
-      this.parent.domNode.dataset.tbalign = tbalign;
+      if (tbalign) {
+        this.parent.domNode.setAttribute('data-tbalign', tbalign);
+      } else {
+        this.parent.domNode.removeAttribute('data-tbalign');
+      }
     }
     this.children.forEach(child => {
       if (child.next == null) return;
@@ -227,6 +198,30 @@ class TableCell extends Container {
 }
 TableCell.blotName = 'table';
 TableCell.tagName = 'TD';
+
+function formatCell(node, key, value) {
+  if (['rowspan', 'colspan'].includes(key)) {
+    if (value) {
+      node.setAttribute(key, value);
+    } else {
+      node.removeAttribute(key);
+    }
+  }
+  if (key === 'diagonal') {
+    if (value) {
+      node.classList.add(constant.tableDiagonalClass);
+    } else {
+      node.classList.remove(constant.tableDiagonalClass);
+    }
+  }
+  if (['row', 'tbalign'].includes(key)) {
+    if (value) {
+      node.setAttribute(`data-${key}`, value);
+    } else {
+      node.removeAttribute(`data-${key}`);
+    }
+  }
+}
 
 class TableRow extends Container {
   checkMerge() {
@@ -269,7 +264,11 @@ class TableRow extends Container {
     ) {
       this.wrap(this.statics.requiredContainer.blotName, { tbalign });
     } else if (tbalign !== this.parent.domNode.dataset.tbalign) {
-      this.parent.domNode.dataset.tbalign = tbalign;
+      if (tbalign) {
+        this.parent.domNode.setAttribute('data-tbalign', tbalign);
+      } else {
+        this.parent.domNode.removeAttribute('data-tbalign');
+      }
     }
 
     this.children.forEach(child => {
@@ -331,7 +330,11 @@ class TableBody extends Container {
         tbalign,
       });
     } else if (tbalign !== this.parent.domNode.getAttribute('table-align')) {
-      this.parent.domNode.setAttribute('table-align', tbalign || '');
+      if (tbalign) {
+        this.parent.domNode.setAttribute('table-align', tbalign);
+      } else {
+        this.parent.domNode.removeAttribute('table-align');
+      }
     }
   }
 }
@@ -339,23 +342,7 @@ TableBody.blotName = 'table-body';
 TableBody.tagName = 'TBODY';
 
 class TableContainer extends Container {
-  balanceCells() {
-    // const rows = this.descendants(TableRow);
-    // const maxColumns = rows.reduce((max, row) => {
-    //   return Math.max(row.rowLength(), max);
-    // }, 0);
-    // rows.forEach(row => {
-    //   new Array(maxColumns - row.rowLength()).fill(0).forEach(() => {
-    //     let value;
-    //     if (row.children.head != null) {
-    //       value = TableCell.formats(row.children.head.domNode);
-    //     }
-    //     const blot = this.scroll.create(TableCell.blotName, value);
-    //     row.appendChild(blot);
-    //     blot.optimize(); // Add break blot
-    //   });
-    // });
-  }
+  balanceCells() {}
 
   cells(column) {
     return this.rows().map(row => row.children.at(column));
