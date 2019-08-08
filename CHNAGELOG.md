@@ -1,3 +1,7 @@
+## 1.1.6
+
+* fix: latex中$不匹配转化异常
+
 ## 1.1.5
 
 * fix: latex中有&amp;符号bug

@@ -1,11 +1,5 @@
 .*
-/dist/*
-!/dist/handout/demo.html
-!/dist/handout/demo.js
-!/dist/tiku/demo.html
-!/dist/tiku/demo.js
-/dist/handout/bundle.js
-/dist/tiku/bundle.js
+/dist
 /node_modules
 /selenium
 /docs/_site

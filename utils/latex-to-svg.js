@@ -21,13 +21,14 @@ export default async function latexToSvg(
       html.replace(/\$(.*?)\$/g, filter).replace(/MATHCUSTOM/g, '\\$'),
     );
   } else {
-    const latexArr = html.match(/\$(.*?)\$/g) || [];
+    const macthLatex = /\$(((?!><|span>|<span).)*?)\$/g;
+    const latexArr = html.match(macthLatex) || [];
     const objList = await mathjaxRender(latexArr);
     const errSvg = [];
     let count = 0;
     quill.setContent(
       html
-        .replace(/\$(.*?)\$/g, () => {
+        .replace(macthLatex, () => {
           const obj = objList[count];
           let svg = '';
           if (obj.isRight) {
