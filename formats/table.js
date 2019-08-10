@@ -126,6 +126,10 @@ class TableCell extends Container {
     return -1;
   }
 
+  format(name, value) {
+    formatCell(this.domNode, name, value);
+  }
+
   formats() {
     const formats = {};
 

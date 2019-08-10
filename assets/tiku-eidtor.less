@@ -56,6 +56,10 @@
         word-break: break-all;
         min-width: 22px;
 
+        &.table-cell-selected {
+          background-color: #edf5fa !important;
+        }
+
         p {
           margin: 0;
         }
@@ -93,16 +97,36 @@
   .table-menu-wrapper {
     display: none;
     position: absolute;
-    width: 120px;
+    width: 130px;
     padding: 3px;
     border-radius: 6px;
     box-shadow: 0 3px 4px rgba(0,0,0,.2);
     border: 1px solid rgba(0,0,0,.2);
     background: #fff;
     z-index: 200;
+    user-select: none;
+
+    .table-menu-ver-line {
+      position: absolute;
+      left: 28px;
+      top: 5px;
+      bottom: 5px;
+      width: 1px;
+      background-color: #e2e3e3;
+      z-index: -1;
+    }
+
+    .table-menu-hor-line {
+      height: 1px;
+      width: 80px;
+      background-color: #e2e3e3;
+      margin-left: 30px;
+      border-width: 1px 0;
+      border-color: transparent;
+    }
 
     .table-menu-item {
-      height: 20px;
+      height: 22px;
       padding: 1px;
       display: flex;
       cursor: default;
@@ -112,6 +136,7 @@
         height: 20px;
         width: 20px;
         background-size: 100% 100%;
+        text-align: center;
       }
 
       .table-menu-item-title {
@@ -156,6 +181,9 @@
       &.table-menu-align-right i {
         background-image: url(./tiku-icons/align-right.png);
       }
+      // &.table-menu-merge-cells i {
+      //   background: url(./tiku-icons/table-merge-cells.svg);
+      // }
     }
   }
 }

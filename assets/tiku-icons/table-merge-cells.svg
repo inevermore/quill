@@ -1,0 +1,10 @@
+<svg width="16px" height="16px" viewBox="0 0 872 872" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="table-merge-cells" fill="#666666" fill-rule="nonzero">
+            <path d="M266.5,72 L72,72 L72,303.817 L266.5,303.817 L266.5,72 Z M338.5,72 L338.5,303.817 L533.5,303.817 L533.5,72 L338.5,72 Z M605.5,72 L605.5,303.817 L800,303.817 L800,72 L605.5,72 Z M800,375.817 L338.5,375.817 L338.5,558.773 C339.446136,562.039399 339.92489,565.423335 339.922,568.824 C339.922,572.314 339.426,575.686 338.5,578.876 L338.5,800 L800,800 L800,375.817 Z M266.5,800 L266.5,604.824 L72,604.824 L72,800 L266.5,800 Z M72,532.824 L266.5,532.824 L266.5,375.817 L72,375.817 L72,532.824 Z M68,0 L804,0 C841.555,0 872,30.445 872,68 L872,804 C872,841.555 841.555,872 804,872 L68,872 C30.445,872 0,841.555 0,804 L0,68 C0,30.445 30.445,0 68,0 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

@@ -57,7 +57,7 @@ let jsRules = {
 
 const svgRules = {
   test: /\.svg$/,
-  include: [path.resolve(__dirname, '../assets/icons')],
+  include: [path.resolve(__dirname, '../assets')],
   use: [
     {
       loader: 'html-loader',
