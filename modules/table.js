@@ -23,6 +23,8 @@ class Table extends Module {
   constructor(...args) {
     super(...args);
     this.listenBalanceCells();
+    this.indexTable = [];
+    this.quill.theme.addModule('table-menu');
   }
 
   balanceTables() {
@@ -80,7 +82,7 @@ class Table extends Module {
     this.quill.update(Quill.sources.USER);
     // let shift = row.rowOffset();
     // if (offset === 0) {
-    //   shift += 1;
+    //   // shift += 1;
     // }
     // this.quill.setSelection(range.index + shift, 1, Quill.sources.SILENT);
   }
@@ -156,6 +158,31 @@ class Table extends Module {
     );
     this.quill.focus();
     this.balanceTables();
+  }
+
+  mergeRange(cellsRange) {
+    const range = this.quill.getSelection() || this.quill.selection.savedRange;
+    const [table] = this.getTable(range);
+    const cell = table.mergeRange(cellsRange);
+    this.quill.update(Quill.sources.USER);
+    // this.quill.focus();
+
+    if (cell.isEmpty()) {
+      this.quill.selection.setNativeRange(cell.domNode, 0);
+    } else {
+      this.quill.selection.setNativeRange(
+        cell.domNode,
+        0,
+        cell.domNode,
+        cell.domNode.childNodes.length,
+      );
+    }
+  }
+
+  splitToCells(cell) {
+    const range = this.quill.getSelection() || this.quill.selection.savedRange;
+    const [table] = this.getTable(range);
+    table.splitToCells(cell);
   }
 
   listenBalanceCells() {

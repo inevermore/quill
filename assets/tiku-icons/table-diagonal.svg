@@ -1,0 +1,50 @@
+<svg width="16px" height="16px" viewBox="0 0 960 960" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="table-diagonal" fill="#000000" fill-rule="nonzero">
+            <polygon id="Shape" opacity="0.5" points="0 832 64 832 64 960 0 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="448 832 512 832 512 896 448 896"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 832 960 832 960 960 896 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 704 960 704 960 768 896 768"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 576 960 576 960 640 896 640"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 448 960 448 960 512 896 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 320 960 320 960 384 896 384"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 192 960 192 960 256 896 256"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 64 960 64 960 128 896 128"></polygon>
+            <polygon id="Shape" opacity="0.5" points="896 0 960 0 960 64 896 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="448 704 512 704 512 768 448 768"></polygon>
+            <polygon id="Shape" opacity="0.5" points="448 576 512 576 512 640 448 640"></polygon>
+            <polygon id="Shape" opacity="0.5" points="448 320 512 320 512 384 448 384"></polygon>
+            <polygon id="Shape" opacity="0.5" points="448 192 512 192 512 256 448 256"></polygon>
+            <polygon id="Shape" opacity="0.5" points="448 64 512 64 512 128 448 128"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 704 64 704 64 768 0 768"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 576 64 576 64 640 0 640"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 448 64 448 64 512 0 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 320 64 320 64 384 0 384"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 192 64 192 64 256 0 256"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 64 64 64 64 128 0 128"></polygon>
+            <polygon id="Shape" opacity="0.5" points="0 0 64 0 64 64 0 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="128 0 192 0 192 64 128 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="128 896 192 896 192 960 128 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="256 0 320 0 320 64 256 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="256 896 320 896 320 960 256 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="384 0 448 0 448 64 384 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="384 896 448 896 448 960 384 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="512 0 576 0 576 64 512 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="512 896 576 896 576 960 512 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="640 0 704 0 704 64 640 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="640 896 704 896 704 960 640 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="768 0 832 0 832 64 768 64"></polygon>
+            <polygon id="Shape" opacity="0.5" points="768 896 832 896 832 960 768 960"></polygon>
+            <polygon id="Shape" opacity="0.5" points="768 448 832 448 832 512 768 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="640 448 704 448 704 512 640 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="512 448 576 448 576 512 512 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="384 448 448 448 448 512 384 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="256 448 320 448 320 512 256 512"></polygon>
+            <polygon id="Shape" opacity="0.5" points="128 448 192 448 192 512 128 512"></polygon>
+            <path d="M0,0 L64,0 L64,64 L0,64 L0,0 Z M64,64 L128,64 L128,128 L64,128 L64,64 Z M128,128 L192,128 L192,192 L128,192 L128,128 Z M192,192 L256,192 L256,256 L192,256 L192,192 Z M256,256 L320,256 L320,320 L256,320 L256,256 Z M320,320 L384,320 L384,384 L320,384 L320,320 Z M384,384 L448,384 L448,448 L384,448 L384,384 Z M448,448 L512,448 L512,512 L448,512 L448,448 Z M512,512 L576,512 L576,576 L512,576 L512,512 Z M576,576 L640,576 L640,640 L576,640 L576,576 Z M640,640 L704,640 L704,704 L640,704 L640,640 Z M704,704 L768,704 L768,768 L704,768 L704,704 Z M768,768 L832,768 L832,832 L768,832 L768,768 Z M832,832 L896,832 L896,896 L832,896 L832,832 Z M896,896 L960,896 L960,960 L896,960 L896,896 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

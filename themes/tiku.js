@@ -59,7 +59,6 @@ class TikuTheme extends TkBaseTheme {
     });
     this.handleEvents();
     this.addModule('image-resizer');
-    this.addModule('table-menu');
   }
 
   extendToolbar(toolbar) {

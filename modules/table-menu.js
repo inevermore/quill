@@ -1,148 +1,17 @@
 import Module from '../core/module';
-import { TableCellLine, TableRow, TableCell } from '../formats/table';
-import constant from '../config/constant';
 import mergeIcon from '../assets/tiku-icons/table-merge-cells.svg';
 import unmergeIcon from '../assets/tiku-icons/table-unmerge-cells.svg';
+import diagonalIcon from '../assets/tiku-icons/table-diagonal.svg';
+import deleteDiagonalIcon from '../assets/tiku-icons/table-delete-diagonal.svg';
+import menuConfig from '../config/table-menu';
+import constant from '../config/constant';
 
 const svgs = {
   'merge-cells': mergeIcon,
   'unmerge-cells': unmergeIcon,
+  'insert-diagonal': diagonalIcon,
+  'delete-diagonal': deleteDiagonalIcon,
 };
-
-const menus = [
-  [
-    {
-      id: 'delete-table',
-      title: '删除表格',
-      handler(table) {
-        table.deleteTable();
-      },
-    },
-  ],
-  [
-    {
-      id: 'delete-row',
-      title: '删除当前行',
-      handler(table) {
-        table.deleteRow();
-      },
-    },
-    {
-      id: 'delete-col',
-      title: '删除当前列',
-      handler(table) {
-        table.deleteColumn();
-      },
-    },
-    {
-      id: 'insert-col-left',
-      title: '左插入列',
-      handler(table) {
-        table.insertColumnLeft();
-      },
-    },
-    {
-      id: 'insert-col-right',
-      title: '右插入列',
-      handler(table) {
-        table.insertColumnRight();
-      },
-    },
-    {
-      id: 'insert-row-above',
-      title: '前插入行',
-      handler(table) {
-        table.insertRowAbove();
-      },
-    },
-    {
-      id: 'insert-row-below',
-      title: '后插入行',
-      handler(table) {
-        table.insertRowBelow();
-      },
-    },
-  ],
-  [
-    {
-      id: 'align-left',
-      title: '表格左浮动',
-      handler(table) {
-        alignTable(table, 'left');
-      },
-    },
-    {
-      id: 'align-center',
-      title: '表格居中显示',
-      handler(table) {
-        alignTable(table, 'center');
-      },
-    },
-    {
-      id: 'align-right',
-      title: '表格右浮动',
-      handler(table) {
-        alignTable(table, 'right');
-      },
-    },
-  ],
-  [
-    {
-      id: 'insert-diagonal',
-      title: '插入对角线',
-      handler(table) {
-        const [, , cell] = table.getTable();
-        cell.domNode.classList.add(constant.tableDiagonalClass);
-        cell.descendants(TableCellLine).forEach(line => {
-          line.format('diagonal', 'normal');
-        });
-      },
-    },
-    {
-      id: 'delete-diagonal',
-      title: '删除对角线',
-      handler(table) {
-        const [, , cell] = table.getTable();
-        cell.domNode.classList.remove(constant.tableDiagonalClass);
-        cell.descendants(TableCellLine).forEach(line => {
-          line.format('diagonal', '');
-        });
-      },
-    },
-  ],
-  [
-    {
-      id: 'merge-cells',
-      title: '合并单元格',
-      handler() {
-        const { startRow, startCol, endRow, endCol } = this.cellsRange;
-        const selectedCells = [];
-        const rows = this.table.descendants(TableRow);
-        rows.forEach(row => {
-          row.descendants(TableCell).forEach(cell => {
-            if (cell.domNode.classList.contains(this.selectedClass)) {
-              selectedCells.push(cell);
-            }
-          });
-        });
-        const theCell = selectedCells[0];
-        theCell.descendants(TableCellLine).forEach(line => {
-          line.format('rowspan', endRow - startRow + 1);
-          line.format('colspan', endCol - startCol + 1);
-          line.optimize();
-        });
-        for (let i = 1; i < selectedCells.length; i++) {
-          selectedCells[i].remove();
-        }
-      },
-    },
-    {
-      id: 'unmerge-cells',
-      title: '取消合并单元格',
-      handler: () => {},
-    },
-  ],
-];
 
 const prefixClass = 'table-menu';
 
@@ -150,20 +19,43 @@ class TableMenu extends Module {
   constructor(quill, options) {
     super(quill, options);
     this.root = quill.root;
-    this.menus = menus;
+    this.menuConfig = menuConfig;
+    this.menuNodes = [];
     this.dom = this.createMenu();
+    this.showMenu(false);
     this.selectedCells = [];
-    this.selectedTable = null;
+    this.table = null;
     this.startTd = null;
     this.cellsRange = {};
     this.mouseMoveFrame = false;
-    this.tableCells = null;
     this.selectedClass = 'table-cell-selected';
+    this.curTd = null;
     quill.container.appendChild(this.dom);
     this.root.addEventListener('contextmenu', e => {
       if (containsByTable(e.target, this.root)) {
         e.preventDefault();
         this.showMenu(true, { x: e.clientX, y: e.clientY });
+        const td = getTd(e.target);
+        const {
+          startRowIndex,
+          endRowIndex,
+          startColIndex,
+          endColIndex,
+        } = this.cellsRange;
+        const isSelected =
+          startRowIndex !== endRowIndex || startColIndex !== endColIndex;
+        if (isSelected) {
+          this.showMenuItem('merge-cells', true);
+        } else if (td.rowSpan > 1 || td.colSpan > 1) {
+          this.showMenuItem('unmerge-cells', true);
+        }
+        if (!isSelected) {
+          if (td.classList.contains(constant.tableDiagonalClass)) {
+            this.showMenuItem('delete-diagonal', true);
+          } else {
+            this.showMenuItem('insert-diagonal', true);
+          }
+        }
       }
     });
     document.addEventListener(
@@ -171,7 +63,8 @@ class TableMenu extends Module {
       ({ target, button }) => {
         if (button === 0 && !this.dom.contains(target)) {
           this.clearSelected();
-          this.selectedTable = null;
+          this.table = null;
+          this.enableSelect(true);
         }
       },
       true,
@@ -190,10 +83,19 @@ class TableMenu extends Module {
 
   showMenu(bool, mousePos) {
     const displayVal = bool ? 'block' : 'none';
+    if (this.dom.style.display === displayVal) {
+      return;
+    }
     if (bool) {
       const rootRect = this.quill.container.getBoundingClientRect();
       this.dom.style.left = `${mousePos.x - rootRect.left}px`;
       this.dom.style.top = `${mousePos.y - rootRect.top}px`;
+    } else {
+      this.clearSelected();
+      this.showMenuItem('unmerge-cells', false);
+      this.showMenuItem('merge-cells', false);
+      this.showMenuItem('delete-diagonal', false);
+      this.showMenuItem('insert-diagonal', false);
     }
     this.dom.style.display = displayVal;
   }
@@ -201,7 +103,7 @@ class TableMenu extends Module {
   createMenu() {
     const wrappper = document.createElement('div');
     wrappper.classList.add(`${prefixClass}-wrapper`);
-    this.menus.forEach((menu, index) => {
+    this.menuConfig.forEach((menu, index) => {
       menu.forEach(item => {
         const div = document.createElement('div');
         div.classList.add(`${prefixClass}-item`);
@@ -218,12 +120,13 @@ class TableMenu extends Module {
         div.appendChild(title);
         div.addEventListener('click', () => {
           const table = this.quill.getModule('table');
-          item.handler.apply(this, table);
+          item.handler.call(this, table);
           this.showMenu(false);
         });
+        this.menuNodes[item.id] = div;
         wrappper.appendChild(div);
       });
-      if (index !== this.menus.length - 1) {
+      if (index !== this.menuConfig.length - 1) {
         wrappper.appendChild(createHorizontalLine());
       }
     });
@@ -234,29 +137,18 @@ class TableMenu extends Module {
   mouseDown(eventTarget) {
     let node = eventTarget;
     this.startTd = getTd(node);
-    const { row, col } = getTdIndex(this.startTd);
-    this.cellsRange.startRow = row;
-    this.cellsRange.startCol = col;
     while (node.tagName.toUpperCase() !== 'TABLE') {
       node = node.parentNode;
     }
+    this.table = node;
     this.clearSelected();
-    document.addEventListener(
-      'selectionchange',
-      () => {
-        [this.table] = this.quill.getModule('table').getTable();
-        console.log('table', this.table);
-      },
-      { once: true },
-    );
-    this.selectedTable = node;
-    this.tableCells = this.selectedTable.querySelectorAll('td');
     const mouseMoveListener = this.mouseMove.bind(this);
-    this.selectedTable.addEventListener('mousemove', mouseMoveListener);
+    this.table.addEventListener('mousemove', mouseMoveListener);
     document.addEventListener(
       'mouseup',
       () => {
-        this.selectedTable.removeEventListener('mousemove', mouseMoveListener);
+        this.enableSelect(true);
+        this.table.removeEventListener('mousemove', mouseMoveListener);
       },
       {
         once: true,
@@ -272,94 +164,51 @@ class TableMenu extends Module {
     this.mouseMoveFrame = true;
     requestAnimationFrame(() => {
       this.mouseMoveFrame = false;
-      if (
-        target !== this.selectedTable &&
-        this.selectedTable.contains(target)
-      ) {
+      if (target !== this.table && this.table.contains(target)) {
         const td = getTd(target);
-        const { row, col } = getTdIndex(td);
-        if (row === this.cellsRange.endRow && col === this.cellsRange.endCol) {
+        if (td === this.curTd) {
           return;
         }
-        this.cellsRange.endRow = row;
-        this.cellsRange.endCol = col;
-        this.updateSelectedCells();
+        this.curTd = td;
+        this.updateSelectedCells(this.startTd, td);
       }
     });
   }
 
-  updateSelectedCells() {
+  updateSelectedCells(startTd, endTd) {
     this.clearSelected();
-    let { startRow, startCol, endRow, endCol } = this.cellsRange;
-    if (startRow === endRow && startCol === endCol) {
+    const [table] = this.quill.getModule('table').getTable();
+    const cellsRange = table.getCellsRange(startTd, endTd);
+    this.cellsRange = cellsRange;
+    const cells = table.getCells(cellsRange);
+    if (!cells || cells.length <= 1) {
       return;
     }
 
-    this.quill.setSelection(null);
-    if (startRow > endRow) {
-      [startRow, endRow] = [endRow, startRow];
-    }
-    if (startCol > endCol) {
-      [startCol, endCol] = [endCol, startCol];
-    }
-    console.log('startRow', startRow);
-    console.log('startCol', startCol);
-    let rowTotal = 0;
-    let colTotal = 0;
-    const rowArr = [];
-    const colArr = [];
-    const rows = this.selectedTable.getElementsByTagName('tr');
-    const cells = [];
-    const validCells = [];
-    for (let i = startRow; i <= endRow; i++) {
-      const tds = rows[i].getElementsByTagName('td');
-      let col = 0;
-      const row = [];
-      for (let j = startCol; j <= endCol; j++) {
-        row.push(tds[j]);
-        col += +tds[j].getAttribute('colspan') || 1;
-        rowTotal += +tds[j].getAttribute('rowspan') || 1;
-      }
-      cells.push(validCells);
-      colArr.push(col);
-      validCells.push(row);
-    }
-    for (let i = 0; i < validCells[0].length; i++) {
-      let row = 0;
-      for (let j = 0; j < validCells.length; j++) {
-        row += +validCells[j][i].getAttribute('rowspan');
-      }
-      rowArr.push(row);
-    }
-    const colMax = Math.max(...colArr);
-    const rowMax = Math.max(...rowArr);
-    console.log('valid', validCells);
-    console.log('colMax', colMax);
-    console.log('rowMax', rowMax);
-    let rowCur = 0;
-    let colCur = 0;
-    let isBreak = false;
-    // while (colCur < colMax || rowCur < rowMax) {
-
-    // }
-    for (let i = startRow; i <= endRow; i++) {
-      const tds = rows[i].getElementsByTagName('td');
-      for (let j = startCol; j <= endCol; j++) {
-        tds[j].classList.add(this.selectedClass);
-        // j += +tds[j].getAttribute('rowspan') || 1;
-        // i += +tds[j].getAttribute('colspan') || 1;
-      }
-    }
+    this.quill.blur();
+    this.enableSelect(false);
+    Array.from(cells).forEach(cell => {
+      cell.domNode.classList.add(this.selectedClass);
+    });
   }
 
   clearSelected() {
-    if (!this.selectedTable) {
+    this.cellsRange = {};
+    if (!this.table) {
       return;
     }
-    const cells = this.selectedTable.querySelectorAll(`.${this.selectedClass}`);
+    const cells = this.table.querySelectorAll(`.${this.selectedClass}`);
     for (let i = 0; i < cells.length; i++) {
       cells[i].classList.remove(this.selectedClass);
     }
+  }
+
+  enableSelect(bool) {
+    this.quill.root.style.webkitUserSelect = bool ? '' : 'none';
+  }
+
+  showMenuItem(id, bool) {
+    this.menuNodes[id].style.display = bool ? 'flex' : 'none';
   }
 }
 
@@ -373,21 +222,6 @@ function getTd(node) {
   return node;
 }
 
-function getTdIndex(td) {
-  const tr = td.parentNode;
-  let table = td;
-  while (table.tagName.toUpperCase() !== 'TABLE') {
-    table = table.parentNode;
-  }
-
-  const trs = Array.from(table.querySelectorAll('tr'));
-
-  return {
-    row: trs.indexOf(tr),
-    col: Array.from(tr.children).indexOf(td),
-  };
-}
-
 function containsByTable(node, root) {
   while (root.contains(node)) {
     if (node.tagName.toUpperCase() === 'TABLE') {
@@ -396,16 +230,6 @@ function containsByTable(node, root) {
     node = node.parentNode;
   }
   return false;
-}
-
-function alignTable(table, align) {
-  const [tableContainer] = table.getTable();
-  tableContainer.domNode.setAttribute('table-align', align);
-  const lines = tableContainer.descendants(TableCellLine);
-  lines.forEach(line => {
-    line.format('tbalign', align);
-    line.optimize();
-  });
 }
 
 function createVerticalLine() {
