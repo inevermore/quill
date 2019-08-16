@@ -19,7 +19,7 @@ import Image from './formats/image';
 import Table from './modules/table';
 import Toolbar from './modules/toolbar';
 import ImageResizer from './modules/image-resizer';
-import TableMenu from './modules/table-menu';
+import TableAction from './modules/table-action';
 
 import Icons from './ui/icons';
 import Picker from './ui/picker';
@@ -64,7 +64,7 @@ Quill.register(
     'modules/table': Table,
     'modules/toolbar': Toolbar,
     'modules/image-resizer': ImageResizer,
-    'modules/table-menu': TableMenu,
+    'modules/table-action': TableAction,
 
     'themes/snow': SnowTheme,
     'themes/tiku': TikuTheme,

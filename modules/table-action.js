@@ -5,6 +5,7 @@ import diagonalIcon from '../assets/tiku-icons/table-diagonal.svg';
 import deleteDiagonalIcon from '../assets/tiku-icons/table-delete-diagonal.svg';
 import menuConfig from '../config/table-menu';
 import constant from '../config/constant';
+import { isContainByTable, getTdParent } from '../utils/dom-utils';
 
 const svgs = {
   'merge-cells': mergeIcon,
@@ -26,16 +27,16 @@ class TableMenu extends Module {
     this.selectedCells = [];
     this.table = null;
     this.startTd = null;
+    this.currentTd = null;
     this.cellsRange = {};
     this.mouseMoveFrame = false;
     this.selectedClass = 'table-cell-selected';
-    this.curTd = null;
     quill.container.appendChild(this.dom);
     this.root.addEventListener('contextmenu', e => {
-      if (containsByTable(e.target, this.root)) {
+      if (isContainByTable(e.target, this.root)) {
         e.preventDefault();
         this.showMenu(true, { x: e.clientX, y: e.clientY });
-        const td = getTd(e.target);
+        const td = getTdParent(e.target);
         const {
           startRowIndex,
           endRowIndex,
@@ -70,7 +71,7 @@ class TableMenu extends Module {
       true,
     );
     this.root.addEventListener('mousedown', e => {
-      if (e.button === 0 && containsByTable(e.target, this.root)) {
+      if (e.button === 0 && isContainByTable(e.target, this.root)) {
         this.mouseDown(e.target);
       }
     });
@@ -136,7 +137,7 @@ class TableMenu extends Module {
 
   mouseDown(eventTarget) {
     let node = eventTarget;
-    this.startTd = getTd(node);
+    this.startTd = getTdParent(node);
     while (node.tagName.toUpperCase() !== 'TABLE') {
       node = node.parentNode;
     }
@@ -165,11 +166,11 @@ class TableMenu extends Module {
     requestAnimationFrame(() => {
       this.mouseMoveFrame = false;
       if (target !== this.table && this.table.contains(target)) {
-        const td = getTd(target);
-        if (td === this.curTd) {
+        const td = getTdParent(target);
+        if (td === this.currentTd) {
           return;
         }
-        this.curTd = td;
+        this.currentTd = td;
         this.updateSelectedCells(this.startTd, td);
       }
     });
@@ -210,26 +211,6 @@ class TableMenu extends Module {
   showMenuItem(id, bool) {
     this.menuNodes[id].style.display = bool ? 'flex' : 'none';
   }
-}
-
-function getTd(node) {
-  while (node.tagName.toUpperCase() !== 'TD') {
-    if (node.tagName.toUpperCase() === 'BODY') {
-      return null;
-    }
-    node = node.parentNode;
-  }
-  return node;
-}
-
-function containsByTable(node, root) {
-  while (root.contains(node)) {
-    if (node.tagName.toUpperCase() === 'TABLE') {
-      return true;
-    }
-    node = node.parentNode;
-  }
-  return false;
 }
 
 function createVerticalLine() {

@@ -3,7 +3,7 @@ import extend from 'extend';
 import Delta from 'quill-delta';
 import TkBaseTheme from './tk-base';
 import svgToLatex from '../utils/svg-to-latex';
-import { isContain } from '../utils/dom-utils';
+import { isContainByClass, getTdParent } from '../utils/dom-utils';
 import Emitter from '../core/emitter';
 import debounce from '../utils/debounce';
 import FillBlankOrder from '../formats/fill-blank-order';
@@ -49,13 +49,16 @@ class TikuTheme extends TkBaseTheme {
     quill.root.addEventListener('dblclick', e => {
       e.preventDefault();
       e.stopPropagation();
-      let node = isContain(e.target, quill.root, quill.formulaImgClass);
+      let node = isContainByClass(e.target, quill.formulaImgClass, quill.root);
       if (!node && e.target.tagName.toUpperCase() === 'SVG') {
         node = e.target.parentNode.parentNode;
       }
       if (node) {
         quill.editFormula(node);
       }
+    });
+    this.quill.on(Emitter.events.SELECTION_CHANGE, () => {
+      this.optimizeTableSelection();
     });
     this.handleEvents();
     this.addModule('image-resizer');
@@ -102,10 +105,10 @@ class TikuTheme extends TkBaseTheme {
     });
     let mathjaxNode = null;
     root.addEventListener('click', ({ target }) => {
-      const fillBlankOrderNode = isContain(
+      const fillBlankOrderNode = isContainByClass(
         target,
-        root,
         FillBlankOrder.className,
+        root,
       );
       if (fillBlankOrderNode) {
         const { index } = this.quill.getSelection();
@@ -114,7 +117,11 @@ class TikuTheme extends TkBaseTheme {
       if (mathjaxNode) {
         mathjaxNode.classList.remove('selected');
       }
-      const curMathjaxNode = isContain(target, root, QlMathjax.className);
+      const curMathjaxNode = isContainByClass(
+        target,
+        QlMathjax.className,
+        root,
+      );
       let curNode = null;
       if (curMathjaxNode) {
         mathjaxNode = curMathjaxNode;
@@ -166,6 +173,22 @@ class TikuTheme extends TkBaseTheme {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
+    }
+  }
+
+  optimizeTableSelection() {
+    const nativeRange = this.quill.selection.getNativeRange();
+    if (!nativeRange) return;
+    const { start, end } = nativeRange;
+    const startTd = getTdParent(start.node);
+    const endTd = getTdParent(end.node);
+    let selectionStartNode = null;
+    // 选中两个td
+    if (startTd && endTd && startTd !== endTd) {
+      selectionStartNode = startTd;
+    }
+    if (selectionStartNode) {
+      this.quill.selection.setNativeRange(selectionStartNode, 0);
     }
   }
 }

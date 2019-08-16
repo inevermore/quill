@@ -24,7 +24,7 @@ class Table extends Module {
     super(...args);
     this.listenBalanceCells();
     this.indexTable = [];
-    this.quill.theme.addModule('table-menu');
+    this.quill.theme.addModule('table-action');
   }
 
   balanceTables() {
@@ -36,14 +36,16 @@ class Table extends Module {
   deleteColumn() {
     const [table, , cell] = this.getTable();
     if (cell == null) return;
-    table.deleteColumn(cell.cellOffset());
+    const { colIndex } = table.getCellInfo(cell.domNode);
+    table.deleteColumn(colIndex);
     this.quill.update(Quill.sources.USER);
   }
 
   deleteRow() {
-    const [, row] = this.getTable();
+    const [table, row, cell] = this.getTable();
     if (row == null) return;
-    row.remove();
+    const { rowIndex } = table.getCellInfo(cell.domNode);
+    table.deleteRow(rowIndex);
     this.quill.update(Quill.sources.USER);
   }
 
@@ -77,7 +79,11 @@ class Table extends Module {
     const range = this.quill.getSelection() || this.quill.selection.savedRange;
     const [table, , cell] = this.getTable(range);
     if (cell == null) return;
-    const column = cell.cellOffset();
+    const { colIndex, colSpan } = table.getCellInfo(cell.domNode);
+    let column = colIndex;
+    if (offset) {
+      column += colSpan - 1;
+    }
     table.insertColumn(column + offset);
     this.quill.update(Quill.sources.USER);
     // let shift = row.rowOffset();
@@ -97,9 +103,13 @@ class Table extends Module {
 
   insertRow(offset) {
     const range = this.quill.getSelection() || this.quill.selection.savedRange;
-    const [table, row, cell] = this.getTable(range);
+    const [table, , cell] = this.getTable(range);
     if (cell == null) return;
-    const index = row.rowOffset();
+    const { rowIndex, rowSpan } = table.getCellInfo(cell.domNode);
+    let index = rowIndex;
+    if (offset) {
+      index += rowSpan - 1;
+    }
     table.insertRow(index + offset);
     this.quill.update(Quill.sources.USER);
     // if (offset > 0) {

@@ -539,16 +539,22 @@ function matchTableCell(node, delta) {
   if (delta && delta.ops.length === 0) {
     applyDelta = new Delta().insert('\n');
   }
-  return applyFormat(applyDelta, 'table-cell-line', {
+  const format = {
     row,
-    rowspan: Number(node.getAttribute('rowspan')) || 1,
-    colspan: Number(node.getAttribute('colspan')) || 1,
     tbalign,
     cell: cells.indexOf(node) + 1,
     align: AlignClass.value(node) || 'center',
     diagonal:
       (node.classList.contains(constant.tableDiagonalClass) && 'normal') || '',
-  });
+  };
+  const { rowSpan, colSpan } = node;
+  if (rowSpan > 1) {
+    format.rowspan = rowSpan;
+  }
+  if (colSpan > 1) {
+    format.colspan = colSpan;
+  }
+  return applyFormat(applyDelta, 'table-cell-line', format);
 }
 
 function centerTableCell(node, delta) {

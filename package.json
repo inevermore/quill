@@ -140,6 +140,9 @@
       ],
       "no-plusplus": [
         "off"
+      ],
+      "no-empty": [
+        "off"
       ]
     }
   },
