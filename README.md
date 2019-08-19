@@ -26,7 +26,7 @@ const editor = new Editor({
   },
   options: [
     {
-      font: ['sans-serif', 'Arial'],
+      align: ['left', 'right', 'center'],
     },
     {
       bold: ['normal'],

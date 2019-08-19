@@ -663,17 +663,16 @@ class TableContainer extends Container {
         for (let j = 0; j < rowSpan; j++) {
           for (let k = 0; k < colSpan; k++) {
             try {
-              this.indexTable[rowIndex + j][colIndex + k] = {
-                rowIndex,
-                cellIndex,
-                colIndex,
-                rowSpan,
-                colSpan,
-              };
-            } catch (e) {
-              // eslint-disable-next-line no-console
-              console.log('updateIndexTable', e);
-            }
+              if (this.indexTable[rowIndex + j]) {
+                this.indexTable[rowIndex + j][colIndex + k] = {
+                  rowIndex,
+                  cellIndex,
+                  colIndex,
+                  rowSpan,
+                  colSpan,
+                };
+              }
+            } catch (e) {}
           }
         }
       }
