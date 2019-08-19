@@ -680,10 +680,10 @@ class TableContainer extends Container {
     }
   }
 
-  getCellInfo(cell) {
-    if (!cell) return {};
-    const { cellIndex } = cell;
-    const { rowIndex } = cell.parentNode;
+  getCellInfo(cellNode) {
+    if (!cellNode) return {};
+    const { cellIndex } = cellNode;
+    const { rowIndex } = cellNode.parentNode;
     const rowInfo = this.indexTable[rowIndex];
     const numCols = this.colsNum;
     for (let colIndex = cellIndex; colIndex < numCols; colIndex++) {

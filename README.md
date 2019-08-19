@@ -1,4 +1,6 @@
-一课团队富文本编辑器，基于 quill.js 二次开发。
+
+
+富文本编辑器
 
 ## 快速上手
 
@@ -35,23 +37,25 @@ const editor = new Editor({
 
 注意：目前样式文件还未上传至 cdn，`text-editor.css`请引用 `dist/text-editor.css`，`yike-iframe.css`请引用`dist/yike-iframe.css`。
 
-另外，如果使用插入公式功能，宿主环境要求MathJax、canvg第三方库，参考如下：
+另外，如果使用插入公式功能，宿主环境要求MathJax库，例如：
 
 ```html
 <script src="https://yy-s.zuoyebang.cc/static/mathjax_274/MathJax.js?config=default-full-min"></script>
-<script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
 ```
 
 ## 参数说明
 
-| 参数名      | 类型           | 必要性 | 默认值        | 取值范围             | 描述                               |
-| ----------- | -------------- | ------ | ------------- | -------------------- | ---------------------------------- |
-| container   | string \| Node | 可选   | document.body | 无                   | 编辑器容器                         |
-| options     | array          | 必选   | []            | 见下方 options 说明  | 可选的样式                         |
-| initContent | string         | 可选   | ''            | 无                   | 初始化内容，可以是文本或html字符串 |
-| events      | object         | 可选   | {}            | 见下方 events 说明   | 传入的事件                         |
-| keyboard    | object         | 可选   | {}            | 见下方 keyboard 说明 | 处理键盘事件                       |
-| uploader    | object         | 可选   | {}            | 见下方 uploader 说明 | 配置图片上传参数（url、参数...）   |
+| 参数名      | 类型           | 必要性 | 默认值        | 取值范围                  | 描述                               |
+| ----------- | -------------- | ------ | ------------- | ------------------------- | ---------------------------------- |
+| container   | String \| Node | 可选   | document.body | 无                        | 编辑器容器                         |
+| theme       | String         | 必选   |               | tiku、handout、platform   | 主题，目前支持题库、讲义、平台     |
+| options     | Array          | 必选   | []            | 见下方 options 说明       | 可选的样式                         |
+| toolbar     | Object         | 可选   |               | 见下方toolbar说明         | 设置toolbar按钮事件                |
+| initContent | String         | 可选   | ''            | 无                        | 初始化内容，可以是文本或html字符串 |
+| events      | Object         | 可选   | {}            | 见下方 events 说明        | 传入的事件                         |
+| keyboard    | Object         | 可选   | {}            | 见下方 keyboard 说明      | 处理键盘事件                       |
+| uploader    | Object         | 可选   | {}            | 见下方 uploader 说明      | 配置图片上传参数（url、参数...）   |
+| subject     | Number         | 可选   |               | 2(数学), 4(物理), 5(化学) | 学科配置                           |
 
 ### options 说明
 
@@ -60,12 +64,8 @@ const editor = new Editor({
 ```javascript
 [
   {
-    font: ['sans-serif', 'Arial'],
-  },
-  {
     bold: ['normal'],
   },
-  'color', // 没有限制
   {
     align: ['left', 'right', 'center']
   },
@@ -89,18 +89,49 @@ const editor = new Editor({
 | size                   | 任意，不设置则没有限制    | 行内文本     | 字号                   |                                                            |
 | color                  | 任意，不设置则没有限制    | 行内文本     | 文本颜色               |                                                            |
 | background             | 任意，不设置则没有限制    | 行内文本     | 文本背景颜色           |                                                            |
-| text-indent            | 'normal                   | 段落         | 首行增加缩进           | tkspec-text-indent-normal                                  |
-| indent                 | '+1', '-1'                | 段落         | 段落增加缩进，减少缩进 | tkspec-indent-1，tkspec-indent-2 …… tkspec-indent-8        |
+| text-indent            | 'normal'                  | 段落         | 首行增加缩进           | tkspec-text-indent-normal                                  |
 | align                  | 'left', 'center', 'right' | 段落         | 段落对齐样式           | tkspec-align-left，tkspec-align-center，tkspec-align-right |
 | line-height            | 任意，不设置则没有限制    | 段落         | 行高                   |                                                            |
 | list                   | 'ordered'                 | 段落         | 列表                   |                                                            |
 | paragraph-bottom-space | 'normal'                  | 段落         | 段后距                 | tkspec-paragraph-bottom-space-normal                       |
+| undo                   | 无                        |              | 撤回                   |                                                            |
+| redo                   | 无                        |              | 重做                   |                                                            |
+| select-all             | 无                        |              | 全选                   |                                                            |
+| clear                  | 无                        |              | 清空                   |                                                            |
+| image                  | 无                        |              | 上传图片               |                                                            |
+| fill-blank-order       | 无                        |              | 填空题序号             | fill-blank                                                 |
+| fill-blank-underline   | 无                        |              | 填空题空格             | tkspec-fill-blank-underline                                |
+| fill-blank-brackets    | 无                        |              | 括号                   | tkspec-fill-blank-brackets                                 |
+| formula-editor         | 无                        |              | 打开公式编辑器         |                                                            |
+| latex2svg              | 无                        |              | latex转化为svg         |                                                            |
+| svg2latex              | 无                        |              | svg转化为latex         |                                                            |
+| pinyin                 | 无                        |              | 打开拼音               |                                                            |
+| table-insert           | 无                        |              | 插入表格               |                                                            |
+
+### toolbar 说明
+
+以下方代码为例，设置插入填空题序号事件
+
+```js
+toolbar: {
+  handlers: {
+    'fill-blank-order': function() {
+      const savedIndex = this.quill.selection.savedRange.index;
+      this.quill.insertEmbed(savedIndex, 'fill-blank-order', '1');
+      this.quill.setSelection(savedIndex + 1, 0);
+    }
+  }
+},
+```
+
+
 
 ### events 说明
 
-| 方法名    | 返回值 | 参数 | 说明                                   |
-| --------- | ------ | ---- | -------------------------------------- |
-| getFormat | object | 无   | 点击编辑区域时触发以获取光标区域的样式 |
+| 方法名           | 返回值 | 参数                                                         | 说明                                             |
+| ---------------- | ------ | ------------------------------------------------------------ | ------------------------------------------------ |
+| getFormat        | object | 无                                                           | 点击编辑区域时触发以获取光标区域的样式           |
+| blankOrderChange | 无     | type（操作类型：add/del/clear），changeList（变化列表），maxLen（序号最多数量） | 填空题序号变化事件，当删除、复制、清空文档时触发 |
 
 ### keyboard 说明
 

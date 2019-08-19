@@ -712,7 +712,6 @@ function makeTableArrowHandler(up) {
     collapsed: true,
     format: ['table-cell-line'],
     handler(range, context) {
-      // TODO move to table module
       const key = up ? 'prev' : 'next';
       const cellLine = context.line;
 
@@ -722,39 +721,59 @@ function makeTableArrowHandler(up) {
         return true;
       }
       if (targetRow != null) {
-        if (targetRow.statics.blotName === 'table-row') {
-          let targetCell = targetRow.children.head;
-          let cur = cell;
-          while (cur.prev != null) {
-            cur = cur.prev;
-            targetCell = targetCell.next;
+        const table = cell.table();
+        const cellInfo = table.getCellInfo(cell.domNode);
+        const plus = up ? -1 : +1;
+        let targetCell = cell;
+        let { rowIndex } = cellInfo;
+        const { colIndex } = cellInfo;
+        while (targetCell === cell) {
+          rowIndex += plus;
+          if (rowIndex >= table.rowsNum) {
+            targetCell = null;
+            break;
           }
+          const targetCellInfo = table.indexTable[rowIndex][colIndex];
+          targetCell = table.getCell(
+            targetCellInfo.rowIndex,
+            targetCellInfo.cellIndex,
+          );
+        }
+
+        if (targetCell) {
           const index =
             targetCell.offset(this.quill.scroll) +
             Math.min(context.offset, targetCell.length() - 1);
           this.quill.setSelection(index, 0, Quill.sources.USER);
+        } else {
+          moveToTableLine.call(this, table, up);
         }
       } else {
-        const targetLine = cell.table()[key];
-        if (targetLine != null) {
-          if (up) {
-            this.quill.setSelection(
-              targetLine.offset(this.quill.scroll) + targetLine.length() - 1,
-              0,
-              Quill.sources.USER,
-            );
-          } else {
-            this.quill.setSelection(
-              targetLine.offset(this.quill.scroll),
-              0,
-              Quill.sources.USER,
-            );
-          }
-        }
+        moveToTableLine.call(this, cell.table(), up);
       }
       return false;
     },
   };
+}
+
+function moveToTableLine(table, up) {
+  const key = up ? 'prev' : 'next';
+  const targetLine = table[key];
+  if (targetLine != null) {
+    if (up) {
+      this.quill.setSelection(
+        targetLine.offset(this.quill.scroll) + targetLine.length() - 1,
+        0,
+        Quill.sources.USER,
+      );
+    } else {
+      this.quill.setSelection(
+        targetLine.offset(this.quill.scroll),
+        0,
+        Quill.sources.USER,
+      );
+    }
+  }
 }
 
 function normalize(binding) {
