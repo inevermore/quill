@@ -11,6 +11,7 @@ class TkEditor {
         toolbar: {
           container: null,
           handlers: {},
+          config: {},
         },
         initContent: '',
         events: {
@@ -51,12 +52,14 @@ class TkEditor {
           container: this.config.toolbar.container,
           options: this.config.options,
           handlers: this.config.toolbar.handlers,
+          config: this.config.toolbar.config,
         },
         keyboard: this.config.keyboard,
         uploader: this.config.uploader,
       },
       events: this.config.events,
       wrapperClass: 'text-editor-wrapper',
+      subject: this.config.subject,
     });
     this.quill.on(Quill.events.EDITOR_CHANGE, (type, range) => {
       if (type === Quill.events.SELECTION_CHANGE) {

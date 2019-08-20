@@ -20,7 +20,16 @@ class Toolbar extends Module {
     } else if (typeof this.options.container === 'string') {
       this.container = document.querySelector(this.options.container);
     }
-    addControls(this.container, this.options.options, quill);
+    this.iconConfig = Object.entries(options.config).reduce(
+      (memo, [key, value]) => {
+        if (typeof value === 'object' && value.icon) {
+          memo[key] = value.icon;
+        }
+        return memo;
+      },
+      {},
+    );
+    this.addControls(this.container, this.options.options);
     // eslint-disable-next-line no-constant-condition
     if (this.options.container == null || 'default') {
       quill.container.parentNode.insertBefore(this.container, quill.container);
@@ -114,6 +123,74 @@ class Toolbar extends Module {
     this.controls.push([format, input]);
   }
 
+  addControls(container, groups) {
+    if (!Array.isArray(groups[0])) {
+      groups = [groups];
+    }
+    groups.forEach((controls, index) => {
+      const group = container;
+      // const group = document.createElement('span');
+      // group.classList.add('ql-formats');
+      controls.forEach(control => {
+        if (control === 'pinyin') {
+          group.appendChild(buildPinyin(this.quill));
+        } else if (typeof control === 'string') {
+          this.addButton(group, control);
+        } else {
+          const format = Object.keys(control)[0];
+          const value = control[format];
+          if (Array.isArray(value)) {
+            this.addSelect(group, format, value);
+          } else {
+            this.addButton(group, format, value);
+          }
+        }
+      });
+      // container.appendChild(group);
+      const line = document.createElement('i');
+      line.classList.add('seperate-line');
+      if (index !== groups.length - 1) {
+        container.appendChild(line);
+      }
+    });
+  }
+
+  addButton(container, format, value) {
+    const input = document.createElement('button');
+    input.setAttribute('type', 'button');
+    input.classList.add(`ql-${format}`);
+    if (value != null) {
+      input.value = value;
+    }
+    const i = document.createElement('i');
+    i.classList.add('button-icon');
+    if (this.iconConfig[format]) {
+      i.style.setProperty(
+        'background-image',
+        `url(${this.iconConfig[format]})`,
+        'important',
+      );
+      i.style.setProperty('background-size', '20px');
+    }
+    input.appendChild(i);
+    container.appendChild(input);
+  }
+
+  addSelect(container, format, values) {
+    const input = document.createElement('select');
+    input.classList.add(`ql-${format}`);
+    values.forEach(value => {
+      const option = document.createElement('option');
+      if (value !== false) {
+        option.setAttribute('value', value);
+      } else {
+        option.setAttribute('selected', 'selected');
+      }
+      input.appendChild(option);
+    });
+    container.appendChild(input);
+  }
+
   update(range) {
     const formats = range == null ? {} : this.quill.getFormat(range);
     // if (this.quill.tkEvents) {
@@ -158,66 +235,6 @@ class Toolbar extends Module {
   }
 }
 Toolbar.DEFAULTS = {};
-
-function addButton(container, format, value) {
-  const input = document.createElement('button');
-  input.setAttribute('type', 'button');
-  input.classList.add(`ql-${format}`);
-  if (value != null) {
-    input.value = value;
-  }
-  const i = document.createElement('i');
-  i.classList.add('button-icon');
-  input.appendChild(i);
-  container.appendChild(input);
-}
-
-function addControls(container, groups, quill) {
-  if (!Array.isArray(groups[0])) {
-    groups = [groups];
-  }
-  groups.forEach((controls, index) => {
-    const group = container;
-    // const group = document.createElement('span');
-    // group.classList.add('ql-formats');
-    controls.forEach(control => {
-      if (control === 'pinyin') {
-        group.appendChild(buildPinyin(quill));
-      } else if (typeof control === 'string') {
-        addButton(group, control);
-      } else {
-        const format = Object.keys(control)[0];
-        const value = control[format];
-        if (Array.isArray(value)) {
-          addSelect(group, format, value);
-        } else {
-          addButton(group, format, value);
-        }
-      }
-    });
-    // container.appendChild(group);
-    const line = document.createElement('i');
-    line.classList.add('seperate-line');
-    if (index !== groups.length - 1) {
-      container.appendChild(line);
-    }
-  });
-}
-
-function addSelect(container, format, values) {
-  const input = document.createElement('select');
-  input.classList.add(`ql-${format}`);
-  values.forEach(value => {
-    const option = document.createElement('option');
-    if (value !== false) {
-      option.setAttribute('value', value);
-    } else {
-      option.setAttribute('selected', 'selected');
-    }
-    input.appendChild(option);
-  });
-  container.appendChild(input);
-}
 
 Toolbar.DEFAULTS = {
   container: null,
@@ -278,4 +295,4 @@ Toolbar.DEFAULTS = {
   },
 };
 
-export { Toolbar as default, addControls };
+export { Toolbar as default };

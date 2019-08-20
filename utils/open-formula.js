@@ -1,4 +1,5 @@
 import { mathjaxRender } from './latex-to-svg';
+import PlatformTheme from '../themes/platform';
 
 const OFFSET_LEFT = 320;
 
@@ -100,7 +101,18 @@ function createFormulaContainer() {
 
   const iframe = document.createElement('iframe');
   iframe.id = 'formulaEditor';
-  iframe.src = '//jymis.zuoyebang.cc/static/equation-editor/index.html';
+  const params = [];
+  if (quill.subject !== undefined) {
+    params.push(`subject=${quill.subject}`);
+  }
+  if (quill.theme instanceof PlatformTheme) {
+    params.push('from=platform');
+  }
+  let src = '//jymis.zuoyebang.cc/static/equation-editor/index.html';
+  if (params.length) {
+    src += `?${params.join('&')}`;
+  }
+  iframe.src = src;
   iframe.width = '100%';
   iframe.height = '485px';
   box.appendChild(iframe);

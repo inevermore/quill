@@ -30,6 +30,7 @@ import TextPicker from './ui/text-picker';
 import SnowTheme from './themes/snow';
 import TikuTheme from './themes/tiku';
 import HandoutTheme from './themes/handout';
+import PlatformTheme from './themes/platform';
 import List from './formats/list';
 import { FontStyle } from './formats/font';
 import { SizeStyle } from './formats/size';
@@ -69,6 +70,7 @@ Quill.register(
     'themes/snow': SnowTheme,
     'themes/tiku': TikuTheme,
     'themes/handout': HandoutTheme,
+    'themes/platform': PlatformTheme,
 
     'ui/icons': Icons,
     'ui/picker': Picker,

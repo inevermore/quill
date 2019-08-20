@@ -44,6 +44,17 @@ class TikuTheme extends TkBaseTheme {
       options.modules.toolbar.options = TOOLBAR_CONFIG;
     }
     super(quill, options);
+    // 支持自定义toolbar 按钮 title
+    const toolbarTitles = Object.entries(options.modules.toolbar.config).reduce(
+      (memo, [key, value]) => {
+        if (typeof value === 'object' && value.title) {
+          memo[key] = value.title;
+        }
+        return memo;
+      },
+      {},
+    );
+    this.titles = extend(true, titles, toolbarTitles);
     this.quill.container.classList.add('ql-snow');
     this.quill.container.classList.add('text-editor-wrapper');
     quill.root.addEventListener('dblclick', e => {
@@ -154,13 +165,13 @@ class TikuTheme extends TkBaseTheme {
       className.split(/\s+/).forEach(name => {
         if (!name.startsWith('ql-')) return;
         name = name.slice('ql-'.length);
-        if (titles[name] == null) return;
-        if (typeof titles[name] === 'string') {
-          button.title = titles[name];
+        if (this.titles[name] == null) return;
+        if (typeof this.titles[name] === 'string') {
+          button.title = this.titles[name];
         } else {
           const value = button.value || '';
-          if (value != null && titles[name][value]) {
-            button.title = titles[name][value];
+          if (value != null && this.titles[name][value]) {
+            button.title = this.titles[name][value];
           }
         }
       });
@@ -206,6 +217,7 @@ TikuTheme.DEFAULTS = extend(true, {}, TkBaseTheme.DEFAULTS, {
         clear() {
           if (window.confirm('确定清空当前文档么？')) {
             this.quill.setContents([]);
+            this.quill.tkEvents.blankOrderChange('clear', [], 0);
           }
         },
         'select-all': function() {
