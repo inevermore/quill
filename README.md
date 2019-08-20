@@ -45,17 +45,17 @@ const editor = new Editor({
 
 ## 参数说明
 
-| 参数名      | 类型           | 必要性 | 默认值        | 取值范围                  | 描述                               |
-| ----------- | -------------- | ------ | ------------- | ------------------------- | ---------------------------------- |
-| container   | String \| Node | 可选   | document.body | 无                        | 编辑器容器                         |
-| theme       | String         | 必选   |               | tiku、handout、platform   | 主题，目前支持题库、讲义、平台     |
-| options     | Array          | 必选   | []            | 见下方 options 说明       | 可选的样式                         |
-| toolbar     | Object         | 可选   |               | 见下方toolbar说明         | 设置toolbar按钮事件                |
-| initContent | String         | 可选   | ''            | 无                        | 初始化内容，可以是文本或html字符串 |
-| events      | Object         | 可选   | {}            | 见下方 events 说明        | 传入的事件                         |
-| keyboard    | Object         | 可选   | {}            | 见下方 keyboard 说明      | 处理键盘事件                       |
-| uploader    | Object         | 可选   | {}            | 见下方 uploader 说明      | 配置图片上传参数（url、参数...）   |
-| subject     | Number         | 可选   |               | 2(数学), 4(物理), 5(化学) | 学科配置                           |
+| 参数名      | 类型           | 必要性 | 默认值        | 取值范围                  | 描述                                 |
+| ----------- | -------------- | ------ | ------------- | ------------------------- | ------------------------------------ |
+| container   | String \| Node | 可选   | document.body | 无                        | 编辑器容器                           |
+| theme       | String         | 必选   |               | tiku、handout、platform   | 主题，目前支持题库、讲义、平台       |
+| options     | Array          | 必选   | []            | 见下方 options 说明       | 可选的样式                           |
+| toolbar     | Object         | 可选   |               | 见下方toolbar说明         | 设置toolbar按钮事件，按钮icon、title |
+| initContent | String         | 可选   | ''            | 无                        | 初始化内容，可以是文本或html字符串   |
+| events      | Object         | 可选   | {}            | 见下方 events 说明        | 传入的事件                           |
+| keyboard    | Object         | 可选   | {}            | 见下方 keyboard 说明      | 处理键盘事件                         |
+| uploader    | Object         | 可选   | {}            | 见下方 uploader 说明      | 配置图片上传参数（url、参数...）     |
+| subject     | Number         | 可选   |               | 2(数学), 4(物理), 5(化学) | 学科配置                             |
 
 ### options 说明
 
@@ -119,6 +119,12 @@ toolbar: {
       const savedIndex = this.quill.selection.savedRange.index;
       this.quill.insertEmbed(savedIndex, 'fill-blank-order', '1');
       this.quill.setSelection(savedIndex + 1, 0);
+    }
+  }，
+  config: {
+    'fill-blank-order': {
+      icon: 'base64/url', // 按钮icon，支持base64或url（icon大小为20px）
+      title: 'fill-blank', // 按钮title，hover显示的文字
     }
   }
 },
@@ -219,3 +225,4 @@ response：返回数据，图片 url 数据结构。如果设为 ['data', 'url']
 
 ## 历史版本变动
 https://git.afpai.com/yike_fe/text-editor/blob/dev/CHNAGELOG.md
+
