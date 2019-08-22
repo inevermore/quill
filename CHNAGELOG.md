@@ -1,3 +1,7 @@
+## 1.3.2
+
+* feat: 选中公式时，增加拖蓝效果
+
 ## 1.3.1
 
 * docs: update readme.md

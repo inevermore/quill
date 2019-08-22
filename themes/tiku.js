@@ -3,7 +3,11 @@ import extend from 'extend';
 import Delta from 'quill-delta';
 import TkBaseTheme from './tk-base';
 import svgToLatex from '../utils/svg-to-latex';
-import { isContainByClass, getTdParent } from '../utils/dom-utils';
+import {
+  isContainByClass,
+  getTdParent,
+  iterateNodes,
+} from '../utils/dom-utils';
 import Emitter from '../core/emitter';
 import debounce from '../utils/debounce';
 import FillBlankOrder from '../formats/fill-blank-order';
@@ -71,6 +75,7 @@ class TikuTheme extends TkBaseTheme {
     this.quill.on(Emitter.events.SELECTION_CHANGE, () => {
       this.optimizeTableSelection();
     });
+    document.onselectionchange = this.setSvgSelected.bind(this);
     this.handleEvents();
     this.addModule('image-resizer');
   }
@@ -114,7 +119,6 @@ class TikuTheme extends TkBaseTheme {
         }
       }
     });
-    let mathjaxNode = null;
     root.addEventListener('click', ({ target }) => {
       const fillBlankOrderNode = isContainByClass(
         target,
@@ -125,9 +129,6 @@ class TikuTheme extends TkBaseTheme {
         const { index } = this.quill.getSelection();
         this.quill.deleteText(index, 1);
       }
-      if (mathjaxNode) {
-        mathjaxNode.classList.remove('selected');
-      }
       const curMathjaxNode = isContainByClass(
         target,
         QlMathjax.className,
@@ -135,9 +136,8 @@ class TikuTheme extends TkBaseTheme {
       );
       let curNode = null;
       if (curMathjaxNode) {
-        mathjaxNode = curMathjaxNode;
         curNode = curMathjaxNode;
-        mathjaxNode.classList.add('selected');
+        curNode.classList.add('selected');
       } else if (target.tagName === 'IMG') {
         curNode = target;
       }
@@ -200,6 +200,22 @@ class TikuTheme extends TkBaseTheme {
     }
     if (selectionStartNode) {
       this.quill.selection.setNativeRange(selectionStartNode, 0);
+    }
+  }
+
+  setSvgSelected() {
+    const [range, native] = this.quill.selection.getRange();
+    const mathjaxes = this.quill.root.querySelectorAll(
+      `.${QlMathjax.className}`,
+    );
+    mathjaxes.forEach(node => {
+      node.classList.remove('selected');
+    });
+    if (range && range.length > 0) {
+      iterateNodes(native, 'svg').forEach(node => {
+        const mathjax = node.parentNode.parentNode;
+        mathjax.classList.add('selected');
+      });
     }
   }
 }
