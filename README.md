@@ -40,7 +40,7 @@ const editor = new Editor({
 另外，如果使用插入公式功能，宿主环境要求MathJax库，例如：
 
 ```html
-<script src="https://yy-s.zuoyebang.cc/static/mathjax_274/MathJax.js?config=default-full-min"></script>
+<script src="https://yy-s.zuoyebang.cc/static/mathjax_274/MathJax.js?config=svgsnippet-update190725"></script>
 ```
 
 ## 参数说明

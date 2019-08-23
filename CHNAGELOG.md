@@ -1,3 +1,11 @@
+## 1.3.71
+
+* docs: update readme
+
+## 1.3.7
+
+* feat: 公式编辑器增加subject参数
+
 ## 1.3.6
 
 * fix: 优化latex2svg逻辑，无latex时，不调用mathjax

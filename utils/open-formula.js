@@ -103,7 +103,7 @@ function createFormulaContainer() {
   iframe.id = 'formulaEditor';
   const params = [];
   if (quill.subject !== undefined) {
-    params.push(`subject=${quill.subject}`);
+    params.push(`course=${quill.subject}`);
   }
   if (quill.theme instanceof PlatformTheme) {
     params.push('from=platform');

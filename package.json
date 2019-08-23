@@ -1,6 +1,6 @@
 {
   "name": "text-editor",
-  "version": "1.3.6",
+  "version": "1.3.71",
   "description": "富文本编辑器",
   "author": "zhangweigang@zuoyebang.com",
   "main": "dist/text-editor.js",
