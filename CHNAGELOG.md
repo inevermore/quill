@@ -1,3 +1,7 @@
+## 1.3.6
+
+* fix: 优化latex2svg逻辑，无latex时，不调用mathjax
+
 ## 1.3.5
 
 * fix: 兼容异常数据

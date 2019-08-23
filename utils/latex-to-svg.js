@@ -23,6 +23,9 @@ export default async function latexToSvg(
   } else {
     const macthLatex = /\$(((?!><|span>|<span).)*?)\$/g;
     const latexArr = html.match(macthLatex) || [];
+    if (latexArr.length === 0) {
+      return;
+    }
     const objList = await mathjaxRender(latexArr);
     const errSvg = [];
     let count = 0;
