@@ -13,7 +13,12 @@ class EmbedText extends Embed {
     const className = Array.from(node.classList).find(
       item => item !== CLASS_NAME,
     );
-    const text = node.children[0].innerText;
+    let text = '';
+    if (node.children[0]) {
+      text = node.children[0].innerText;
+    } else {
+      text = node.innerText;
+    }
     return {
       className,
       text,

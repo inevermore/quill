@@ -75,7 +75,10 @@ class TikuTheme extends TkBaseTheme {
     this.quill.on(Emitter.events.SELECTION_CHANGE, () => {
       this.optimizeTableSelection();
     });
-    document.onselectionchange = this.setSvgSelected.bind(this);
+    document.addEventListener(
+      'selectionchange',
+      this.setSvgSelected.bind(this),
+    );
     this.handleEvents();
     this.addModule('image-resizer');
   }
@@ -129,16 +132,8 @@ class TikuTheme extends TkBaseTheme {
         const { index } = this.quill.getSelection();
         this.quill.deleteText(index, 1);
       }
-      const curMathjaxNode = isContainByClass(
-        target,
-        QlMathjax.className,
-        root,
-      );
-      let curNode = null;
-      if (curMathjaxNode) {
-        curNode = curMathjaxNode;
-        curNode.classList.add('selected');
-      } else if (target.tagName === 'IMG') {
+      let curNode = isContainByClass(target, QlMathjax.className, root);
+      if (target.tagName === 'IMG') {
         curNode = target;
       }
       if (curNode) {
@@ -206,7 +201,7 @@ class TikuTheme extends TkBaseTheme {
   setSvgSelected() {
     const [range, native] = this.quill.selection.getRange();
     const mathjaxes = this.quill.root.querySelectorAll(
-      `.${QlMathjax.className}`,
+      `.${QlMathjax.className}.selected`,
     );
     mathjaxes.forEach(node => {
       node.classList.remove('selected');

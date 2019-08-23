@@ -103,23 +103,23 @@ function blankOrderChange(type, list, len) {
   // console.log(list,len)
 }
 
-// const editor1 = new Editor({
-//   container: '#tikuEditor1',
-//   theme: 'tiku',
-//   events: {
-//     getFormat,
-//     blankOrderChange,
-//   },
-//   options,
-//   uploader: {
-//     param: 'upfile',
-//     url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
-//     method: 'post',
-//     maxSize: 600,
-//     response: ['url'],
-//   }
-// });
-// editor1.setContent(str)
+const editor1 = new Editor({
+  container: '#tikuEditor1',
+  theme: 'tiku',
+  events: {
+    getFormat,
+    blankOrderChange,
+  },
+  options,
+  uploader: {
+    param: 'upfile',
+    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['url'],
+  }
+});
+editor1.setContent(str)
 
 function getFormat(format) {
   // console.log(editor.getSelection())
