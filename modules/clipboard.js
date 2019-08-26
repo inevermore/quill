@@ -188,8 +188,11 @@ class Clipboard extends Module {
     const formats = this.quill.getFormat(range.index);
     // eslint-disable-next-line no-console
     console.log(html);
-    const pastedDelta = this.convert({ text, html }, formats);
-    debug.log('onPaste', pastedDelta, { text, html });
+    const noSoftWrapHtml = html.replace(/\$([^]*?)\$/g, latex => {
+      return latex.replace(/\r\n/g, ' ').replace(/\n/g, ' ');
+    });
+    const pastedDelta = this.convert({ text, html: noSoftWrapHtml }, formats);
+    debug.log('onPaste', pastedDelta, { text, html: noSoftWrapHtml });
     const delta = new Delta()
       .retain(range.index)
       .delete(range.length)

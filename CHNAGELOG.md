@@ -1,3 +1,7 @@
+## 1.3.8
+
+* fix: 粘贴时latex中去除换行符
+
 ## 1.3.71
 
 * docs: update readme

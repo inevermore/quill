@@ -87,7 +87,7 @@ const editor = new Editor({
     maxSize: 600,
     response: ['url'],
   },
-  subject: 2,
+  subject: 5,
 });
 editor.setContent(str);
 const div = document.createElement('div');
