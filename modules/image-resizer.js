@@ -36,6 +36,9 @@ class ImageResizer extends Module {
       this.imgNode = null;
       this.wrap.removeEventListener('mousemove', this.mouseMove);
     });
+    quill.root.addEventListener('keydown', () => {
+      this.removeResizer();
+    });
   }
 
   addResizer(imgNode) {

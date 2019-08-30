@@ -59,7 +59,6 @@ class TikuTheme extends TkBaseTheme {
       {},
     );
     this.titles = extend(true, titles, toolbarTitles);
-    this.quill.container.classList.add('ql-snow');
     this.quill.container.classList.add('text-editor-wrapper');
     quill.root.addEventListener('dblclick', e => {
       e.preventDefault();

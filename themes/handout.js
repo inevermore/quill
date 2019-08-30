@@ -2,6 +2,7 @@ import extend from 'extend';
 import Delta from 'quill-delta';
 import TkBaseTheme from './tk-base';
 import QlMathjax from '../formats/mathjax';
+import { isContainByClass } from '../utils/dom-utils';
 
 const LINE_SEPARATOR = '\u2028';
 
@@ -9,22 +10,33 @@ class Handout extends TkBaseTheme {
   constructor(quill, options) {
     super(quill, options);
     quill.root.addEventListener('click', e => {
-      let { target } = e;
-      const range = quill.getSelection();
-      if (!range) {
-        return;
-      }
+      const { target } = e;
+      // const range = quill.getSelection();
+      // if (!range) {
+      //   return;
+      // }
 
-      while (quill.root.contains(target)) {
-        if (target.classList.contains(QlMathjax.className)) {
-          quill.setSelection(range.index, 1);
-          break;
-        } else {
-          target = target.parentNode;
+      let curNode = isContainByClass(target, QlMathjax.className, quill.root);
+      if (target.tagName === 'IMG') {
+        curNode = target;
+      }
+      if (curNode) {
+        const range = document.createRange();
+        range.selectNodeContents(curNode);
+        const native = this.quill.selection.normalizeNative(range);
+        this.quill.selection.setNativeRange(
+          native.start.node,
+          native.start.offset,
+          native.end.node,
+          native.end.offset,
+        );
+        if (curNode.tagName === 'IMG') {
+          this.quill.setSelection(this.quill.getSelection().index, 1);
         }
       }
     });
     this.quill.container.classList.add('text-editor-wrapper');
+    this.addModule('image-resizer');
   }
 
   extendToolbar(toolbar) {

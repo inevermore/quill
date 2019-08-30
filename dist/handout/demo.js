@@ -50,6 +50,13 @@ const editor = new Editor({
     {indent: [1,2,3,4,5,6,7,8]},
     {'text-indent': 'normal'}
   ],
+  uploader: {
+    param: 'upfile',
+    url: 'http://zhufu-docker.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['url'],
+  },
 });
 
 function openFormula(latex = '') {
