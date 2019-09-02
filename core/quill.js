@@ -405,6 +405,7 @@ class Quill {
   }
 
   setContents(delta, source = Emitter.sources.API) {
+    this.getModule('image-resizer').hide();
     return modify.call(
       this,
       () => {
@@ -464,6 +465,7 @@ class Quill {
   }
 
   setContent(content) {
+    this.getModule('image-resizer').hide();
     const div = document.createElement('div');
     div.innerHTML = content;
     const html =

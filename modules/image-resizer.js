@@ -19,7 +19,7 @@ class ImageResizer extends Module {
       [-1, 1],
       [-1, 0],
     ];
-    this.wrap.parentNode.addEventListener('click', e => {
+    this.wrap.addEventListener('click', e => {
       if (
         this.wrap.contains(e.target) &&
         e.target.tagName.toUpperCase() === 'IMG' &&
@@ -28,7 +28,7 @@ class ImageResizer extends Module {
       ) {
         this.addResizer(e.target);
       } else {
-        this.removeResizer();
+        this.hide();
       }
     });
     document.addEventListener('mouseup', () => {
@@ -37,7 +37,7 @@ class ImageResizer extends Module {
       this.wrap.removeEventListener('mousemove', this.mouseMove);
     });
     quill.root.addEventListener('keydown', () => {
-      this.removeResizer();
+      this.hide();
     });
   }
 
@@ -127,7 +127,7 @@ class ImageResizer extends Module {
     this.resizer.style.height = `${this.imgNode.offsetHeight}px`;
   }
 
-  removeResizer() {
+  hide() {
     this.imgNode = null;
     this.resizer.style.display = 'none';
   }
