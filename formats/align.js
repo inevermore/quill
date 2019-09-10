@@ -2,7 +2,7 @@ import { ClassAttributor, Scope, StyleAttributor } from 'parchment';
 
 const config = {
   scope: Scope.BLOCK,
-  // whitelist: ['left', 'right', 'center'],
+  // whitelist: ['left', 'right', 'center', 'justify'],
 };
 
 const AlignClass = new ClassAttributor('align', 'tkspec-align', config);

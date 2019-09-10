@@ -10,6 +10,7 @@ const options = [
     { align: 'center' },
     { align: 'left' },
     { align: 'right' },
+    { align: 'justify' },
     { 'text-indent': 'normal' },
     { script: 'super' },
     { script: 'sub' },
@@ -82,14 +83,14 @@ const editor = new Editor({
   options,
   uploader: {
     param: 'upfile',
-    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    url: 'http://sss-docker.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
     method: 'post',
     maxSize: 600,
     response: ['url'],
   },
   subject: 5,
 });
-editor.setContent(str);
+// editor.setContent(str);
 const div = document.createElement('div');
 div.innerHTML = str;
 document.body.appendChild(div);
@@ -113,7 +114,7 @@ const editor1 = new Editor({
   options,
   uploader: {
     param: 'upfile',
-    url: 'http://test152.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
+    url: 'http://sss-docker.suanshubang.com/zbtiku/tiku/imgupload?action=uploadimage',
     method: 'post',
     maxSize: 600,
     response: ['url'],

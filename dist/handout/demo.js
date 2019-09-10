@@ -39,7 +39,7 @@ const editor = new Editor({
       'paragraph-bottom-space': ['normal'],
     },
     {
-      align: ['left', 'center', 'right'],
+      align: ['left', 'center', 'right', 'justify'],
     },
     // {
     //   indent: [-1 ,+1],
