@@ -1,5 +1,4 @@
 import Module from '../core/module';
-import throttle from '../utils/throttle';
 
 class ImageResizer extends Module {
   constructor(quill, options) {
@@ -19,6 +18,8 @@ class ImageResizer extends Module {
       [-1, 1],
       [-1, 0],
     ];
+    this.mouseMoveFrame = false;
+    this.mouseMoveEvent = this.mouseMove.bind(this);
     this.wrap.addEventListener('click', e => {
       if (
         this.wrap.contains(e.target) &&
@@ -34,7 +35,7 @@ class ImageResizer extends Module {
     document.addEventListener('mouseup', () => {
       this.handId = -1;
       this.imgNode = null;
-      this.wrap.removeEventListener('mousemove', this.mouseMove);
+      this.wrap.removeEventListener('mousemove', this.mouseMoveEvent);
     });
     quill.root.addEventListener('keydown', () => {
       this.hide();
@@ -61,55 +62,59 @@ class ImageResizer extends Module {
         height: this.imgNode.offsetHeight,
       };
       this.handId = hand.className.slice(-1);
-      this.wrap.addEventListener(
-        'mousemove',
-        throttle(this.mouseMove, 30).bind(this),
-      );
+      this.wrap.addEventListener('mousemove', this.mouseMoveEvent);
     }
   }
 
   mouseMove(e) {
-    if (this.handId < 0 || !this.imgNode) return;
-    const offset = {
-      x: e.clientX - this.prePos.x,
-      y: e.clientY - this.prePos.y,
-    };
-    const widthDir = this.rect[this.handId][0];
-    const heightDir = this.rect[this.handId][1];
-    let offsetWidth = widthDir * offset.x;
-    let offsetHeight = heightDir * offset.y;
-    // 比例缩放
-    if (widthDir !== 0 && heightDir !== 0) {
-      // 放大
-      if (offsetHeight > 0 || offsetWidth > 0) {
-        if (offsetHeight > 0 && offsetWidth > 0) {
-          if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
+    if (this.mouseMoveFrame) return;
+
+    this.mouseMoveFrame = true;
+    requestAnimationFrame(() => {
+      if (this.handId < 0 || !this.imgNode) return;
+
+      this.mouseMoveFrame = false;
+      const offset = {
+        x: e.clientX - this.prePos.x,
+        y: e.clientY - this.prePos.y,
+      };
+      const widthDir = this.rect[this.handId][0];
+      const heightDir = this.rect[this.handId][1];
+      let offsetWidth = widthDir * offset.x;
+      let offsetHeight = heightDir * offset.y;
+      // 比例缩放
+      if (widthDir !== 0 && heightDir !== 0) {
+        // 放大
+        if (offsetHeight > 0 || offsetWidth > 0) {
+          if (offsetHeight > 0 && offsetWidth > 0) {
+            if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
+              offsetHeight = offsetWidth / this.scale;
+            } else {
+              offsetWidth = offsetHeight * this.scale;
+            }
+          } else if (offsetWidth > 0) {
             offsetHeight = offsetWidth / this.scale;
           } else {
             offsetWidth = offsetHeight * this.scale;
           }
-        } else if (offsetWidth > 0) {
-          offsetHeight = offsetWidth / this.scale;
-        } else {
+          // 缩小
+        } else if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
           offsetWidth = offsetHeight * this.scale;
+        } else {
+          offsetHeight = offsetWidth / this.scale;
         }
-        // 缩小
-      } else if (Math.abs(offset.x) / Math.abs(offset.y) > this.scale) {
-        offsetWidth = offsetHeight * this.scale;
-      } else {
-        offsetHeight = offsetWidth / this.scale;
       }
-    }
-    const width = this.originSize.width + offsetWidth;
-    const { paddingLeft, paddingRight } = getComputedStyle(this.quill.root);
-    const contentWidth =
-      this.quill.root.offsetWidth -
-      parseInt(paddingLeft, 10) -
-      parseInt(paddingRight, 10);
-    if (width >= contentWidth && widthDir !== 0) {
-      return;
-    }
-    this.resizeImage(width, this.originSize.height + offsetHeight);
+      const width = this.originSize.width + offsetWidth;
+      const { paddingLeft, paddingRight } = getComputedStyle(this.quill.root);
+      const contentWidth =
+        this.quill.root.offsetWidth -
+        parseInt(paddingLeft, 10) -
+        parseInt(paddingRight, 10);
+      if (width >= contentWidth && widthDir !== 0) {
+        return;
+      }
+      this.resizeImage(width, this.originSize.height + offsetHeight);
+    });
   }
 
   resizeImage(width, height) {
