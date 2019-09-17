@@ -59,7 +59,6 @@ class TikuTheme extends TkBaseTheme {
       {},
     );
     this.titles = extend(true, titles, toolbarTitles);
-    this.quill.container.classList.add('text-editor-wrapper');
     quill.root.addEventListener('dblclick', e => {
       e.preventDefault();
       e.stopPropagation();
@@ -80,6 +79,7 @@ class TikuTheme extends TkBaseTheme {
     );
     this.handleEvents();
     this.addModule('image-resizer');
+    this.quill.container.classList.add('ql-tiku');
   }
 
   extendToolbar(toolbar) {

@@ -4,7 +4,8 @@ import icons from '../ui/icons';
 class TikuBaseTheme extends BaseTheme {
   constructor(quill, options) {
     super(quill, options);
-    this.quill.container.classList.add('ql-tiku');
+    this.quill.container.classList.add('ql-tk-base');
+    this.quill.container.classList.add('text-editor-wrapper');
     options.modules.toolbar.options.forEach(option => {
       if (Array.isArray(option)) {
         option.forEach(item => {

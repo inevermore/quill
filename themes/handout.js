@@ -35,7 +35,6 @@ class Handout extends TkBaseTheme {
         }
       }
     });
-    this.quill.container.classList.add('text-editor-wrapper');
     this.addModule('image-resizer');
   }
 
