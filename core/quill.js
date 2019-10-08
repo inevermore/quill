@@ -8,6 +8,11 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
+import QlMathjax from '../formats/mathjax';
+import openFormula from '../utils/open-formula';
+import latexToSvg from '../utils/latex-to-svg';
+import { getSvgLatex } from '../utils/svg-to-latex';
+import TikuTheme from '../themes/tiku';
 
 const debug = logger('quill');
 
@@ -62,6 +67,7 @@ class Quill {
   }
 
   constructor(container, options = {}) {
+    this.imports = Quill.imports;
     this.options = expandConfig(container, options);
     this.container = this.options.container;
     if (this.container == null) {
@@ -78,6 +84,7 @@ class Quill {
     this.root.addEventListener('dragstart', e => {
       e.preventDefault();
     });
+    this.formulaImgClass = 'ql-mathjax';
     this.root.classList.add('ql-blank');
     this.root.setAttribute('data-gramm', false);
     this.scrollingContainer = this.options.scrollingContainer || this.root;
@@ -113,8 +120,8 @@ class Quill {
       );
     });
     const contents = this.clipboard.convert({
-      html: `${html}<p><br></p>`,
-      text: '\n',
+      html: `${html}<p></p>`,
+      text: '',
     });
     this.setContents(contents);
     this.history.clear();
@@ -125,6 +132,19 @@ class Quill {
       this.disable();
     }
     this.allowReadOnlyEdits = false;
+    this.editedFormula = null;
+    this.tkEvents = this.options.events;
+    this.wrapperClass = this.options.wrapperClass;
+    this.embedTextMap = {
+      FILL_BLANK_BRACKETS: {
+        className: 'tkspec-fill-blank-brackets',
+        text: '（   ）',
+      },
+      FILL_BLANK_UNDERLINE: {
+        className: 'tkspec-fill-blank-underline',
+        text: '________',
+      },
+    };
   }
 
   addContainer(container, refNode = null) {
@@ -438,7 +458,75 @@ class Quill {
       true,
     );
   }
+
+  setContent(content) {
+    const div = document.createElement('div');
+    div.innerHTML = content;
+    const html =
+      (div.firstElementChild && div.firstElementChild.innerHTML) || '';
+    if (this.theme instanceof TikuTheme) {
+      this.setContents([]);
+      const contents = this.clipboard.convert({
+        html: `${html}<p></p>`,
+        text: '',
+      });
+      this.setContents(contents);
+    } else {
+      this.root.innerHTML = html;
+    }
+  }
+
+  getContent(latexMode) {
+    const copy = this.root.cloneNode(true);
+    if (latexMode) {
+      const imgs = copy.querySelectorAll(`.${this.formulaImgClass}`);
+      Array.from(imgs).forEach(img => {
+        img.outerHTML = `$${getSvgLatex(img)}$`;
+      });
+    }
+    copy.querySelectorAll('.ql-cursor').forEach(el => {
+      el.parentNode.removeChild(el);
+    });
+    return this.wrapContent(copy.innerHTML);
+  }
+
+  wrapContent(html) {
+    return `<div class="${this.wrapperClass}">${html}</div>`;
+  }
+
+  insertFormula(objList) {
+    const savedRangeIndex = this.selection.savedRange.index;
+    // 编辑模式下替换 img 节点
+    if (this.editedFormula) {
+      this.editedFormula.outerHTML = QlMathjax.create({
+        latex: objList.latex,
+        innerHTML: objList.svg,
+      }).outerHTML;
+      this.editedFormula = null;
+    } else if (objList.latex) {
+      this.insertEmbed(savedRangeIndex, 'ql-mathjax', {
+        latex: `${objList.latex}`,
+        innerHTML: objList.svg,
+      });
+      this.root.focus();
+      this.setSelection(savedRangeIndex + 1, 0);
+    }
+  }
+
+  editFormula(node) {
+    this.editedFormula = node;
+    this.showFormulaEditor(node.getAttribute('latex'));
+  }
+
+  showFormulaEditor(latex = '') {
+    openFormula(latex, this.insertFormula.bind(this));
+  }
+
+  latex2svg(isFilter = false) {
+    latexToSvg(this, isFilter);
+  }
 }
+
 Quill.DEFAULTS = {
   bounds: null,
   modules: {},

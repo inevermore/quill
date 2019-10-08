@@ -1,0 +1,313 @@
+/*
+ * @fileoverview ueditor自定义类名及样式
+ * @author zhangda | zhangda01@zuoyebang.com
+ * @version 1.0 | 2018-07-30 | zhangda    // 初始版本。
+ */
+/* 加点字 */
+.yikespec-dotted {
+  position: relative;
+  display: box;
+  display: -webkit-inline-flex;
+  display: -moz-inline-box;
+  /* Firefox 19 */
+  display: -ms-inline-flexbox;
+  display: -o-inline-flex;
+  display: inline-flex;
+  text-align: center;
+  text-indent: 0;
+  -webkit-align-items: space-between;
+  -moz-align-items: space-between;
+  -ms-align-items: space-between;
+  -o-align-items: space-between;
+  align-items: space-between;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+
+  &:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    margin: auto;
+    content: '•';
+    font-family: arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
+    font-size: 1.2em;
+    font-style: normal !important;
+    line-height: 0;
+    text-indent: 0;
+  }
+}
+
+@supports(-webkit-text-emphasis-position: under) and (-webkit-text-emphasis: dot) {
+  .tkspec-dotted-normal {
+    -webkit-text-emphasis-position: under;
+    -webkit-text-emphasis: dot;
+  }
+}
+
+@supports(not (-webkit-text-emphasis-position: under)) or (not (-webkit-text-emphasis: circle)) {
+  .tkspec-dotted-normal {
+    border-bottom: 2px dotted black;
+  }
+}
+
+/* 上边加点 */
+.yikespec-dotted-top {
+  position: relative;
+
+  &:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -.1em;
+    margin: auto;
+    content: '•';
+    font-size: 1.2em;
+    font-family: arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
+    text-indent: 0;
+    line-height: .1em;
+  }
+}
+
+/* 字体下划线 */
+.yikespec-underline,
+.tkspec-underline-normal {
+  border-bottom: 1px solid #000;
+}
+
+/* 标准下划线 */
+.yikespec-underline-blank {
+  border-bottom: 1px solid #000;
+}
+
+/* 自定义下划线 */
+.yikespec-underline-custom {
+  border-bottom: 1px solid #000;
+}
+
+/* 删除线 */
+.yikespec-line-through {
+  text-decoration: line-through;
+}
+
+.tkspec-strike-normal {
+  text-decoration: line-through;
+}
+
+/* 波浪线 */
+.yikespec-wavy,
+.tkspec-underline-wavy {
+  background: url(https://yy-s.zuoyebang.cc/static/standardstyle/font-wavyLine.svg) repeat-x;
+  background-position-y: 1px;
+  background-size: 1em 100%;
+}
+
+/* 括号 */
+.yikespec-bracket {}
+
+/* 斜体 */
+.yikespec-italic {
+  font-family: 'Courier New', Courier, arial, tahoma, 'Microsoft Yahei', '\5b8b\4f53', sans-serif;
+  font-style: italic;
+}
+
+/* 斜体与其他功能组合引入class */
+.tkspec-italic-normal {
+  /* font-family: 'Courier New', Courier, arial,tahoma,'Microsoft Yahei','\5b8b\4f53',sans-serif; */
+  font-style: italic;
+}
+
+/* 首行缩进 */
+.yikespec-text-indent {
+  display: block !important;
+  text-indent: 1.5em;
+
+  * {
+    text-indent: 0;
+  }
+}
+
+.tkspec-text-indent-normal {
+  display: block !important;
+  text-indent: 2em;
+
+  * {
+    text-indent: 0;
+  }
+}
+
+/* 居中 */
+.yikespec-align-center {
+  display: block !important;
+  text-align: center !important;
+}
+
+/* 居左 */
+.yikespec-align-left {
+  display: block !important;
+  text-align: left !important;
+}
+
+/* 居右 */
+.yikespec-align-right {
+  display: block !important;
+  text-align: right !important;
+}
+
+/* 兼容table的对齐 */
+th.yikespec-align-center,
+th.yikespec-align-left,
+th.yikespec-align-right,
+td.yikespec-align-center,
+td.yikespec-align-left,
+td.yikespec-align-right {
+  display: table-cell !important;
+}
+
+/* 加粗 */
+.yikespec-bold {
+  font-weight: bold;
+  font-style: normal;
+}
+
+.tkspec-bold-normal {
+  font-weight: bold !important;
+}
+
+.tkspec-script-sub,
+.tkspec-script-super {
+  position: relative;
+  font-size: 75%;
+  vertical-align: baseline;
+  line-height: 0;
+}
+
+.tkspec-script-super {
+  top: -.5em;
+}
+
+.tkspec-script-sub {
+  bottom: -.25em;
+}
+
+/* 居中 */
+.tkspec-align-center {
+  display: block !important;
+  text-align: center !important;
+}
+
+/* 居左 */
+.tkspec-align-left {
+  display: block !important;
+  text-align: left !important;
+}
+
+/* 居右 */
+.tkspec-align-right {
+  display: block !important;
+  text-align: right !important;
+}
+
+th.tkspec-align-center,
+th.tkspec-align-left,
+th.tkspec-align-right,
+td.tkspec-align-center,
+td.tkspec-align-left,
+td.tkspec-align-right {
+  display: table-cell !important;
+}
+
+/* 段后距 */
+.tkspec-paragraph-bottom-space-normal {
+  padding-bottom: 13px !important;
+}
+
+table[tkalign="right"] {
+  margin-left: auto;
+  float: unset;
+}
+
+td.tkspec-table-diagonal-normal {
+  background: linear-gradient(to top right,
+  rgba(0,0,0,0) 0%,
+  rgba(0,0,0,0) calc(50% - 0.8px),
+  #ddd 50%,
+  rgba(0,0,0,0) calc(50% + 0.8px),
+  rgba(0,0,0,0) 100%);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+:root {
+  --list-style-width: 1.2em;
+  --list-style-margin: 0.3em;
+  --list-style-outer-width: 1.5em;
+}
+
+.text-editor-wrapper {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: normal;
+
+  p:after,
+  li:after {
+    content: '↵';
+    display: inline-block;
+    width: 0;
+    pointer-events: none;
+    opacity: .5;
+    font-size: 12px;
+    text-indent: 0 !important;
+  }
+
+  .ql-ui {
+    position: absolute;
+  }
+
+  li {
+    list-style-type: none;
+    padding-left: 1.5em;
+    position: relative;
+
+    > .ql-ui {
+      position: relative;
+      display: inline-block;
+      width: 0;
+
+      &:before {
+        display: inline-block;
+        margin-left: -1.5em;
+        margin-right: 0.3em;
+        text-align: right;
+        white-space: nowrap;
+        width: 1.2em;
+      }
+    }
+
+    &[data-list=ordered] {
+      counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+      counter-increment: list-0;
+
+      &>.ql-ui:before {
+        content: counter(list-0, decimal) '. ';
+      }
+    }
+  }
+}
+
+.text-editor-wrapper p,
+ol,
+pre,
+blockquote,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}

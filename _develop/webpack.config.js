@@ -4,12 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const pkg = require('../package.json');
 
 const bannerPack = new webpack.BannerPlugin({
-  banner: [
-    `Quill Editor v${pkg.version}`,
-    'https://quilljs.com/',
-    'Copyright (c) 2014, Jason Chen',
-    'Copyright (c) 2013, salesforce.com',
-  ].join('\n'),
+  banner: [`Text Editor v${pkg.version}`].join('\n'),
   entryOnly: true,
 });
 const constantPack = new webpack.DefinePlugin({
@@ -17,7 +12,7 @@ const constantPack = new webpack.DefinePlugin({
 });
 
 const source = [
-  'quill.js',
+  'index.js',
   'core.js',
   'blots',
   'core',
@@ -26,6 +21,7 @@ const source = [
   'test',
   'themes',
   'ui',
+  'utils',
 ].map(file => {
   return path.resolve(__dirname, '..', file);
 });
@@ -78,6 +74,18 @@ const stylRules = {
   use: [MiniCssExtractPlugin.loader, 'css-loader', 'stylus-loader'],
 };
 
+const lessRules = {
+  test: /\.less$/,
+  include: [path.resolve(__dirname, '../assets')],
+  use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+};
+
+const imageRules = {
+  test: /\.png$/,
+  include: [path.resolve(__dirname, '../assets/tiku-icons')],
+  use: ['url-loader'],
+};
+
 const tsRules = {
   test: /\.ts$/,
   use: [
@@ -100,16 +108,16 @@ const baseConfig = {
   mode: 'development',
   context: path.resolve(__dirname, '..'),
   entry: {
-    'quill.js': ['./quill.js'],
-    'quill.core.js': ['./core.js'],
-    'quill.core': './assets/core.styl',
-    'quill.bubble': './assets/bubble.styl',
-    'quill.snow': './assets/snow.styl',
+    'text-editor.js': ['./index.js'],
+    './handout/bundle.js': './dist/handout/demo.js',
+    './tiku/bundle.js': './dist/tiku/demo.js',
+    'text-editor': './assets/tk.styl',
     'unit.js': './test/unit.js',
+    'yike-iframe': './assets/yike-iframe.less',
   },
   output: {
     filename: '[name]',
-    library: 'Quill',
+    library: 'TextEditor',
     libraryExport: 'default',
     libraryTarget: 'umd',
     path: path.resolve(__dirname, '../dist/'),
@@ -121,10 +129,10 @@ const baseConfig = {
         '../node_modules/parchment/src/parchment',
       ),
     },
-    extensions: ['.js', '.styl', '.ts'],
+    extensions: ['.js', '.styl', '.less', '.ts'],
   },
   module: {
-    rules: [jsRules, stylRules, svgRules, tsRules],
+    rules: [jsRules, stylRules, lessRules, svgRules, tsRules, imageRules],
     noParse: [
       /\/node_modules\/clone\/clone\.js$/,
       /\/node_modules\/eventemitter3\/index\.js$/,
@@ -153,7 +161,7 @@ module.exports = env => {
     return {
       ...prodConfig,
       mode: 'production',
-      entry: { 'quill.min.js': './quill.js' },
+      entry: { 'text-editor.min.js': './text-editor.js' },
       devtool: 'source-map',
     };
   }

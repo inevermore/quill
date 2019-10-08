@@ -1,7 +1,6 @@
 import alignLeftIcon from '../assets/icons/align-left.svg';
 import alignCenterIcon from '../assets/icons/align-center.svg';
 import alignRightIcon from '../assets/icons/align-right.svg';
-import alignJustifyIcon from '../assets/icons/align-justify.svg';
 import backgroundIcon from '../assets/icons/background.svg';
 import blockquoteIcon from '../assets/icons/blockquote.svg';
 import boldIcon from '../assets/icons/bold.svg';
@@ -16,7 +15,6 @@ import header2Icon from '../assets/icons/header-2.svg';
 import italicIcon from '../assets/icons/italic.svg';
 import imageIcon from '../assets/icons/image.svg';
 import indentIcon from '../assets/icons/indent.svg';
-import outdentIcon from '../assets/icons/outdent.svg';
 import linkIcon from '../assets/icons/link.svg';
 import listBulletIcon from '../assets/icons/list-bullet.svg';
 import listCheckIcon from '../assets/icons/list-check.svg';
@@ -27,17 +25,22 @@ import strikeIcon from '../assets/icons/strike.svg';
 import tableIcon from '../assets/icons/table.svg';
 import underlineIcon from '../assets/icons/underline.svg';
 import videoIcon from '../assets/icons/video.svg';
+import dottedIcon from '../assets/icons/dotted.svg';
+import selectAllIcon from '../assets/icons/select-all.svg';
+import redoIcon from '../assets/icons/redo.svg';
+import undoIcon from '../assets/icons/undo.svg';
+import wavyIcon from '../assets/icons/wavy.svg';
+import piIcon from '../assets/icons/pi.svg';
+import fillBlankUnderlineIcon from '../assets/icons/fill-blank-underline.svg';
+import svgToLatexIcon from '../assets/icons/svg-to-latex.svg';
+import latexToSvgIcon from '../assets/icons/latex-to-svg.svg';
+import pinyinIcon from '../assets/icons/pinyin.svg';
+import closeIcon from '../assets/icons/close.svg';
+import fillBlankBracketsIcon from '../assets/icons/fill-blank-brackets.svg';
 
 export default {
-  align: {
-    '': alignLeftIcon,
-    center: alignCenterIcon,
-    right: alignRightIcon,
-    justify: alignJustifyIcon,
-  },
   background: backgroundIcon,
   blockquote: blockquoteIcon,
-  bold: boldIcon,
   clean: cleanIcon,
   code: codeIcon,
   'code-block': codeIcon,
@@ -51,12 +54,7 @@ export default {
     '1': headerIcon,
     '2': header2Icon,
   },
-  italic: italicIcon,
   image: imageIcon,
-  indent: {
-    '+1': indentIcon,
-    '-1': outdentIcon,
-  },
   link: linkIcon,
   list: {
     bullet: listBulletIcon,
@@ -67,8 +65,31 @@ export default {
     sub: subscriptIcon,
     super: superscriptIcon,
   },
-  strike: strikeIcon,
   table: tableIcon,
-  underline: underlineIcon,
   video: videoIcon,
+  all: selectAllIcon,
+  undo: undoIcon,
+  redo: redoIcon,
+  wavy: wavyIcon,
+  pi: piIcon,
+  underline: {
+    normal: underlineIcon,
+    wavy: wavyIcon,
+  },
+  svgToLatex: svgToLatexIcon,
+  latexToSvg: latexToSvgIcon,
+  'fill-blank-underline': fillBlankUnderlineIcon,
+  pinyin: pinyinIcon,
+  align: {
+    left: alignLeftIcon,
+    center: alignCenterIcon,
+    right: alignRightIcon,
+  },
+  indent: indentIcon,
+  strike: strikeIcon,
+  bold: boldIcon,
+  italic: italicIcon,
+  dotted: dottedIcon,
+  close: closeIcon,
+  'fill-blank-brackets': fillBlankBracketsIcon,
 };

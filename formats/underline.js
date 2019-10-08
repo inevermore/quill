@@ -1,7 +1,10 @@
-import Inline from '../blots/inline';
+import { ClassAttributor, Scope } from 'parchment';
 
-class Underline extends Inline {}
-Underline.blotName = 'underline';
-Underline.tagName = 'U';
+const config = {
+  scope: Scope.INLINE,
+  // whitelist: ['normal', 'wavy'],
+};
+
+const Underline = new ClassAttributor('underline', 'tkspec-underline', config);
 
 export default Underline;

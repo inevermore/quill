@@ -1,8 +1,13 @@
 .*
-/dist
+/dist/*
+!/dist/handout/demo.html
+!/dist/handout/demo.js
+!/dist/tiku/demo.html
+!/dist/tiku/demo.js
 /node_modules
 /selenium
 /docs/_site
 /src
 *.d.ts
 *.log
+/nokogiri-1.8.1

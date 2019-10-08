@@ -7,7 +7,7 @@ import {
   LeafBlot,
   Scope,
 } from 'parchment';
-import Break from './break';
+import Empty from './empty';
 import Inline from './inline';
 import TextBlot from './text';
 
@@ -76,7 +76,7 @@ class Block extends BlockBlot {
   insertBefore(blot, ref) {
     const { head } = this.children;
     super.insertBefore(blot, ref);
-    if (head instanceof Break) {
+    if (head instanceof Empty) {
       head.remove();
     }
     this.cache = {};
@@ -123,10 +123,14 @@ class Block extends BlockBlot {
     return next;
   }
 }
+
+const t = document.createElement('text');
+t.data = '&nbsp;';
+t.blotName = 'text';
 Block.blotName = 'block';
 Block.tagName = 'P';
-Block.defaultChild = Break;
-Block.allowedChildren = [Break, Inline, EmbedBlot, TextBlot];
+Block.defaultChild = Empty;
+Block.allowedChildren = [Inline, Empty, EmbedBlot, TextBlot];
 
 class BlockEmbed extends EmbedBlot {
   attach() {

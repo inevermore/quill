@@ -1,111 +1,190 @@
-Note: This branch and README covers the upcoming 2.0 release. View [1.x docs here](https://github.com/quilljs/quill/tree/1.3.6).
+一课团队富文本编辑器，目前适用于讲义系统，基于 quill.js 二次开发。
 
-<h1 align="center">
-  <a href="https://quilljs.com/" title="Quill">Quill Rich Text Editor</a>
-</h1>
-<p align="center">
-  <a href="https://quilljs.com/" title="Quill"><img alt="Quill Logo" src="https://quilljs.com/assets/images/logo.svg" width="180"></a>
-</p>
-<p align="center">
-  <a title="Quickstart" href="#quickstart"><strong>Quickstart</strong></a>
-  &#x2022;
-  <a title="Documentation" href="https://quilljs.com/docs/"><strong>Documentation</strong></a>
-  &#x2022;
-  <a title="Development" href="https://github.com/quilljs/quill/blob/master/.github/DEVELOPMENT.md"><strong>Development</strong></a>
-  &#x2022;
-  <a title="Contributing" href="https://github.com/quilljs/quill/blob/master/.github/CONTRIBUTING.md"><strong>Contributing</strong></a>
-  &#x2022;
-  <a title="Interactive Playground" href="https://quilljs.com/playground/"><strong>Interactive Playground</strong></a>
-</p>
-<p align="center">
-  <a href="https://travis-ci.org/quilljs/quill" title="Build Status">
-    <img src="https://travis-ci.org/quilljs/quill.svg?branch=master" alt="Build Status">
-  </a>
-  <a href="https://npmjs.com/package/quill" title="Version">
-    <img src="https://img.shields.io/npm/v/quill.svg" alt="Version">
-  </a>
-  <a href="https://npmjs.com/package/quill" title="Downloads">
-    <img src="https://img.shields.io/npm/dm/quill.svg" alt="Downloads">
-  </a>
-</p>
-<p align="center">
-  <a href="https://saucelabs.com/u/quill" title="Test Status">
-    <img src="https://cdn.quilljs.com/badge.svg?v=2" alt="Test Status">
-  </a>
-</p>
-
-[Quill](https://quilljs.com/) is a modern rich text editor built for compatibility and extensibility. It was created by [Jason Chen](https://twitter.com/jhchen) and [Byron Milligan](https://twitter.com/byronmilligan) and actively maintained by [Slab](https://slab.com).
-
-To get started, check out [https://quilljs.com/](https://quilljs.com/) for documentation, guides, and live demos!
-
-
-## Quickstart
-
-Instantiate a new Quill object with a css selector for the div that should become the editor.
+## 快速上手
 
 ```html
-<!-- Include Quill stylesheet -->
-<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" href="text-editor.css">
+<link rel="stylesheet" href="yike-iframe.css">
 
-<!-- Create the toolbar container -->
-<div id="toolbar">
-  <button class="ql-bold">Bold</button>
-  <button class="ql-italic">Italic</button>
-</div>
+<div id="editor"></div>
 
-<!-- Create the editor container -->
-<div id="editor">
-  <p>Hello World!</p>
-</div>
-
-<!-- Include the Quill library -->
-<script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
-
-<!-- Initialize Quill editor -->
-<script>
-  var editor = new Quill('#editor', {
-    modules: { toolbar: '#toolbar' },
-    theme: 'snow'
-  });
-</script>
+<script src="demo.js"></script>
 ```
 
-Take a look at the [Quill](https://quilljs.com/) website for more documentation, guides and [live playground](https://quilljs.com/playground/)!
+`demo.js`
 
+```javascript
+import Editor from 'text-editor';
 
-## Download
+const editor = new Editor({
+  container: '#editor',
+  theme: 'handout',
+  events: {
+    getFormat,
+  },
+  options: [
+    {
+      font: ['sans-serif', 'Arial'],
+    },
+    {
+      bold: ['normal'],
+    }
+  ],
+});
+```
 
-- [npm](https://www.npmjs.com/package/quill) - `npm install quill`
-- tar - https://github.com/quilljs/quill/releases
+注意：目前样式文件还未上传至 cdn，`text-editor.css`请引用 `dist/text-editor.css`，`yike-iframe.css`请引用`dist/yike-iframe.css`。
 
-
-### CDN
+另外，如果使用插入公式功能，宿主环境要求MathJax、canvg第三方库，参考如下：
 
 ```html
-<!-- Main Quill library -->
-<script src="//cdn.quilljs.com/1.0.0/quill.js"></script>
-<script src="//cdn.quilljs.com/1.0.0/quill.min.js"></script>
+<script src="https://yy-s.zuoyebang.cc/static/mathjax_274/MathJax.js?config=default-full-min"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvg/dist/browser/canvg.min.js"></script>
+```
 
-<!-- Theme included stylesheets -->
-<link href="//cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
-<link href="//cdn.quilljs.com/1.0.0/quill.bubble.css" rel="stylesheet">
+## 参数说明
 
-<!-- Core build with no theme, formatting, non-essential modules -->
-<link href="//cdn.quilljs.com/1.0.0/quill.core.css" rel="stylesheet">
-<script src="//cdn.quilljs.com/1.0.0/quill.core.js"></script>
-  ```
+| 参数名      | 类型           | 必要性 | 默认值        | 取值范围             | 描述                               |
+| ----------- | -------------- | ------ | ------------- | -------------------- | ---------------------------------- |
+| container   | string \| Node | 可选   | document.body | 无                   | 编辑器容器                         |
+| options     | array          | 必选   | []            | 见下方 options 说明  | 可选的样式                         |
+| initContent | string         | 可选   | ''            | 无                   | 初始化内容，可以是文本或html字符串 |
+| events      | object         | 可选   | {}            | 见下方 events 说明   | 传入的事件                         |
+| keyboard    | object         | 可选   | {}            | 见下方 keyboard 说明 | 处理键盘事件                       |
+| uploader    | object         | 可选   | {}            | 见下方 uploader 说明 | 配置图片上传参数（url、参数...）   |
+
+### options 说明
+
+示例：
+
+```javascript
+[
+  {
+    font: ['sans-serif', 'Arial'],
+  },
+  {
+    bold: ['normal'],
+  },
+  'color', // 没有限制
+  {
+    align: ['left', 'right', 'center']
+  },
+  {
+    underline: ['normal']
+  }
+]
+```
 
 
-## Community
 
-Get help or stay up to date.
+| 可选值                 | 白名单                    | 格式影响范围 | 说明                   | 对应class                                                  |
+| ---------------------- | ------------------------- | ------------ | ---------------------- | ---------------------------------------------------------- |
+| bold                   | 'normal'                  | 行内文本     | 粗体                   | tkspec-bold-normal                                         |
+| italic                 | 'normal'                  | 行内文本     | 斜体                   | tkspec-italic-normal                                       |
+| underline              | 'normal', 'wavy'          | 行内文本     | 下划线（直线、波浪线） | tkspec-underline-normal，tkspec-underline-wavy             |
+| strike                 | 'normal'                  | 行内文本     | 删除线                 | tkspec-strike-normal                                       |
+| dotted                 | 'normal'                  | 行内文本     | 着重号                 | tkspec-dotted-normal                                       |
+| script                 | 'super, 'sub''            | 行内文本     | 上标、下标             | tkspec-script-super，tkspec-script-sub                     |
+| font                   | 任意，不设置则没有限制    | 行内文本     | 字体                   |                                                            |
+| size                   | 任意，不设置则没有限制    | 行内文本     | 字号                   |                                                            |
+| color                  | 任意，不设置则没有限制    | 行内文本     | 文本颜色               |                                                            |
+| background             | 任意，不设置则没有限制    | 行内文本     | 文本背景颜色           |                                                            |
+| text-indent            | 'normal                   | 段落         | 首行增加缩进           | tkspec-text-indent-normal                                  |
+| indent                 | '+1', '-1'                | 段落         | 段落增加缩进，减少缩进 | tkspec-indent-1，tkspec-indent-2 …… tkspec-indent-8        |
+| align                  | 'left', 'center', 'right' | 段落         | 段落对齐样式           | tkspec-align-left，tkspec-align-center，tkspec-align-right |
+| line-height            | 任意，不设置则没有限制    | 段落         | 行高                   |                                                            |
+| list                   | 'ordered'                 | 段落         | 列表                   |                                                            |
+| paragraph-bottom-space | 'normal'                  | 段落         | 段后距                 | tkspec-paragraph-bottom-space-normal                       |
 
-- [Contribute](https://github.com/quilljs/quill/blob/develop/.github/CONTRIBUTING.md) on [Issues](https://github.com/quilljs/quill/issues)
-- Follow [@jhchen](https://twitter.com/jhchen) and [@quilljs](https://twitter.com/quilljs) on Twitter
-- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/quill)
-- If privacy is required, email support@quilljs.com
+### events 说明
+
+| 方法名    | 返回值 | 参数 | 说明                                   |
+| --------- | ------ | ---- | -------------------------------------- |
+| getFormat | object | 无   | 点击编辑区域时触发以获取光标区域的样式 |
+
+### keyboard 说明
+
+以下方代码为例，可以禁止回车事件
+
+```javascript
+  keyboard: {
+    bindings: {
+      handleEnter: {
+        key: 'Enter',
+        metaKey: null,
+        ctrlKey: null,
+        shiftKey: null,
+        altKey: null,
+        handler: function() {}
+      }，
+      // 禁止 shift + Enter 按键
+      handleAnotherEnter: {
+        key: 'Enter',
+        shiftKey: true,
+        handler: function() {}
+      }
+    }
+  },
+```
+
+参数说明：
+
+key: 按键
+
+handler: 事件回调
+
+metaKey, ctrlKey, shiftKey, altKey 表示组合按键，默认是null。如需组合设置对应值为 true
+
+### uploader 说明
+
+以下方代码为例: 
+
+```javascript
+  uploader: {
+    param: 'upfile',
+    mimetypes: ['image/png', 'image/jpg', 'image/jpeg']  //默认三种格式
+    url: '/zbtiku/tiku/imgupload?action=uploadimage',
+    method: 'post',
+    maxSize: 600,
+    response: ['data', 'url'],
+  }
+```
+
+参数释义：
+
+param: 图片参数 key
+
+mimetypes：图片格式，默认 ['image/png', 'image/jpg', 'image/jpeg']
+
+url： 图片上传接口，为空则使用base64存储
+
+method：http 请求方法
+
+maxSize: 图片最大体积，单位 KB
+
+response：返回数据，图片 url 数据结构。如果设为 ['data', 'url']，则取 response.data.url 作为图片url
+
+接口上传参数默认为 FormData
 
 
-## License
 
-BSD 3-clause
+## API
+
+| 方法名                | 返回值       | 参数                    | 说明                                                         |
+| --------------------- | ------------ | ----------------------- | ------------------------------------------------------------ |
+| format                | 无           | (format, value)         | 设置文本、段落样式，format是参数options取值范围内，value是对应值。例如：`editor.format('align', 'center')`;value是false时，取消对应样式 |
+| setContent            | 无           | htmlString              | 设置内容，参数是html字符串                                   |
+| getContent            | htmlString   | 无                      | 获取内容                                                     |
+| setData               | 无           | object                  | 设置格式化数据                                               |
+| getData               | object       | 无                      | 获取格式化数据                                               |
+| insertEmbed           | 无           | （index，embed，value） | embed可选值 'ql-mathjax'                                     |
+| undo                  | 无           | 无                      | 撤回操作                                                     |
+| redo                  | 无           | 无                      | 还原操作                                                     |
+| splitContent          | [prev, next] | 无                      | 获得光标前后的内容，prev是光标前内容，next是光标后内容，都是html字符串 |
+| setSelection          | 无           | (index, length)         | 设置编辑器选区。index为光标位置，length为range长度           |
+| isBlank               | boolean      | 无                      | 内容是否为空                                                 |
+| ~~setKeyboardBindings~~ | ~~无~~       | ~~object~~              | ~~重新设置自定义的keyboard事件，参数见keyboard说明~~ |
+| enableSingleLine | 无 | boolean | 设置/取消单行模式，boolean为true单行模式，否则为多行模式 |
+
+## 历史版本变动
+https://git.afpai.com/yike_fe/text-editor/blob/dev/CHNAGELOG.md

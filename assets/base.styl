@@ -222,7 +222,7 @@ colorItemsPerRow = 7
       padding: 0px
       width: colorItemSize
 
-  .ql-picker:not(.ql-color-picker):not(.ql-icon-picker)
+  .ql-picker:not(.ql-color-picker):not(.ql-icon-picker):not(.ql-text-picker)
     svg
       position: absolute
       margin-top: -9px
@@ -307,3 +307,35 @@ colorItemsPerRow = 7
   .ql-ui
     right: 5px
     top: 5px
+
+
+.ql-container .tk-upload-error-tips {
+    position: absolute; 
+    right: 4px;
+    top: 4px;
+    color: #b94a48;
+    background-color: #f2dede;
+    border: 1px solid #eed3d7;
+    padding: 8px;
+    border-radius: 3px;
+
+    button {
+      border: none;
+      display: inline-block;
+      background: none;
+      padding: 0 0 0 5px;
+      vertical-align: middle;
+      cursor: pointer;
+      outline: none;
+    }
+
+    svg {
+      margin-left: 5px;
+      height: 15px;
+      width: 15px;
+
+      * {
+        fill: #b94a48;
+      }
+    }
+  }

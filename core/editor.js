@@ -6,7 +6,7 @@ import { LeafBlot } from 'parchment';
 import { Range } from './selection';
 import CursorBlot from '../blots/cursor';
 import Block, { BlockEmbed, bubbleFormats } from '../blots/block';
-import Break from '../blots/break';
+import Empty from '../blots/empty';
 import TextBlot, { escapeText } from '../blots/text';
 
 const ASCII = /^[ -~]*$/;
@@ -137,10 +137,10 @@ class Editor {
   }
 
   getHTML(index, length) {
-    const [line, lineOffset] = this.scroll.line(index);
-    if (line.length() >= lineOffset + length) {
-      return convertHTML(line, lineOffset, length, true);
-    }
+    // const [line, lineOffset] = this.scroll.line(index);
+    // if (line.length() >= lineOffset + length) {
+    //   return convertHTML(line, lineOffset, length, true);
+    // }
     return convertHTML(this.scroll, index, length, true);
   }
 
@@ -171,7 +171,7 @@ class Editor {
     const block = this.scroll.children.head;
     if (block.statics.blotName !== Block.blotName) return false;
     if (block.children.length > 1) return false;
-    return block.children.head instanceof Break;
+    return block.children.head instanceof Empty;
   }
 
   removeFormat(index, length) {
@@ -294,6 +294,14 @@ function convertHTML(blot, index, length, isRoot = false) {
     const [start, end] = outerHTML.split(`>${innerHTML}<`);
     // TODO cleanup
     if (start === '<table') {
+      // 避免复制单个单元格时生成table start
+      const tableNode = document.createElement('table');
+      tableNode.innerHTML = parts.join('');
+      const tds = tableNode.querySelectorAll('td');
+      if (tds.length === 1) {
+        return tds[0].innerHTML;
+      }
+      // end
       return `<table style="border: 1px solid #000;">${parts.join('')}<${end}`;
     }
     return `${start}>${parts.join('')}<${end}`;
@@ -324,6 +332,8 @@ function getListType(type) {
       return [tag, ' data-list="checked"'];
     case 'unchecked':
       return [tag, ' data-list="unchecked"'];
+    case 'ordered':
+      return [tag, ' data-list="ordered"'];
     default:
       return [tag, ''];
   }

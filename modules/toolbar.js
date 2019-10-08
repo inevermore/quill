@@ -3,21 +3,28 @@ import { EmbedBlot, Scope } from 'parchment';
 import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
+import buildPinyin from '../ui/build-pinyin';
+import TableInsert from '../ui/build-table-insert';
 
 const debug = logger('quill:toolbar');
 
 class Toolbar extends Module {
   constructor(quill, options) {
     super(quill, options);
-    if (Array.isArray(this.options.container)) {
-      const container = document.createElement('div');
-      addControls(container, this.options.container);
-      quill.container.parentNode.insertBefore(container, quill.container);
-      this.container = container;
+    this.container = this.options.container;
+    // eslint-disable-next-line no-constant-condition
+    if (this.options.container == null || 'default') {
+      if (Array.isArray(this.options.options)) {
+        const container = document.createElement('div');
+        this.container = container;
+      }
     } else if (typeof this.options.container === 'string') {
       this.container = document.querySelector(this.options.container);
-    } else {
-      this.container = this.options.container;
+    }
+    addControls(this.container, this.options.options, quill);
+    // eslint-disable-next-line no-constant-condition
+    if (this.options.container == null || 'default') {
+      quill.container.parentNode.insertBefore(this.container, quill.container);
     }
     if (!(this.container instanceof HTMLElement)) {
       return debug.error('Container required for toolbar', this.options);
@@ -42,6 +49,7 @@ class Toolbar extends Module {
       const [range] = this.quill.selection.getRange(); // quill.getSelection triggers update
       this.update(range);
     });
+    this.quill.toolbarContainer = this.container;
   }
 
   addHandler(format, handler) {
@@ -109,6 +117,9 @@ class Toolbar extends Module {
 
   update(range) {
     const formats = range == null ? {} : this.quill.getFormat(range);
+    // if (this.quill.tkEvents) {
+    //   this.quill.tkEvents.getFormat(formats);
+    // }
     this.controls.forEach(pair => {
       const [format, input] = pair;
       if (input.tagName === 'SELECT') {
@@ -156,18 +167,27 @@ function addButton(container, format, value) {
   if (value != null) {
     input.value = value;
   }
+  const i = document.createElement('i');
+  i.classList.add('button-icon');
+  input.appendChild(i);
   container.appendChild(input);
 }
 
-function addControls(container, groups) {
+function addControls(container, groups, quill) {
   if (!Array.isArray(groups[0])) {
     groups = [groups];
   }
-  groups.forEach(controls => {
-    const group = document.createElement('span');
-    group.classList.add('ql-formats');
+  groups.forEach((controls, index) => {
+    const group = container;
+    // const group = document.createElement('span');
+    // group.classList.add('ql-formats');
     controls.forEach(control => {
-      if (typeof control === 'string') {
+      if (control === 'table-insert') {
+        const tableInsert = new TableInsert().buildTableInsert(quill);
+        group.appendChild(tableInsert);
+      } else if (control === 'pinyin') {
+        group.appendChild(buildPinyin(quill));
+      } else if (typeof control === 'string') {
         addButton(group, control);
       } else {
         const format = Object.keys(control)[0];
@@ -179,7 +199,12 @@ function addControls(container, groups) {
         }
       }
     });
-    container.appendChild(group);
+    // container.appendChild(group);
+    const line = document.createElement('i');
+    line.classList.add('seperate-line');
+    if (index !== groups.length - 1) {
+      container.appendChild(line);
+    }
   });
 }
 

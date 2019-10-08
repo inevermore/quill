@@ -1,22 +1,10 @@
-import Inline from '../blots/inline';
+import { ClassAttributor, Scope } from 'parchment';
 
-class Bold extends Inline {
-  static create() {
-    return super.create();
-  }
+const config = {
+  scope: Scope.INLINE,
+  whitelist: ['normal'],
+};
 
-  static formats() {
-    return true;
-  }
+const TkBoldClass = new ClassAttributor('bold', 'tkspec-bold', config);
 
-  optimize(context) {
-    super.optimize(context);
-    if (this.domNode.tagName !== this.statics.tagName[0]) {
-      this.replaceWith(this.statics.blotName);
-    }
-  }
-}
-Bold.blotName = 'bold';
-Bold.tagName = ['STRONG', 'B'];
-
-export default Bold;
+export default TkBoldClass;

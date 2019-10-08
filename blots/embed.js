@@ -6,16 +6,23 @@ const GUARD_TEXT = '\uFEFF';
 class Embed extends EmbedBlot {
   constructor(scroll, node) {
     super(scroll, node);
-    this.contentNode = document.createElement('span');
-    this.contentNode.setAttribute('contenteditable', false);
-    Array.from(this.domNode.childNodes).forEach(childNode => {
-      this.contentNode.appendChild(childNode);
-    });
-    this.leftGuard = document.createTextNode(GUARD_TEXT);
-    this.rightGuard = document.createTextNode(GUARD_TEXT);
-    this.domNode.appendChild(this.leftGuard);
-    this.domNode.appendChild(this.contentNode);
-    this.domNode.appendChild(this.rightGuard);
+    if (
+      node.children.length > 0 &&
+      node.children[0].tagName.toUpperCase() === 'SPAN'
+    ) {
+      [this.leftGuard, this.contentNode, this.rightGuard] = node.childNodes;
+    } else {
+      this.contentNode = document.createElement('span');
+      this.contentNode.setAttribute('contenteditable', false);
+      Array.from(this.domNode.childNodes).forEach(childNode => {
+        this.contentNode.appendChild(childNode);
+      });
+      this.leftGuard = document.createTextNode(GUARD_TEXT);
+      this.rightGuard = document.createTextNode(GUARD_TEXT);
+      this.domNode.appendChild(this.leftGuard);
+      this.domNode.appendChild(this.contentNode);
+      this.domNode.appendChild(this.rightGuard);
+    }
   }
 
   index(node, offset) {
@@ -65,16 +72,25 @@ class Embed extends EmbedBlot {
   }
 
   update(mutations, context) {
-    mutations.forEach(mutation => {
-      if (
-        mutation.type === 'characterData' &&
-        (mutation.target === this.leftGuard ||
-          mutation.target === this.rightGuard)
-      ) {
-        const range = this.restore(mutation.target);
-        if (range) context.range = range;
-      }
-    });
+    // mutations.forEach(mutation => {
+    //   if (
+    //     mutation.type === 'characterData' &&
+    //     (mutation.target === this.leftGuard ||
+    //       mutation.target === this.rightGuard)
+    //   ) {
+    //     const range = this.restore(mutation.target);
+    //     if (range) context.range = range;
+    //   }
+    // });
+    const mutation = mutations[0];
+    if (
+      mutation.type === 'characterData' &&
+      (mutation.target === this.leftGuard ||
+        mutation.target === this.rightGuard)
+    ) {
+      const range = this.restore(mutation.target);
+      if (range) context.range = range;
+    }
   }
 }
 

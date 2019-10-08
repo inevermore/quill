@@ -1,10 +1,9 @@
 {
-  "name": "quill",
-  "version": "2.0.0-dev.3",
-  "description": "Your powerful, rich text editor",
-  "author": "Jason Chen <jhchen7@gmail.com>",
-  "homepage": "http://quilljs.com",
-  "main": "dist/quill.js",
+  "name": "text-editor",
+  "version": "0.3.62",
+  "description": "一课富文本编辑器，目前只适用与讲义系统",
+  "author": "zhangweigang@zuoyebang.com",
+  "main": "dist/text-editor.js",
   "files": [
     "assets",
     "blots",
@@ -13,15 +12,14 @@
     "modules",
     "themes",
     "ui",
-    "dist/quill.bubble.css",
-    "dist/quill.snow.css",
-    "dist/quill.core.css",
-    "dist/quill.js",
-    "dist/quill.core.js",
-    "dist/quill.min.js.map",
-    "dist/quill.min.js",
+    "dist/text-editor.js",
+    "dist/yike-iframe.css",
+    "dist/text-editor.css",
     "core.js",
-    "quill.js"
+    "quill.js",
+    "utils",
+    "index.js",
+    "CHANGELOG.md"
   ],
   "config": {
     "ports": {
@@ -37,7 +35,8 @@
     "eventemitter3": "^3.1.0",
     "extend": "^3.0.2",
     "parchment": "2.0.0-dev.0",
-    "quill-delta": "4.1.0"
+    "quill-delta": "4.1.0",
+    "url-loader": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -58,11 +57,13 @@
     "http-proxy": "^1.17.0",
     "jasmine": "^3.3.1",
     "jasmine-core": "^3.3.0",
-    "karma": "^3.1.4",
+    "karma": "^4.0.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
     "karma-jasmine": "^2.0.1",
     "karma-sauce-launcher": "^2.0.2",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "~0.5.0",
     "prettier": "^1.15.3",
@@ -79,7 +80,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quilljs/quill"
+    "url": "https://git.afpai.com/yike_fe/text-editor.git"
   },
   "bugs": {
     "url": "https://github.com/quilljs/quill/issues"
@@ -132,7 +133,11 @@
       "import/named": [
         "error"
       ],
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "func-names": [
+        "error",
+        "never"
+      ]
     }
   },
   "eslintIgnore": [
@@ -146,20 +151,26 @@
   },
   "scripts": {
     "build": "npm run lint && npm run build:webpack",
-    "build:webpack": "webpack --config _develop/webpack.config.js; rm dist/quill.core dist/quill.bubble dist/quill.snow",
+    "build:webpack": "webpack --config _develop/webpack.config.js",
     "build:release": "./_develop/scripts/release.sh",
     "lint": "eslint blots core formats modules themes ui test",
     "start": "npm run build:webpack; bundle exec foreman start -f _develop/procfile",
     "test": "npm run test:unit",
+    "test:debug": "npm run build; karma start _develop/karma.config.js --single-run=false --debug",
     "test:all": "npm run test:unit; npm run test:functional",
     "test:functional": "./_develop/scripts/puppeteer.sh",
     "test:unit": "npm run build; karma start _develop/karma.config.js",
     "test:coverage": "webpack --env.coverage --config _develop/webpack.config.js; karma start _develop/karma.config.js --reporters coverage",
-    "travis": "npm run lint && karma start _develop/karma.config.js --reporters dots,saucelabs"
+    "travis": "npm run lint && karma start _develop/karma.config.js --reporters dots,saucelabs",
+    "release": "npm run build && npm publish"
   },
   "keywords": [
     "editor",
     "rich text",
-    "wysiwyg"
+    "wysiwyg",
+    "题库",
+    "讲义",
+    "编辑器",
+    "富文本编辑器"
   ]
 }

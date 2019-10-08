@@ -5,35 +5,36 @@ import CodeBlock, { CodeBlockContainer } from '../formats/code';
 
 import './helpers/unit';
 
-import './unit/blots/scroll';
-import './unit/blots/block';
-import './unit/blots/block-embed';
-import './unit/blots/inline';
+// import './unit/blots/scroll';
+// import './unit/blots/block';
+// import './unit/blots/block-embed';
+// import './unit/blots/inline';
 
-import './unit/core/editor';
-import './unit/core/selection';
-import './unit/core/quill';
+// import './unit/core/editor';
+// import './unit/core/selection';
+// import './unit/core/quill';
 
-import './unit/formats/color';
-import './unit/formats/link';
-import './unit/formats/script';
-import './unit/formats/align';
-import './unit/formats/code';
-import './unit/formats/header';
-import './unit/formats/indent';
-import './unit/formats/list';
-import './unit/formats/bold';
-import './unit/formats/table';
+// import './unit/formats/color';
+// import './unit/formats/link';
+// import './unit/formats/script';
+// import './unit/formats/align';
+// import './unit/formats/code';
+// import './unit/formats/header';
+// import './unit/formats/indent';
+// import './unit/formats/list';
+// import './unit/formats/bold';
+// import './unit/formats/table';
 
-import './unit/modules/clipboard';
-import './unit/modules/history';
-import './unit/modules/keyboard';
-import './unit/modules/syntax';
-import './unit/modules/table';
-import './unit/modules/toolbar';
+// import './unit/modules/clipboard';
+// import './unit/modules/history';
+// import './unit/modules/keyboard';
+// import './unit/modules/syntax';
+// import './unit/modules/table';
+// import './unit/modules/toolbar';
 
-import './unit/ui/picker';
-import './unit/theme/base/tooltip';
+// import './unit/ui/picker';
+// import './unit/theme/base/tooltip';
+import './unit1/formats/bold';
 
 // Syntax version will otherwise be registered
 Quill.register(CodeBlockContainer, true);

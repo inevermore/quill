@@ -1,5 +1,4 @@
 import { EmbedBlot, InlineBlot, Scope } from 'parchment';
-import Break from './break';
 import Text from './text';
 
 class Inline extends InlineBlot {
@@ -44,7 +43,7 @@ class Inline extends InlineBlot {
     }
   }
 }
-Inline.allowedChildren = [Inline, Break, EmbedBlot, Text];
+Inline.allowedChildren = [Inline, EmbedBlot, Text];
 // Lower index means deeper in the DOM tree, since not found (-1) is for embeds
 Inline.order = [
   'cursor',

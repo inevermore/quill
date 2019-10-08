@@ -22,7 +22,7 @@ class IndentAttributor extends ClassAttributor {
   }
 }
 
-const IndentClass = new IndentAttributor('indent', 'ql-indent', {
+const IndentClass = new IndentAttributor('indent', 'tkspec-indent', {
   scope: Scope.BLOCK,
   whitelist: [1, 2, 3, 4, 5, 6, 7, 8],
 });

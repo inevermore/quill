@@ -319,7 +319,7 @@ class Selection {
     const selection = document.getSelection();
     if (selection == null) return;
     if (startNode != null) {
-      if (!this.hasFocus()) this.root.focus();
+      // if (!this.hasFocus()) this.root.focus();
       const { native } = this.getNativeRange() || {};
       if (
         native == null ||

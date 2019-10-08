@@ -1,7 +1,10 @@
-import Bold from './bold';
+import { ClassAttributor, Scope } from 'parchment';
 
-class Italic extends Bold {}
-Italic.blotName = 'italic';
-Italic.tagName = ['EM', 'I'];
+const config = {
+  scope: Scope.INLINE,
+  whitelist: ['normal'],
+};
 
-export default Italic;
+const TkItalicClass = new ClassAttributor('italic', 'tkspec-italic', config);
+
+export default TkItalicClass;

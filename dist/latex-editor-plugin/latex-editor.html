@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>作业帮理科公式编辑器</title>
+  <script src="https://yy-s.zuoyebang.cc/static/mathjax_274/MathJax.js?config=default-full-min"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="static/css/app.cecc983b0814307a9125d3035e22f799.css">
+</head>
+<body>
+  <div id="latexeditor"></div>
+  <!-- <script type="text/javascript" src="../dialogs/internal.js"></script> -->
+  <!-- <canvas style="display: none" id="drawImage" width="500px" height="500px"></canvas> -->
+
+  <script src="static/js/manifest.2ae2e69a05c33dfc65f8.js"></script>
+  <script src="static/js/vendor.4cff52ac0a027d7dace0.js"></script>
+  <script src="static/js/app.ba2d5dbcb3b98a0b8135.js"></script>
+  <script>
+      
+    // 一些常用工具
+    // alert('domUtils: '+domUtils);
+    // alert('utils: '+utils);
+    // alert('browser: '+browser);
+    // latexEditor && latexEditor.set(Math.random());
+    // var isEdit = false;
+    // var container = null;
+
+    // function latexAjax (url, data) {
+    //   return new Promise((resolve, reject) => {
+    //     let xhr = new XMLHttpRequest();
+    //     xhr.onreadystatechange = function () {
+    //       if (xhr.readyState === 4) {
+    //         if (xhr.status === 200) {
+    //           let data = JSON.parse(xhr.responseText);
+    //           resolve(data.errNo === 0 ? (data.data.list || []) : [data.errStr]);
+    //         } else {
+    //           resolve(['当前网络不好，稍后重试']);
+    //         }
+    //       }
+    //     };
+    //     xhr.withCredentials = true;
+    //     // xhr.open('POST', `http://test42.suanshubang.com${url}`, true);
+    //     xhr.open('POST', url, true);
+    //     // xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+    //     let formdata = new FormData();
+    //     formdata.append('latex', data);
+    //     formdata.append('appId', 2);
+    //     xhr.send(formdata);
+    //   });
+    // }
+
+    latexEditor['get'] = function (output) {
+      if (!output.latex.length) return;
+      console.log(output)
+      window.parent.editor.quill.insertFormula(output);
+      // window.parent.editor && window.parent.editor.insertFormula(output.latex);
+      // latexAjax(`/zbtiku/formula/formulalatexadd?latex=${output.latex.replace(/\\/g, '$SYMBOL$')}`)
+      // latexAjax('/zbtiku/api/formulalatexadd', output.latex)
+      //   .then(() => {
+      //     if (!isEdit) {
+      //       editor.fireEvent('insertlatex', '$' + output.latex + '$');
+      //     } else {
+      //       // 编辑
+      //       editor.fireEvent('insertlatex', '$' + output.latex + '$', container);
+      //     }
+      //   });
+    }
+
+    // latexEditor['history'] = function (latex) {
+    //   // return latexAjax(`/zbtiku/formula/formulasearch?latex=${latex.replace(/\\/g, '$SYMBOL$')}`)
+    //   //   .then(list => list.map(v => v.latex.replace(/\$SYMBOL\$/g, '\\')));
+    //   return latexAjax('/zbtiku/api/formulasearch', latex)
+    //     .then(list => list.map(v => unescape(v.latex)));
+    // }
+    
+    // editor.addListener('initlatexeditor', function (eventName, result) {
+    //   isEdit = true;
+    //   container = result.container;
+    //   latexEditor.set(result.latex);
+    // });
+    // editor.fireEvent('latexeditorload');
+    window.onload = function() {
+      console.log('latex')
+    }
+  </script>
+</body>
+</html>

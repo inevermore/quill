@@ -6,6 +6,8 @@ import { EmbedBlot, Scope, TextBlot } from 'parchment';
 import Quill from '../core/quill';
 import logger from '../core/logger';
 import Module from '../core/module';
+import Empty from '../blots/empty';
+import Emitter from '../core/emitter';
 
 const debug = logger('quill:keyboard');
 
@@ -20,7 +22,11 @@ class Keyboard extends Module {
     ) {
       return false;
     }
-    return binding.key === evt.key || binding.key === evt.which;
+    return (
+      binding.key === evt.key ||
+      binding.key === String.fromCharCode(evt.keyCode).toLowerCase() ||
+      binding.key === evt.which
+    );
   }
 
   constructor(quill, options) {
@@ -73,6 +79,17 @@ class Keyboard extends Module {
       { collapsed: true, offset: 0 },
       handleBackspace,
     );
+    this.addBinding(
+      {
+        key: 'Backspace',
+        altKey: null,
+        ctrlKey: null,
+        metaKey: null,
+        shiftKey: null,
+      },
+      { collapsed: true },
+      handleBackspace,
+    );
     this.listen();
   }
 
@@ -98,10 +115,11 @@ class Keyboard extends Module {
 
   listen() {
     this.quill.root.addEventListener('keydown', evt => {
-      if (evt.defaultPrevented) return;
-      const bindings = (this.bindings[evt.key] || []).concat(
-        this.bindings[evt.which] || [],
-      );
+      if (evt.defaultPrevented || evt.isComposing) return;
+      const bindings =
+        this.bindings[evt.key] ||
+        this.bindings[String.fromCharCode(evt.keyCode).toLowerCase()] ||
+        [];
       const matches = bindings.filter(binding => Keyboard.match(evt, binding));
       if (matches.length === 0) return;
       const range = this.quill.getSelection();
@@ -179,7 +197,7 @@ Keyboard.DEFAULTS = {
   bindings: {
     bold: makeFormatHandler('bold'),
     italic: makeFormatHandler('italic'),
-    underline: makeFormatHandler('underline'),
+    // underline: makeFormatHandler('underline'),
     indent: {
       // highlight tab or tab at beginning of list, indent or blockquote
       key: 'Tab',
@@ -326,24 +344,14 @@ Keyboard.DEFAULTS = {
       handler(range) {
         const module = this.quill.getModule('table');
         if (module) {
-          const [table, row, cell, offset] = module.getTable(range);
-          const shift = tableSide(table, row, cell, offset);
-          if (shift == null) return;
-          let index = table.offset();
-          if (shift < 0) {
-            const delta = new Delta().retain(index).insert('\n');
-            this.quill.updateContents(delta, Quill.sources.USER);
-            this.quill.setSelection(
-              range.index + 1,
-              range.length,
-              Quill.sources.SILENT,
-            );
-          } else if (shift > 0) {
-            index += table.length();
-            const delta = new Delta().retain(index).insert('\n');
-            this.quill.updateContents(delta, Quill.sources.USER);
-            this.quill.setSelection(index, Quill.sources.USER);
-          }
+          const LINE_SEPARATOR = '\u2028';
+          const delta = new Delta().retain(range.index).insert(LINE_SEPARATOR);
+          this.quill.updateContents(delta, Quill.sources.USER);
+          this.quill.setSelection(
+            range.index + 1,
+            range.length,
+            Quill.sources.SILENT,
+          );
         }
       },
     },
@@ -444,6 +452,8 @@ Keyboard.DEFAULTS = {
     'embed right shift': makeEmbedArrowHandler('ArrowRight', true),
     'table down': makeTableArrowHandler(false),
     'table up': makeTableArrowHandler(true),
+    'empty down': makeArrowHandler(false),
+    'empty up': makeArrowHandler(true),
   },
 };
 
@@ -454,6 +464,10 @@ function handleBackspace(range, context) {
   if (context.offset === 0) {
     const [prev] = this.quill.getLine(range.index - 1);
     if (prev != null) {
+      if (prev.statics.blotName === 'table') {
+        prev.table().remove();
+        return;
+      }
       if (prev.length() > 1 || prev.statics.blotName === 'table') {
         const curFormats = line.formats();
         const prevFormats = this.quill.getFormat(range.index - 1, 1);
@@ -520,6 +534,9 @@ function handleDeleteRange(range) {
 
 // TODO use just updateContents()
 function handleEnter(range, context) {
+  if (this.quill.enableSingleLine) {
+    return;
+  }
   if (range.length > 0) {
     this.quill.scroll.deleteAt(range.index, range.length); // So we do not trigger text-change
   }
@@ -626,7 +643,42 @@ function makeFormatHandler(format) {
     key: format[0],
     shortKey: true,
     handler(range, context) {
-      this.quill.format(format, !context.format[format], Quill.sources.USER);
+      this.quill.format(
+        format,
+        !context.format[format] && 'normal',
+        Quill.sources.USER,
+      );
+    },
+  };
+}
+
+function makeArrowHandler(up) {
+  return {
+    key: up ? 'ArrowUp' : 'ArrowDown',
+    handler(range, context) {
+      const key = up ? 'prev' : 'next';
+      const curLine = context.line;
+      const targetLine = curLine[key];
+      if (targetLine != null && targetLine.children.head instanceof Empty) {
+        let offset = 0;
+        const { index } = range;
+        if (curLine.children.head instanceof Empty) {
+          offset = up ? -1 : 1;
+        } else {
+          const [line, lineOffset] = this.quill.scroll.line(index);
+          offset = up ? -lineOffset - 1 : line.length() - lineOffset;
+        }
+        this.quill.setSelection(
+          {
+            index: index + offset,
+            length: 0,
+          },
+          // Emitter.sources.SILENT,
+          Emitter.sources.USER,
+        );
+        return false;
+      }
+      return true;
     },
   };
 }
@@ -692,20 +744,20 @@ function normalize(binding) {
   return binding;
 }
 
-function tableSide(table, row, cell, offset) {
-  if (row.prev == null && row.next == null) {
-    if (cell.prev == null && cell.next == null) {
-      return offset === 0 ? -1 : 1;
-    }
-    return cell.prev == null ? -1 : 1;
-  }
-  if (row.prev == null) {
-    return -1;
-  }
-  if (row.next == null) {
-    return 1;
-  }
-  return null;
-}
+// function tableSide(table, row, cell, offset) {
+//   if (row.prev == null && row.next == null) {
+//     if (cell.prev == null && cell.next == null) {
+//       return offset === 0 ? -1 : 1;
+//     }
+//     return cell.prev == null ? -1 : 1;
+//   }
+//   if (row.prev == null) {
+//     return -1;
+//   }
+//   if (row.next == null) {
+//     return 1;
+//   }
+//   return null;
+// }
 
 export { Keyboard as default, SHORTKEY, normalize };

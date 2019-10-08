@@ -51,7 +51,7 @@ class Table extends Module {
     this.quill.setSelection(offset, Quill.sources.SILENT);
   }
 
-  getTable(range = this.quill.getSelection()) {
+  getTable(range = this.quill.getSelection(true)) {
     if (range == null) return [null, null, null, -1];
     const [cell, offset] = this.quill.getLine(range.index);
     if (cell == null || cell.statics.blotName !== TableCell.blotName) {
@@ -63,7 +63,7 @@ class Table extends Module {
   }
 
   insertColumn(offset) {
-    const range = this.quill.getSelection();
+    const range = this.quill.getSelection(true);
     const [table, row, cell] = this.getTable(range);
     if (cell == null) return;
     const column = cell.cellOffset();
@@ -89,7 +89,7 @@ class Table extends Module {
   }
 
   insertRow(offset) {
-    const range = this.quill.getSelection();
+    const range = this.quill.getSelection(true);
     const [table, row, cell] = this.getTable(range);
     if (cell == null) return;
     const index = row.rowOffset();
@@ -115,14 +115,35 @@ class Table extends Module {
   }
 
   insertTable(rows, columns) {
-    const range = this.quill.getSelection();
-    if (range == null) return;
+    const rangeIndex =
+      (this.quill.getSelection(true) && this.quill.getSelection(true).index) ||
+      this.quill.selection.savedRange.index;
+    if (rangeIndex == null) return;
+    const [line, offset] = this.quill.getLine(rangeIndex);
+    const initDelta = new Delta();
+    // 非行首
+    if (offset !== 0) {
+      // 行尾
+      if (offset === line.length() - 1) {
+        initDelta.retain(rangeIndex + 1);
+      } else {
+        initDelta.retain(rangeIndex).insert('\n');
+      }
+    } else {
+      initDelta.retain(rangeIndex);
+    }
     const delta = new Array(rows).fill(0).reduce(memo => {
       const text = new Array(columns).fill('\n').join('');
       return memo.insert(text, { table: tableId() });
-    }, new Delta().retain(range.index));
+    }, initDelta);
+    if (offset !== 0 && offset === line.length() - 1) {
+      delta.insert('\n');
+    }
     this.quill.updateContents(delta, Quill.sources.USER);
-    this.quill.setSelection(range.index, Quill.sources.SILENT);
+    this.quill.setSelection(
+      offset === 0 ? rangeIndex : rangeIndex + 1,
+      Quill.sources.SILENT,
+    );
     this.balanceTables();
   }
 
